@@ -7,6 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <Label
+            FontSize="50" 
+            VerticalAlignment="Center" 
+            HorizontalAlignment="Center"
+            Background="Lavender"
+        >
+            Welcome to ManaHub!
+        </Label>
     </Grid>
 </Window>
