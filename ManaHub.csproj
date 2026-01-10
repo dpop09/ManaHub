@@ -8,4 +8,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Iona-Shield-of-Emeria-MtG-Art.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Iona-Shield-of-Emeria-MtG-Art.jpg" />
+  </ItemGroup>
+
 </Project>
