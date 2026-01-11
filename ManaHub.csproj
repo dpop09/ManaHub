@@ -9,11 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Jace-the-Mind-Sculptor-MtG-Planeswalker-Art.jpg" />
     <None Remove="Iona-Shield-of-Emeria-MtG-Art.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Assets\Iona-Shield-of-Emeria-MtG-Art.jpg" />
+    <Resource Include="Assets\Jace-the-Mind-Sculptor-MtG-Planeswalker-Art.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>
