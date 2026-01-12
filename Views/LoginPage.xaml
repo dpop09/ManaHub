@@ -82,10 +82,11 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Width="100" Height="30" VerticalAlignment="Bottom"
-                    Content="Login"/>
+                        Content="Login"
+                        Command="{Binding ExecuteLoginCommand}"/>
                     <Button Grid.Column="1" Width="100" Height="30" VerticalAlignment="Bottom"
-                    Content="Create Account"
-                            Command="{Binding GoToCreateAccountPageCommand}"/>
+                        Content="Create Account"
+                        Command="{Binding GoToCreateAccountPageCommand}"/>
                 </Grid>
             </Grid>
         </Border>
