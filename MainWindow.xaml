@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ManaHub"
-        mc:Ignorable="d"
+        mc:Ignorable="d" WindowStyle="None" AllowsTransparency="True" Background="White" 
         Title="MainWindow" Height="450" Width="800"
         xmlns:views="clr-namespace:ManaHub.Views"
         xmlns:vm="clr-namespace:ManaHub.ViewModels">
-    
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0" />
+    </WindowChrome.WindowChrome>
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:LoginPageViewModel}">
             <views:LoginPage />
@@ -20,8 +22,19 @@
             <views:DeckEditorPage />
         </DataTemplate>
     </Window.Resources>
-    
+
     <Grid>
-        <ContentControl Content="{Binding CurrentView}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="#2d2d2d" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="—" Width="30" Height="25" Command="{Binding MinimizeWindowCommand}"></Button>
+                <Button Content="☐" Width="30" Height="25" Command="{Binding MaximizeWindowCommand}"></Button>
+                <Button Content="✕" Width="30" Height="25" Command="{Binding CloseWindowCommand}"></Button>
+            </StackPanel>
+        </Grid>
+        <ContentControl Grid.Row="1" Content="{Binding CurrentView}" />
     </Grid>
 </Window>
