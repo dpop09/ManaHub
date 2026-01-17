@@ -1,4 +1,5 @@
 ﻿using ManaHub.MVVMs;
+using System.Windows;
 
 namespace ManaHub.ViewModels
 {
@@ -12,6 +13,9 @@ namespace ManaHub.ViewModels
             set { _currentView = value; OnPropertyChanged(); } // Uses your OnPropertyChanged
         }
         public RelayCommand ShowGoToCreateAccountPageCommand {  get; set; }
+        public RelayCommand CloseWindowCommand { get; set; }
+        public RelayCommand MinimizeWindowCommand { get; set; }
+        public RelayCommand MaximizeWindowCommand { get; set; }
 
         public MainWindowViewModel()
         {
@@ -20,6 +24,24 @@ namespace ManaHub.ViewModels
 
             // Commands to swap the view
             ShowGoToCreateAccountPageCommand = new RelayCommand(o => CurrentView = new CreateAccountPageViewModel(this));
+            MinimizeWindowCommand = new RelayCommand(o => MinimizeWindow());
+            MaximizeWindowCommand = new RelayCommand(o => MaximizeWindow());
+            CloseWindowCommand = new RelayCommand(o => CloseWindow());
+        }
+        private void MinimizeWindow()
+        {
+            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
+        private void MaximizeWindow() 
+        {
+            if (Application.Current.MainWindow.WindowState == WindowState.Maximized)
+                Application.Current.MainWindow.WindowState = WindowState.Normal;
+            else
+                Application.Current.MainWindow.WindowState = WindowState.Maximized;
+        }
+        private void CloseWindow()
+        {
+            Application.Current.Shutdown();
         }
     }
 }

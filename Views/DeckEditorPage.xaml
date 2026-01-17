@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ManaHub.Views"
         mc:Ignorable="d"
         d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Background="White">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="This is the deck editor page." />
             <Button Width="100" Height="30" Content="Logout" Command="{Binding GoToLoginPageCommand}" />
