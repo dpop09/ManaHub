@@ -1,4 +1,6 @@
 ﻿using ManaHub.MVVMs;
+using ManaHub.Services;
+using System.IO;
 using System.Windows;
 
 namespace ManaHub.ViewModels
@@ -19,8 +21,7 @@ namespace ManaHub.ViewModels
 
         public MainWindowViewModel()
         {
-            // Initial Page
-            CurrentView = new LoginPageViewModel(this);
+            InitializeApp();
 
             // Commands to swap the view
             ShowGoToCreateAccountPageCommand = new RelayCommand(o => CurrentView = new CreateAccountPageViewModel(this));
@@ -42,6 +43,27 @@ namespace ManaHub.ViewModels
         private void CloseWindow()
         {
             Application.Current.Shutdown();
+        }
+        private async void InitializeApp()
+        {
+            var db = DatabaseService.Instance;
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "oracle-cards-20260117221532.json");
+
+            if (File.Exists(filePath))
+            {
+                if (db.GetCardCount() == 0)
+                {
+                    await Task.Run(async () =>
+                    {
+                        await db.BulkImportCards(filePath);
+                    });
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Critical Error: File not found at {filePath}");
+            }
+            CurrentView = new LoginPageViewModel(this);
         }
     }
 }

@@ -7,9 +7,26 @@
         mc:Ignorable="d"
         d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="White">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="This is the deck editor page." />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Width="100" Height="30" Content="Logout" Command="{Binding GoToLoginPageCommand}" />
         </StackPanel>
+        <ListView Grid.Row="1" ItemsSource="{Binding FilteredCards}"
+                  VirtualizingStackPanel.IsVirtualizing="True"
+                  VirtualizingStackPanel.VirtualizationMode="Recycling"
+                  ScrollViewer.CanContentScroll="True">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="150"/>
+                    <GridViewColumn Header="Mana" DisplayMemberBinding="{Binding ManaCost}" Width="80"/>
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding TypeLine}" Width="120"/>
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding OracleText}" Width="200"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </UserControl>

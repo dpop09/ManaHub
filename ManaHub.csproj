@@ -10,7 +10,14 @@
 
   <ItemGroup>
     <None Remove="Assets\Jace-the-Mind-Sculptor-MtG-Planeswalker-Art.jpg" />
+    <None Remove="Data\sample-of-cards.json" />
     <None Remove="Iona-Shield-of-Emeria-MtG-Art.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\sample-of-cards.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -19,11 +26,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.1" />
+    <None Update="Data\oracle-cards-20260117221532.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
