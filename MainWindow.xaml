@@ -29,7 +29,23 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="#2d2d2d" MouseLeftButtonDown="Window_MouseLeftButtonDown">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".5*" />
+                <ColumnDefinition Width=".5*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock VerticalAlignment="Center" 
+                       Foreground="White" 
+                       Margin="5,0,0,0" 
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Text="ManaHub"/>
+                <TextBlock VerticalAlignment="Center" 
+                        Foreground="White" 
+                        Margin="5,4.5,0,0" 
+                        Text="Pre-Alpha v1.0.0" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="—" Width="30" Height="25" Command="{Binding MinimizeWindowCommand}"></Button>
                 <Button Content="☐" Width="30" Height="25" Command="{Binding MaximizeWindowCommand}"></Button>
                 <Button Content="✕" Width="30" Height="25" Command="{Binding CloseWindowCommand}"></Button>

@@ -24,7 +24,7 @@
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="150"/>
                     <GridViewColumn Header="Mana" DisplayMemberBinding="{Binding ManaCost}" Width="80"/>
                     <GridViewColumn Header="Type" DisplayMemberBinding="{Binding TypeLine}" Width="120"/>
-                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding OracleText}" Width="200"/>
+                    <GridViewColumn Header="Text" DisplayMemberBinding="{Binding OracleText}" Width="200"/>
                 </GridView>
             </ListView.View>
         </ListView>

@@ -23,8 +23,8 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="1" Grid.Column="1"
-		Background="Gray"
-		CornerRadius="20"
+		Background="#5B5B5B"
+		Opacity=".9"
 		Width="350"
 		Height="200">
             <Grid Margin="10">
