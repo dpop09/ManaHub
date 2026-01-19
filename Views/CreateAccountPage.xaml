@@ -23,8 +23,8 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="1" Grid.Column="1"
-		Background="Gray"
-		CornerRadius="20"
+		Background="#5B5B5B"
+		Opacity=".9"
 		Width="350"
 		Height="200">
             <Grid Margin="10">
@@ -36,13 +36,12 @@
                 </Grid.RowDefinitions>
 
                 <Label
-			Background="Transparent"
-			Foreground="White"
-			FontSize="25"
-			VerticalAlignment="Top"
-			HorizontalAlignment="Center">
-                   Create Account
-                </Label>
+			        Background="Transparent"
+			        Foreground="White"
+			        FontSize="25"
+			        VerticalAlignment="Top"
+			        HorizontalAlignment="Center" 
+                    Content="Create Account" />
                 <Grid Grid.Row="1" Margin="0,0,0,2.5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width=".3*"/>
@@ -50,14 +49,13 @@
                     </Grid.ColumnDefinitions>
 
                     <Label
-				Background="Transparent"
-				Foreground="White"
-				FontSize="15">
-                        Username:
-                    </Label>
+				        Background="Transparent"
+				        Foreground="White"
+				        FontSize="15"
+                        Content="Username:" />
                     <TextBox Grid.Column="1"
-				FontSize="15">
-                    </TextBox>
+				        FontSize="15"
+                        Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
                 <Grid Grid.Row="2" Margin="0,2.5,0,0">
                     <Grid.ColumnDefinitions>
@@ -66,14 +64,13 @@
                     </Grid.ColumnDefinitions>
 
                     <Label
-				Background="Transparent"
-				Foreground="White"
-				FontSize="15">
-                        Password:
-                    </Label>
+				        Background="Transparent"
+				        Foreground="White"
+				        FontSize="15"
+                        Content="Password:" />
                     <TextBox Grid.Column="1"
-				FontSize="15">
-                    </TextBox>
+				        FontSize="15" 
+                        Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
@@ -82,7 +79,8 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Width="100" Height="30" VerticalAlignment="Bottom"
-                    Content="Create Account"/>
+                    Content="Create Account"
+                            Command="{Binding ExecuteCreateAccountCommand}"/>
                     <Button Grid.Column="1" Width="100" Height="30" VerticalAlignment="Bottom"
                     Content="Go Back"
                             Command="{Binding GoToLoginPageCommand}"/>

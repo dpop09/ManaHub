@@ -3,7 +3,7 @@
 namespace ManaHub.Services
 {
     // DatabaseService follows singleton design pattern to ensure there is only at least 1 instance of it
-    internal sealed partial class DatabaseService
+    sealed partial class DatabaseService
     {
         // static instance that holds our single object
         private static DatabaseService _instance;
@@ -37,14 +37,20 @@ namespace ManaHub.Services
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText =
-                    @"
+                command.CommandText = @"
                        CREATE TABLE IF NOT EXISTS Users (
                             Id INTEGER PRIMARY KEY AUTOINCREMENT,
                             Username TEXT NOT NULL UNIQUE,
                             Password Text NOT NULL
-                       );
-                    ";
+                       );";
+                command.CommandText += @"
+                       CREATE TABLE IF NOT EXISTS Cards (
+                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            Name TEXT,
+                            ManaCost TEXT,
+                            TypeLine TEXT,
+                            OracleText TEXT
+                       );";
                 command.ExecuteNonQuery();
             }
         }
