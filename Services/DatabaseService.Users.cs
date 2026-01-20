@@ -66,44 +66,5 @@ namespace ManaHub.Services
                 return false;
             }
         }
-        //public bool CreateUserAccount(string username, string password)
-        //{
-        //    try
-        //    {
-        //        using (var connection = new SqliteConnection(_connectionString))
-        //        {
-        //            // Ensure the connection is open before creating the command
-        //            connection.Open();
-
-        //            using (var command = connection.CreateCommand())
-        //            {
-        //                command.CommandText = @"
-        //            INSERT INTO Users (Username, Password)
-        //            VALUES ($user, $pass)";
-
-        //                // Using specific SqliteType helps prevent mapping errors
-        //                command.Parameters.Add("$user", SqliteType.Text).Value = username;
-        //                command.Parameters.Add("$pass", SqliteType.Text).Value = password;
-
-        //                // ExecuteNonQuery returns the number of rows affected
-        //                int rowsAffected = command.ExecuteNonQuery();
-        //                return rowsAffected > 0;
-        //            }
-        //        }
-        //    }
-        //    catch (SqliteException ex)
-        //    {
-        //        // SQLite error 19 is 'Constraint' (Username already exists)
-        //        if (ex.SqliteErrorCode == 19) return false;
-
-        //        throw; // Other DB errors
-        //    }
-        //    catch (InvalidOperationException ex)
-        //    {
-        //        // This catches the specific error you're seeing for debugging
-        //        System.Diagnostics.Debug.WriteLine($"DB Error: {ex.Message}");
-        //        return false;
-        //    }
-        //}
     }
 }

@@ -56,7 +56,7 @@
                         Username:
                     </Label>
                     <TextBox Grid.Column="1"
-				FontSize="15">
+				FontSize="15" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}">
                     </TextBox>
                 </Grid>
                 <Grid Grid.Row="2" Margin="0,2.5,0,0">
@@ -72,7 +72,7 @@
                         Password:
                     </Label>
                     <TextBox Grid.Column="1"
-				FontSize="15">
+				FontSize="15" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}">
                     </TextBox>
                 </Grid>
                 <Grid Grid.Row="3">

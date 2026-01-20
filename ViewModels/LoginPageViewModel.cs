@@ -7,6 +7,27 @@ namespace ManaHub.ViewModels
 {
     internal class LoginPageViewModel : ViewModelBase
     {
+        private string _username;
+        private string _password;
+        public string Username 
+        {
+            get { return  _username; }
+            set
+            {
+                _username = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Password 
+        { 
+            get { return _password; }
+            set
+            {
+                _password = value;
+                OnPropertyChanged();
+            }
+        }
+
         private MainWindowViewModel _mainVM;
         public ICommand GoToCreateAccountPageCommand { get; }
         public ICommand ExecuteLoginCommand { get; }
@@ -30,9 +51,15 @@ namespace ManaHub.ViewModels
         }
         private void ExecuteLogin()
         {
-            // hard-coded username and password
-            if (DatabaseService.Instance.CheckUser("dpop", "mypassword"))
-                GoToDeckEditorPage();
+            // ensure username and password is not null or whitespace
+            if (string.IsNullOrWhiteSpace(_username) || string.IsNullOrWhiteSpace(Password))
+            {
+                MessageBox.Show("Please fill in all fields.", "Notification", MessageBoxButton.OK);
+                return;
+            }
+            // check database if user exists, else display incorrect message
+            if (DatabaseService.Instance.CheckUser(Username, Password))
+                GoToDeckEditorPage();  
             else
                 MessageBox.Show("Incorrect username or password.", "Notification", MessageBoxButton.OK);
         }
