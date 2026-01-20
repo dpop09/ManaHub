@@ -25,12 +25,17 @@ namespace ManaHub.Services
                     var command = connection.CreateCommand();
                     command.Transaction = transaction;
                     command.CommandText = @"
-                        INSERT INTO Cards (Name, ManaCost, TypeLine, OracleText) 
-                        VALUES ($name, $mana, $type, $text)";
+                        INSERT INTO Cards (Name, ManaCost, TypeLine, [Set], Power, Toughness, Rarity, CollectorNumber, OracleText) 
+                        VALUES ($name, $mana, $type, $set, $power, $tough, $rarity, $colnum, $text)";
 
                     var pName = command.Parameters.Add("$name", SqliteType.Text);
                     var pMana = command.Parameters.Add("$mana", SqliteType.Text);
                     var pType = command.Parameters.Add("$type", SqliteType.Text);
+                    var pSet = command.Parameters.Add("$set", SqliteType.Text);
+                    var pPower = command.Parameters.Add("$power", SqliteType.Text);
+                    var pTough = command.Parameters.Add("$tough", SqliteType.Text);
+                    var pRarity = command.Parameters.Add("$rarity", SqliteType.Text);
+                    var pColNum = command.Parameters.Add("$colnum", SqliteType.Text);
                     var pText = command.Parameters.Add("$text", SqliteType.Text);
 
                     await foreach (var card in cards)
@@ -40,6 +45,11 @@ namespace ManaHub.Services
                         pName.Value = card.Name ?? (object)DBNull.Value;
                         pMana.Value = card.ManaCost ?? (object)DBNull.Value;
                         pType.Value = card.TypeLine ?? (object)DBNull.Value;
+                        pSet.Value = card.Set ?? (object)DBNull.Value;
+                        pPower.Value = card.Power ?? (object)DBNull.Value;
+                        pTough.Value = card.Toughness ?? (object)DBNull.Value;
+                        pRarity.Value = card.Rarity ?? (object)DBNull.Value;
+                        pColNum.Value = card.CollectorNumber ?? (object)DBNull.Value;
                         pText.Value = card.OracleText ?? (object)DBNull.Value;
 
                         await command.ExecuteNonQueryAsync();
@@ -69,7 +79,8 @@ namespace ManaHub.Services
                 connection.Open();
 
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT Name, ManaCost, TypeLine, OracleText FROM Cards LIMIT $limit";
+                command.CommandText = "SELECT Name, ManaCost, TypeLine, [Set], Power, " +
+                    "Toughness, Rarity, CollectorNumber, OracleText FROM Cards LIMIT $limit";
                 command.Parameters.AddWithValue("$limit", limit);
 
                 using (var reader = command.ExecuteReader())
@@ -81,7 +92,12 @@ namespace ManaHub.Services
                             Name = reader.IsDBNull(0) ? "" : reader.GetString(0),
                             ManaCost = reader.IsDBNull(1) ? "" : reader.GetString(1),
                             TypeLine = reader.IsDBNull(2) ? "" : reader.GetString(2),
-                            OracleText = reader.IsDBNull(3) ? "" : reader.GetString(3)
+                            Set = reader.IsDBNull(3) ? "" : reader.GetString(3),
+                            Power = reader.IsDBNull(4) ? "" : reader.GetString(4),
+                            Toughness = reader.IsDBNull(5) ? "" : reader.GetString(5),
+                            Rarity = reader.IsDBNull(6) ? "" : reader.GetString(6),
+                            CollectorNumber = reader.IsDBNull(7) ? "" : reader.GetString(7),
+                            OracleText = reader.IsDBNull(8) ? "" : reader.GetString(8)
                         });
                     }
                 }

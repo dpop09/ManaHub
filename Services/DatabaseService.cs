@@ -49,6 +49,11 @@ namespace ManaHub.Services
                             Name TEXT,
                             ManaCost TEXT,
                             TypeLine TEXT,
+                            [Set] TEXT,
+                            Power TEXT,
+                            Toughness TEXT,
+                            Rarity TEXT,
+                            CollectorNumber TEXT,
                             OracleText TEXT
                        );";
                 command.ExecuteNonQuery();

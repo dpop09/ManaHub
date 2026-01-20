@@ -10,12 +10,17 @@ namespace ManaHub.ViewModels
     {
         private MainWindowViewModel _mainVM;
         public ObservableCollection<Card> FilteredCards {  get; set; }
+        public int CardCount => FilteredCards.Count;
+
         public ICommand GoToLoginPageCommand { get; }
 
         public DeckEditorPageViewModel(MainWindowViewModel mainVM)
         {
             _mainVM = mainVM;
+
             FilteredCards = new ObservableCollection<Card>();
+            FilteredCards.CollectionChanged += (s, e) => OnPropertyChanged(nameof(CardCount));
+
             LoadInitialCards();
             GoToLoginPageCommand = new RelayCommand(o => GoToLoginPage());
         }
@@ -27,8 +32,13 @@ namespace ManaHub.ViewModels
 
         private void LoadInitialCards()
         {
-            var cards = DatabaseService.Instance.GetCards(limit: 100);
-            foreach(var card in cards) FilteredCards.Add(card);
+            // retrive the cards from the db
+            var cards = DatabaseService.Instance.GetCards(limit: 40000);
+
+            // clear and fill the observable collection
+            FilteredCards.Clear();
+            foreach(var card in cards) 
+                FilteredCards.Add(card);
         }
     }
 }
