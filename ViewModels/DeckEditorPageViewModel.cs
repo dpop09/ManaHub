@@ -19,6 +19,7 @@ namespace ManaHub.ViewModels
             _mainVM = mainVM;
 
             FilteredCards = new ObservableCollection<Card>();
+            // subscribe to changes in the collection
             FilteredCards.CollectionChanged += (s, e) => OnPropertyChanged(nameof(CardCount));
 
             LoadInitialCards();

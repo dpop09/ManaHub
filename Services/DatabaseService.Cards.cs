@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace ManaHub.Services
 {
-    sealed partial class DatabaseService
+    internal sealed partial class DatabaseService
     {
         public async Task BulkImportCards(string filePath)
         {

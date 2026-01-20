@@ -3,7 +3,7 @@
 namespace ManaHub.Services
 {
     // DatabaseService follows singleton design pattern to ensure there is only at least 1 instance of it
-    sealed partial class DatabaseService
+    internal sealed partial class DatabaseService
     {
         // static instance that holds our single object
         private static DatabaseService _instance;

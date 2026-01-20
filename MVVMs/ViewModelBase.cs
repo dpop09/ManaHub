@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace ManaHub.MVVMs
 {
-    internal class ViewModelBase : INotifyPropertyChanged
+    class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

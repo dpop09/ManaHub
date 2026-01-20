@@ -59,7 +59,11 @@ namespace ManaHub.ViewModels
             }
             // check database if user exists, else display incorrect message
             if (DatabaseService.Instance.CheckUser(Username, Password))
-                GoToDeckEditorPage();  
+            {
+                _mainVM.NavVM.Username = Username;
+                GoToDeckEditorPage();
+            }
+                  
             else
                 MessageBox.Show("Incorrect username or password.", "Notification", MessageBoxButton.OK);
         }

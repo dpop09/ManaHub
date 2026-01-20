@@ -2,7 +2,7 @@
 
 namespace ManaHub.Services
 {
-    sealed partial class DatabaseService
+    internal sealed partial class DatabaseService
     {
         public bool CheckUser(string username, string password)
         {
