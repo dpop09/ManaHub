@@ -12,8 +12,25 @@ namespace ManaHub.ViewModels
         public object CurrentView
         {
             get => _currentView;
-            set { _currentView = value; OnPropertyChanged(); } // Uses your OnPropertyChanged
+            set 
+            { 
+                _currentView = value; 
+                OnPropertyChanged();
+                // whenever the view changes, reevaluate the need to show the nav bar
+                UpdateNavVisibility();
+            }
         }
+        private Visibility _navVisibility = Visibility.Collapsed;
+        public Visibility NavVisibility
+        {
+            get => _navVisibility;
+            set
+            {
+                _navVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+        public NavigationBarViewModel NavVM { get; set; }
         public RelayCommand ShowGoToCreateAccountPageCommand {  get; set; }
         public RelayCommand CloseWindowCommand { get; set; }
         public RelayCommand MinimizeWindowCommand { get; set; }
@@ -28,6 +45,15 @@ namespace ManaHub.ViewModels
             MinimizeWindowCommand = new RelayCommand(o => MinimizeWindow());
             MaximizeWindowCommand = new RelayCommand(o => MaximizeWindow());
             CloseWindowCommand = new RelayCommand(o => CloseWindow());
+        }
+
+        private void UpdateNavVisibility()
+        {
+            // make the nav bar invisibile when user is not logged in
+            if (CurrentView is LoginPageViewModel || CurrentView is CreateAccountPageViewModel)
+                NavVisibility = Visibility.Collapsed;
+            else
+                NavVisibility = Visibility.Visible;
         }
         private void MinimizeWindow()
         {
@@ -63,6 +89,7 @@ namespace ManaHub.ViewModels
             {
                 Console.WriteLine($"Critical Error: File not found at {filePath}");
             }
+            NavVM = new NavigationBarViewModel(this);
             CurrentView = new LoginPageViewModel(this);
         }
     }

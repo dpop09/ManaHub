@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ManaHub"
         mc:Ignorable="d" WindowStyle="None" AllowsTransparency="True" Background="White" 
         Title="MainWindow" Height="450" Width="800"
+        WindowState="Maximized"
         xmlns:views="clr-namespace:ManaHub.Views"
         xmlns:vm="clr-namespace:ManaHub.ViewModels">
     <WindowChrome.WindowChrome>
@@ -26,8 +27,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <Grid Grid.Row="0" Background="#2d2d2d" MouseLeftButtonDown="Window_MouseLeftButtonDown">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".5*" />
@@ -51,6 +54,7 @@
                 <Button Content="✕" Width="30" Height="25" Command="{Binding CloseWindowCommand}"></Button>
             </StackPanel>
         </Grid>
-        <ContentControl Grid.Row="1" Content="{Binding CurrentView}" />
+        <views:NavigationBar Grid.Row="1" Visibility="{Binding NavVisibility}" />
+        <ContentControl Grid.Row="2" Content="{Binding CurrentView}" />
     </Grid>
 </Window>

@@ -3,7 +3,7 @@
 namespace ManaHub.Services
 {
     // DatabaseService follows singleton design pattern to ensure there is only at least 1 instance of it
-    sealed partial class DatabaseService
+    internal sealed partial class DatabaseService
     {
         // static instance that holds our single object
         private static DatabaseService _instance;
@@ -49,6 +49,11 @@ namespace ManaHub.Services
                             Name TEXT,
                             ManaCost TEXT,
                             TypeLine TEXT,
+                            [Set] TEXT,
+                            Power TEXT,
+                            Toughness TEXT,
+                            Rarity TEXT,
+                            CollectorNumber TEXT,
                             OracleText TEXT
                        );";
                 command.ExecuteNonQuery();
