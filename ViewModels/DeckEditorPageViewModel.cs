@@ -23,12 +23,6 @@ namespace ManaHub.ViewModels
             FilteredCards.CollectionChanged += (s, e) => OnPropertyChanged(nameof(CardCount));
 
             LoadInitialCards();
-            GoToLoginPageCommand = new RelayCommand(o => GoToLoginPage());
-        }
-
-        private void GoToLoginPage()
-        {
-            _mainVM.CurrentView = new LoginPageViewModel(this._mainVM);
         }
 
         private void LoadInitialCards()

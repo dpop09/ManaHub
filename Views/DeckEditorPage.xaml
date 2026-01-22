@@ -41,7 +41,7 @@
                     <DataGridTextColumn Header="Type" Binding="{Binding TypeLine}" Width="*" />
                     <DataGridTextColumn Header="Stats" Width="*" >
                         <DataGridTextColumn.Binding>
-                            <MultiBinding StringFormat="{}{0} / {1}">
+                            <MultiBinding Converter="{StaticResource StatsConverter}">
                                 <Binding Path="Power" />
                                 <Binding Path="Toughness" />
                             </MultiBinding>
@@ -49,6 +49,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Rarity" Binding="{Binding Rarity}" Width="*" />
                     <DataGridTextColumn Header="Set" Binding="{Binding Set}" Width="*" />
+                    <DataGridTextColumn Header="Card Number" Binding="{Binding CollectorNumber}" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
             <Border Grid.Row="2" Background="LightGray" BorderBrush="Black" BorderThickness="0,1,0,1" Padding="10,5,0,0">

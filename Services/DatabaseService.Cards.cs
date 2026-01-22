@@ -45,10 +45,13 @@ namespace ManaHub.Services
                         pName.Value = card.Name ?? (object)DBNull.Value;
                         pMana.Value = card.ManaCost ?? (object)DBNull.Value;
                         pType.Value = card.TypeLine ?? (object)DBNull.Value;
-                        pSet.Value = card.Set ?? (object)DBNull.Value;
+                        // convert set text from json to uppercase if not null
+                        pSet.Value = card.Set?.ToUpper() ?? (object)DBNull.Value;
                         pPower.Value = card.Power ?? (object)DBNull.Value;
                         pTough.Value = card.Toughness ?? (object)DBNull.Value;
-                        pRarity.Value = card.Rarity ?? (object)DBNull.Value;
+                        pRarity.Value = !string.IsNullOrEmpty(card.Rarity)
+                            ? char.ToUpper(card.Rarity[0]) + card.Rarity.Substring(1).ToLower()
+                            : (object)DBNull.Value;
                         pColNum.Value = card.CollectorNumber ?? (object)DBNull.Value;
                         pText.Value = card.OracleText ?? (object)DBNull.Value;
 

@@ -38,13 +38,15 @@ namespace ManaHub.ViewModels
 
         public MainWindowViewModel()
         {
-            InitializeApp();
-
+            NavVM = new NavigationBarViewModel(this);
+            
             // Commands to swap the view
             ShowGoToCreateAccountPageCommand = new RelayCommand(o => CurrentView = new CreateAccountPageViewModel(this));
             MinimizeWindowCommand = new RelayCommand(o => MinimizeWindow());
             MaximizeWindowCommand = new RelayCommand(o => MaximizeWindow());
             CloseWindowCommand = new RelayCommand(o => CloseWindow());
+            
+            InitializeApp();
         }
 
         private void UpdateNavVisibility()
@@ -86,10 +88,8 @@ namespace ManaHub.ViewModels
                 }
             }
             else
-            {
                 Console.WriteLine($"Critical Error: File not found at {filePath}");
-            }
-            NavVM = new NavigationBarViewModel(this);
+
             CurrentView = new LoginPageViewModel(this);
         }
     }

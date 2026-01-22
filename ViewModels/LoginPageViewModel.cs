@@ -63,7 +63,6 @@ namespace ManaHub.ViewModels
                 _mainVM.NavVM.Username = Username;
                 GoToDeckEditorPage();
             }
-                  
             else
                 MessageBox.Show("Incorrect username or password.", "Notification", MessageBoxButton.OK);
         }

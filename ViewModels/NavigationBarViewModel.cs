@@ -1,9 +1,4 @@
 ﻿using ManaHub.MVVMs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ManaHub.ViewModels
@@ -31,10 +26,12 @@ namespace ManaHub.ViewModels
 
         private void LogoutCommand()
         {
+            if (_mainVM != null) 
+                return;
             // clear session
             Username = string.Empty;
             // navigate to the login page
-            _mainVM.CurrentView = new LoginPageViewModel(_mainVM);
+            _mainVM.CurrentView = new LoginPageViewModel(this._mainVM);
         }
     }
 }
