@@ -47,7 +47,9 @@ namespace ManaHub.Services
                        CREATE TABLE IF NOT EXISTS Cards (
                             Id INTEGER PRIMARY KEY AUTOINCREMENT,
                             Name TEXT,
+                            Colors TEXT,
                             ManaCost TEXT,
+                            Cmc DECIMAL,
                             TypeLine TEXT,
                             [Set] TEXT,
                             Power TEXT,

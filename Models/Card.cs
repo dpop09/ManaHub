@@ -10,11 +10,17 @@ namespace ManaHub.Models
         [JsonPropertyName("mana_cost")]
         public string ManaCost { get; set; }
 
+        [JsonPropertyName("cmc")]
+        public double Cmc {  get; set; }
+
         [JsonPropertyName("type_line")]
         public string TypeLine { get; set; }
 
-        //[JsonPropertyName("color")]
-        //public string Color { get; set; }
+        [JsonPropertyName("colors")]
+        public List<string> Colors { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string ColorsString { get; set; }
 
         [JsonPropertyName("set")]
         public string Set { get; set; }
