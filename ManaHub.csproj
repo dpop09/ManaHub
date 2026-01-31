@@ -10,8 +10,145 @@
 
   <ItemGroup>
     <None Remove="Assets\Jace-the-Mind-Sculptor-MtG-Planeswalker-Art.jpg" />
+    <None Remove="Assets\Mana\0.svg" />
+    <None Remove="Assets\Mana\1.svg" />
+    <None Remove="Assets\Mana\10.svg" />
+    <None Remove="Assets\Mana\11.svg" />
+    <None Remove="Assets\Mana\12.svg" />
+    <None Remove="Assets\Mana\13.svg" />
+    <None Remove="Assets\Mana\14.svg" />
+    <None Remove="Assets\Mana\15.svg" />
+    <None Remove="Assets\Mana\16.svg" />
+    <None Remove="Assets\Mana\17.svg" />
+    <None Remove="Assets\Mana\18.svg" />
+    <None Remove="Assets\Mana\19.svg" />
+    <None Remove="Assets\Mana\2.svg" />
+    <None Remove="Assets\Mana\20.svg" />
+    <None Remove="Assets\Mana\2B.svg" />
+    <None Remove="Assets\Mana\2G.svg" />
+    <None Remove="Assets\Mana\2R.svg" />
+    <None Remove="Assets\Mana\2U.svg" />
+    <None Remove="Assets\Mana\2W.svg" />
+    <None Remove="Assets\Mana\3.svg" />
+    <None Remove="Assets\Mana\4.svg" />
+    <None Remove="Assets\Mana\5.svg" />
+    <None Remove="Assets\Mana\6.svg" />
+    <None Remove="Assets\Mana\7.svg" />
+    <None Remove="Assets\Mana\8.svg" />
+    <None Remove="Assets\Mana\9.svg" />
+    <None Remove="Assets\Mana\B.svg" />
+    <None Remove="Assets\Mana\BG.svg" />
+    <None Remove="Assets\Mana\BGP.svg" />
+    <None Remove="Assets\Mana\BP.svg" />
+    <None Remove="Assets\Mana\BR.svg" />
+    <None Remove="Assets\Mana\BRP.svg" />
+    <None Remove="Assets\Mana\C.svg" />
+    <None Remove="Assets\Mana\G.svg" />
+    <None Remove="Assets\Mana\GP.svg" />
+    <None Remove="Assets\Mana\GU.svg" />
+    <None Remove="Assets\Mana\GUP.svg" />
+    <None Remove="Assets\Mana\GW.svg" />
+    <None Remove="Assets\Mana\GWP.svg" />
+    <None Remove="Assets\Mana\R.svg" />
+    <None Remove="Assets\Mana\RG.svg" />
+    <None Remove="Assets\Mana\RGP.svg" />
+    <None Remove="Assets\Mana\RP.svg" />
+    <None Remove="Assets\Mana\RW.svg" />
+    <None Remove="Assets\Mana\RWP.svg" />
+    <None Remove="Assets\Mana\S.svg" />
+    <None Remove="Assets\Mana\U.svg" />
+    <None Remove="Assets\Mana\UB.svg" />
+    <None Remove="Assets\Mana\UBP.svg" />
+    <None Remove="Assets\Mana\UP.svg" />
+    <None Remove="Assets\Mana\UR.svg" />
+    <None Remove="Assets\Mana\URP.svg" />
+    <None Remove="Assets\Mana\W.svg" />
+    <None Remove="Assets\Mana\WB.svg" />
+    <None Remove="Assets\Mana\WBP.svg" />
+    <None Remove="Assets\Mana\WP.svg" />
+    <None Remove="Assets\Mana\WU.svg" />
+    <None Remove="Assets\Mana\WUP.svg" />
+    <None Remove="Assets\Mana\X.svg" />
     <None Remove="Data\sample-of-cards.json" />
     <None Remove="Iona-Shield-of-Emeria-MtG-Art.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Mana\0.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\BP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Mana\10.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\11.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\12.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\13.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\14.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\15.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\16.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\17.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\18.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\19.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\20.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\2B.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\2G.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\2R.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\2U.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\2W.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\5.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\6.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\7.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\8.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\9.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\B.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -23,10 +160,140 @@
   <ItemGroup>
     <Resource Include="Assets\Iona-Shield-of-Emeria-MtG-Art.jpg" />
     <Resource Include="Assets\Jace-the-Mind-Sculptor-MtG-Planeswalker-Art.jpg" />
+    <Resource Include="Assets\Mana\1.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\3.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\4.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\BG.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\BGP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\BR.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\BRP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\C.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\G.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\GP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\GU.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\GUP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\GW.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\GWP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\R.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\RG.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\RGP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\RP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\RW.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\RWP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\S.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\U.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\UB.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\UBP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\UP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\UR.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\URP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\W.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\WB.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\WBP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\WP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\WU.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\WUP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Mana\X.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\artifact.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\battle.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\creature.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\enchantment.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\instant.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\land.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\planeswalker.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\sorcery.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.1" />
+    <PackageReference Include="SharpVectors" Version="1.8.5" />
   </ItemGroup>
 
   <ItemGroup>

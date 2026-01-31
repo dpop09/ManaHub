@@ -8,6 +8,7 @@
         <ResourceDictionary>
             <conv:StatsConverter x:Key="StatsConverter" />
             <conv:ColorConverter x:Key="ColorConverter" />
+            <conv:ManaImageConverter x:Key="ManaImageConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

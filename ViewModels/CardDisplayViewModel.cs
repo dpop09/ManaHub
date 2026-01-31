@@ -22,7 +22,5 @@ namespace ManaHub.ViewModels
         {
             _depvm = depvm;
         }
-
-
     }
 }
