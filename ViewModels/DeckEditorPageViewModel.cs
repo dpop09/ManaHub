@@ -11,6 +11,7 @@ namespace ManaHub.ViewModels
         private MainWindowViewModel _mainVM;
         public ObservableCollection<Card> FilteredCards {  get; set; }
         public int CardCount => FilteredCards.Count;
+        public CardDisplayViewModel CardDisplayVM { get; set; }
 
         public ICommand GoToLoginPageCommand { get; }
 
@@ -21,6 +22,7 @@ namespace ManaHub.ViewModels
             FilteredCards = new ObservableCollection<Card>();
             // subscribe to changes in the collection
             FilteredCards.CollectionChanged += (s, e) => OnPropertyChanged(nameof(CardCount));
+            CardDisplayVM = new CardDisplayViewModel(this);
 
             LoadInitialCards();
         }

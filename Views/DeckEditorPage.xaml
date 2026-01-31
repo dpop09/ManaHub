@@ -23,7 +23,7 @@
                     <Label FontSize="10" Content="Deck Name:"/>
                     <TextBlock Text="New Deck" VerticalAlignment="Center" FontSize="10" FontWeight="Bold"/>
                 </StackPanel>
-                <local:CardDisplay Grid.Row="1"/>
+                <local:CardDisplay Grid.Row="1" DataContext="{Binding CardDisplayVM}"/>
             </Grid>
         </Border>
         <Grid Grid.Column="1">
@@ -110,8 +110,9 @@
                     </ToggleButton>
                 </StackPanel>
             </Grid>
-            <DataGrid Grid.Row="1" ItemsSource="{Binding FilteredCards}" AutoGenerateColumns="False" IsReadOnly="True" 
-                        CanUserResizeColumns="True" Background="White" BorderThickness="0" SelectionMode="Single">
+            <DataGrid Grid.Row="1" ItemsSource="{Binding FilteredCards}" SelectedItem="{Binding CardDisplayVM.CardDisplay}" 
+                      AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeColumns="True" Background="White" 
+                      BorderThickness="0" SelectionMode="Single">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*" />
                     <DataGridTextColumn Header="Cost" Binding="{Binding ManaCost}" Width="*" />
