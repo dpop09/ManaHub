@@ -88,7 +88,7 @@
                     <DataGridTemplateColumn Header="Cost" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ItemsControl ItemsSource="{Binding ManaCost, Converter={StaticResource ManaImageConverter}}" 
+                                <ItemsControl ItemsSource="{Binding ManaCost, Converter={StaticResource SymbolToImageConverter}}" 
                                               HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>

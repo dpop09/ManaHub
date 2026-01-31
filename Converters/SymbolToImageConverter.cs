@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace ManaHub.Converters
 {
-    internal class ManaImageConverter : IValueConverter
+    internal class SymbolToImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -15,12 +15,11 @@ namespace ManaHub.Converters
 
                 // Convert each symbol (like "W") into a Pack URI path
                 return matches.Cast<Match>().Select(m =>
-                {
-                    string symbol = m.Groups[1].Value;
+                {   
                     // Clean the symbol to remove the slash
-                    string cleanSymbol = symbol.Replace("/", "");
+                    string symbol = m.Groups[1].Value.Replace("/", "");
                     // Return the absolute path of the mana symbol's correlating svg file
-                    return $"pack://application:,,,/ManaHub;component/Assets/Mana/{cleanSymbol}.svg";
+                    return $"pack://application:,,,/ManaHub;component/Assets/Symbols/{symbol}.svg";
                 }).ToList();
             }
             return new List<string>();
