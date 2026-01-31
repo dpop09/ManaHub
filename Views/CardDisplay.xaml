@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ManaHub.Views"
              xmlns:conv="clr-namespace:ManaHub.Converters"
+             xmlns:svg="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
+             xmlns:helpers="clr-namespace:ManaHub.Helpers"
              mc:Ignorable="d" 
              d:DesignHeight="315" d:DesignWidth="225">
     <UserControl.Resources>
@@ -20,23 +22,40 @@
             <Border Grid.Row="0" Background="#444444"  Padding="5" CornerRadius="12,12,0,0">
                 <StackPanel Orientation="Vertical">
                     <Grid>
-                        <TextBlock HorizontalAlignment="Left" Text="{Binding CardDisplay.Name}" 
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{Binding CardDisplay.Name}" TextTrimming="CharacterEllipsis"
                             Foreground="White" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Right" Text="{Binding CardDisplay.ManaCost}" 
-                            Foreground="White" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                        <ItemsControl Grid.Column="1" ItemsSource="{Binding CardDisplay.ManaCost, Converter={StaticResource SymbolToImageConverter}}" 
+                                      Margin="5,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <svg:SvgViewbox UriSource="{Binding}" Width="12" Height="12" Margin="1,0"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
                     <Grid>
                         <TextBlock HorizontalAlignment="Left" Text="{Binding CardDisplay.TypeLine}" 
-                            Foreground="White" FontStyle="Italic" FontSize="10" VerticalAlignment="Center"/>
+                            Foreground="White" FontSize="10" VerticalAlignment="Center"/>
                         <TextBlock HorizontalAlignment="Right" Text="{Binding CardDisplay.Set}" 
                             Foreground="#FFD700" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"/>
                     </Grid>
                 </StackPanel>
             </Border>
 
-            <Border Grid.Row="2" Background="#444444" CornerRadius="0,0,12,12" Padding="5">
+            <Border Grid.Row="1" Background="#444444" CornerRadius="0,0,12,12" Padding="5">
                 <Grid>
-                    <TextBlock TextWrapping="Wrap" Foreground="White" FontSize="11" LineHeight="10" Text="{Binding CardDisplay.OracleText}" />
+                    <TextBlock helpers:TextBlockHelper.FormattedText="{Binding CardDisplay.OracleText}" 
+                               TextWrapping="Wrap" Foreground="White" FontWeight="Bold" FontSize="11" LineHeight="10" />
 
                     <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" 
                             Background="#AAAAAA" CornerRadius="12,0,12,0" 

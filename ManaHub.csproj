@@ -10,8 +10,149 @@
 
   <ItemGroup>
     <None Remove="Assets\Jace-the-Mind-Sculptor-MtG-Planeswalker-Art.jpg" />
+    <None Remove="Assets\Symbols\0.svg" />
+    <None Remove="Assets\Symbols\1.svg" />
+    <None Remove="Assets\Symbols\10.svg" />
+    <None Remove="Assets\Symbols\11.svg" />
+    <None Remove="Assets\Symbols\12.svg" />
+    <None Remove="Assets\Symbols\13.svg" />
+    <None Remove="Assets\Symbols\14.svg" />
+    <None Remove="Assets\Symbols\15.svg" />
+    <None Remove="Assets\Symbols\16.svg" />
+    <None Remove="Assets\Symbols\17.svg" />
+    <None Remove="Assets\Symbols\18.svg" />
+    <None Remove="Assets\Symbols\19.svg" />
+    <None Remove="Assets\Symbols\2.svg" />
+    <None Remove="Assets\Symbols\20.svg" />
+    <None Remove="Assets\Symbols\2B.svg" />
+    <None Remove="Assets\Symbols\2G.svg" />
+    <None Remove="Assets\Symbols\2R.svg" />
+    <None Remove="Assets\Symbols\2U.svg" />
+    <None Remove="Assets\Symbols\2W.svg" />
+    <None Remove="Assets\Symbols\3.svg" />
+    <None Remove="Assets\Symbols\4.svg" />
+    <None Remove="Assets\Symbols\5.svg" />
+    <None Remove="Assets\Symbols\6.svg" />
+    <None Remove="Assets\Symbols\7.svg" />
+    <None Remove="Assets\Symbols\8.svg" />
+    <None Remove="Assets\Symbols\9.svg" />
+    <None Remove="Assets\Symbols\B.svg" />
+    <None Remove="Assets\Symbols\BG.svg" />
+    <None Remove="Assets\Symbols\BGP.svg" />
+    <None Remove="Assets\Symbols\BP.svg" />
+    <None Remove="Assets\Symbols\BR.svg" />
+    <None Remove="Assets\Symbols\BRP.svg" />
+    <None Remove="Assets\Symbols\C.svg" />
+    <None Remove="Assets\Symbols\E.svg" />
+    <None Remove="Assets\Symbols\G.svg" />
+    <None Remove="Assets\Symbols\GP.svg" />
+    <None Remove="Assets\Symbols\GU.svg" />
+    <None Remove="Assets\Symbols\GUP.svg" />
+    <None Remove="Assets\Symbols\GW.svg" />
+    <None Remove="Assets\Symbols\GWP.svg" />
+    <None Remove="Assets\Symbols\P.svg" />
+    <None Remove="Assets\Symbols\Q.svg" />
+    <None Remove="Assets\Symbols\R.svg" />
+    <None Remove="Assets\Symbols\RG.svg" />
+    <None Remove="Assets\Symbols\RGP.svg" />
+    <None Remove="Assets\Symbols\RP.svg" />
+    <None Remove="Assets\Symbols\RW.svg" />
+    <None Remove="Assets\Symbols\RWP.svg" />
+    <None Remove="Assets\Symbols\S.svg" />
+    <None Remove="Assets\Symbols\T.svg" />
+    <None Remove="Assets\Symbols\U.svg" />
+    <None Remove="Assets\Symbols\UB.svg" />
+    <None Remove="Assets\Symbols\UBP.svg" />
+    <None Remove="Assets\Symbols\UP.svg" />
+    <None Remove="Assets\Symbols\UR.svg" />
+    <None Remove="Assets\Symbols\URP.svg" />
+    <None Remove="Assets\Symbols\W.svg" />
+    <None Remove="Assets\Symbols\WB.svg" />
+    <None Remove="Assets\Symbols\WBP.svg" />
+    <None Remove="Assets\Symbols\WP.svg" />
+    <None Remove="Assets\Symbols\WU.svg" />
+    <None Remove="Assets\Symbols\WUP.svg" />
+    <None Remove="Assets\Symbols\X.svg" />
     <None Remove="Data\sample-of-cards.json" />
     <None Remove="Iona-Shield-of-Emeria-MtG-Art.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Symbols\0.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\BP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Symbols\10.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\11.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\12.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\13.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\14.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\15.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\16.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\17.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\18.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\19.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\20.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\2B.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\2G.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\2R.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\2U.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\2W.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\5.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\6.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\7.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\8.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\9.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\B.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -23,10 +164,152 @@
   <ItemGroup>
     <Resource Include="Assets\Iona-Shield-of-Emeria-MtG-Art.jpg" />
     <Resource Include="Assets\Jace-the-Mind-Sculptor-MtG-Planeswalker-Art.jpg" />
+    <Resource Include="Assets\Symbols\1.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\2.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\3.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\4.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\BG.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\BGP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\BR.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\BRP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\C.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\E.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\G.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\GP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\GU.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\GUP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\GW.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\GWP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\P.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\Q.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\R.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\RG.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\RGP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\RP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\RW.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\RWP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\S.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\T.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\U.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\UB.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\UBP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\UP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\UR.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\URP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\W.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\WB.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\WBP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\WP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\WU.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\WUP.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\X.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\artifact.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\battle.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\creature.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\enchantment.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\instant.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\land.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\planeswalker.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Types\sorcery.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.1" />
+    <PackageReference Include="SharpVectors" Version="1.8.5" />
   </ItemGroup>
 
   <ItemGroup>
