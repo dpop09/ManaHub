@@ -26,7 +26,7 @@ namespace ManaHub.ViewModels
 
         private void LogoutCommand()
         {
-            if (_mainVM != null) 
+            if (_mainVM == null) 
                 return;
             // clear session
             Username = string.Empty;

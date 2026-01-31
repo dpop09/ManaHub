@@ -8,21 +8,22 @@
         d:DesignHeight="720" d:DesignWidth="1280">
     <Grid Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width=".15*" />
-            <ColumnDefinition Width=".85*" />
+            <ColumnDefinition Width="225" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         
         <Border Grid.Row="0" BorderBrush="Black" BorderThickness="0,0,1,0">
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height=".5*" />
-                    <RowDefinition Height=".5*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="315" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top" Margin="5">
                     <Label FontSize="10" Content="Deck Name:"/>
-                    <TextBlock Width="50"/>
+                    <TextBlock Text="New Deck" VerticalAlignment="Center" FontSize="10" FontWeight="Bold"/>
                 </StackPanel>
+                <local:CardDisplay Grid.Row="1" DataContext="{Binding CardDisplayVM}"/>
             </Grid>
         </Border>
         <Grid Grid.Column="1">
@@ -109,8 +110,9 @@
                     </ToggleButton>
                 </StackPanel>
             </Grid>
-            <DataGrid Grid.Row="1" ItemsSource="{Binding FilteredCards}" AutoGenerateColumns="False" IsReadOnly="True" 
-                        CanUserResizeColumns="True" Background="White" BorderThickness="0" SelectionMode="Single">
+            <DataGrid Grid.Row="1" ItemsSource="{Binding FilteredCards}" SelectedItem="{Binding CardDisplayVM.CardDisplay}" 
+                      AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeColumns="True" Background="White" 
+                      BorderThickness="0" SelectionMode="Single">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*" />
                     <DataGridTextColumn Header="Cost" Binding="{Binding ManaCost}" Width="*" />

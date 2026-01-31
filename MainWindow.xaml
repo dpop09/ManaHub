@@ -7,6 +7,7 @@
         mc:Ignorable="d" WindowStyle="None" AllowsTransparency="True" Background="White" 
         Title="MainWindow" Height="450" Width="800"
         WindowState="Maximized"
+        ResizeMode="CanMinimize"
         xmlns:views="clr-namespace:ManaHub.Views"
         xmlns:vm="clr-namespace:ManaHub.ViewModels">
     <WindowChrome.WindowChrome>
