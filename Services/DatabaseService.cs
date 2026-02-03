@@ -56,7 +56,8 @@ namespace ManaHub.Services
                             Toughness TEXT,
                             Rarity TEXT,
                             CollectorNumber TEXT,
-                            OracleText TEXT
+                            OracleText TEXT,
+                            Layout TEXT
                        );";
                 command.ExecuteNonQuery();
             }

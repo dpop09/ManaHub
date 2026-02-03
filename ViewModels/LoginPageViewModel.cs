@@ -45,9 +45,9 @@ namespace ManaHub.ViewModels
         {
             _mainVM.CurrentView = new CreateAccountPageViewModel(this._mainVM);
         }
-        private void GoToDeckEditorPage()
+        private void GoToTablesPage()
         {
-            _mainVM.CurrentView = new DeckEditorPageViewModel(this._mainVM);
+            _mainVM.CurrentView = new TablesPageViewModel(this._mainVM);
         }
         private void ExecuteLogin()
         {
@@ -61,7 +61,7 @@ namespace ManaHub.ViewModels
             if (DatabaseService.Instance.CheckUser(Username, Password))
             {
                 _mainVM.NavVM.Username = Username;
-                GoToDeckEditorPage();
+                GoToTablesPage();
             }
             else
                 MessageBox.Show("Incorrect username or password.", "Notification", MessageBoxButton.OK);

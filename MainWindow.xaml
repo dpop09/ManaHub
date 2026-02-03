@@ -23,6 +23,12 @@
         <DataTemplate DataType="{x:Type vm:DeckEditorPageViewModel}">
             <views:DeckEditorPage />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TablesPageViewModel}">
+            <views:TablesPage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:GamePageViewModel}">
+            <views:GamePage />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>

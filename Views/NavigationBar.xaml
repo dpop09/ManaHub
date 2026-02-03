@@ -7,13 +7,22 @@
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="1280">
     <Border Background="#F0F0F0" BorderBrush="Black" BorderThickness="0,0,0,1">
-        <Grid Margin="5,0">
-            <TextBlock Text="{Binding NavVM.Username}" VerticalAlignment="Center" FontWeight="Bold" HorizontalAlignment="Left"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Width="100" Height="22" Content="Logout" 
+                <TextBlock Grid.Column="0" Text="{Binding NavVM.Username}" Padding="10,0,10,0" FontWeight="Bold" />
+                <Button Grid.Column="1" Padding="10,0,10,0" Content="Deck Editor"
+                        Command="{Binding NavVM.GoToDeckEditorPageCommand}" />
+                <Button Grid.Column="2" Padding="10,0,10,0" Content="Tables"
+                        Command="{Binding NavVM.GoToTablesPageCommand}" />
+                <Button Grid.Column="3" Padding="10,0,10,0" Content="Logout" 
                         Command="{Binding NavVM.ExecuteLogoutCommand}" />
-            </StackPanel>
         </Grid>
     </Border>
 </UserControl>

@@ -39,5 +39,8 @@ namespace ManaHub.Models
 
         [JsonPropertyName("oracle_text")]
         public string OracleText { get; set; }
+
+        [JsonPropertyName("layout")]
+        public string Layout { get; set; }
     }
 }
