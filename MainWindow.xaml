@@ -4,14 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ManaHub"
-        mc:Ignorable="d" WindowStyle="None" AllowsTransparency="True" Background="White" 
+        mc:Ignorable="d" WindowStyle="None" AllowsTransparency="False" Background="White" 
         Title="MainWindow" Height="450" Width="800"
         WindowState="Maximized"
         ResizeMode="CanMinimize"
         xmlns:views="clr-namespace:ManaHub.Views"
         xmlns:vm="clr-namespace:ManaHub.ViewModels">
     <WindowChrome.WindowChrome>
-        <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0" />
+        <WindowChrome GlassFrameThickness="1" CornerRadius="0" CaptionHeight="0" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:LoginPageViewModel}">
@@ -22,6 +22,12 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:DeckEditorPageViewModel}">
             <views:DeckEditorPage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TablesPageViewModel}">
+            <views:TablesPage />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:GamePageViewModel}">
+            <views:GamePage />
         </DataTemplate>
     </Window.Resources>
 
@@ -50,9 +56,12 @@
                         Text="Pre-Alpha v1.0.0" />
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="—" Width="30" Height="25" Command="{Binding MinimizeWindowCommand}"></Button>
-                <Button Content="☐" Width="30" Height="25" Command="{Binding MaximizeWindowCommand}"></Button>
-                <Button Content="✕" Width="30" Height="25" Command="{Binding CloseWindowCommand}"></Button>
+                <Button Content="—" Background="Transparent" Foreground="White" BorderThickness="0" 
+                        Width="30" Height="30" Command="{Binding MinimizeWindowCommand}"></Button>
+                <Button Content="☐" Background="Transparent" Foreground="White" BorderThickness="0" 
+                        Width="30" Height="30" Command="{Binding MaximizeWindowCommand}"></Button>
+                <Button Content="✕" Background="Transparent" Foreground="White" BorderThickness="0" 
+                        Width="30" Height="30" Command="{Binding CloseWindowCommand}"></Button>
             </StackPanel>
         </Grid>
         <views:NavigationBar Grid.Row="1" Visibility="{Binding NavVisibility}" />

@@ -25,8 +25,8 @@ namespace ManaHub.Services
                     var command = connection.CreateCommand();
                     command.Transaction = transaction;
                     command.CommandText = @"
-                        INSERT INTO Cards (Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, Toughness, Rarity, CollectorNumber, OracleText) 
-                        VALUES ($name, $colors, $mana, $cmc, $type, $set, $power, $tough, $rarity, $colnum, $text)";
+                        INSERT INTO Cards (Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, Toughness, Rarity, CollectorNumber, OracleText, Layout) 
+                        VALUES ($name, $colors, $mana, $cmc, $type, $set, $power, $tough, $rarity, $colnum, $text, $layout)";
 
                     var pName = command.Parameters.Add("$name", SqliteType.Text);
                     var pColors = command.Parameters.Add("$colors", SqliteType.Text);
@@ -39,6 +39,7 @@ namespace ManaHub.Services
                     var pRarity = command.Parameters.Add("$rarity", SqliteType.Text);
                     var pColNum = command.Parameters.Add("$colnum", SqliteType.Text);
                     var pText = command.Parameters.Add("$text", SqliteType.Text);
+                    var pLayout = command.Parameters.Add("$layout", SqliteType.Text);
 
                     await foreach (var card in cards)
                     {
@@ -61,6 +62,7 @@ namespace ManaHub.Services
                             : (object)DBNull.Value;
                         pColNum.Value = card.CollectorNumber ?? (object)DBNull.Value;
                         pText.Value = card.OracleText ?? (object)DBNull.Value;
+                        pLayout.Value = card.Layout ?? (object)DBNull.Value;
 
                         await command.ExecuteNonQueryAsync();
                     }
@@ -75,7 +77,8 @@ namespace ManaHub.Services
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT COUNT(*) FROM Cards";
+                command.CommandText = "SELECT COUNT(*) FROM Cards " +
+                    "WHERE Layout NOT IN ('token', 'double_faced_token', 'emblem', 'art_series')";
                 return (long)command.ExecuteScalar();
             }
         }
@@ -90,7 +93,10 @@ namespace ManaHub.Services
 
                 var command = connection.CreateCommand();
                 command.CommandText = "SELECT Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, " +
-                    "Toughness, Rarity, CollectorNumber, OracleText FROM Cards LIMIT $limit";
+                    "Toughness, Rarity, CollectorNumber, OracleText, Layout " +
+                    "FROM Cards " +
+                    "WHERE Layout NOT IN ('token', 'double_faced_token', 'emblem', 'art_series') " +
+                    "LIMIT $limit";
                 command.Parameters.AddWithValue("$limit", limit);
 
                 using (var reader = command.ExecuteReader())
@@ -109,7 +115,8 @@ namespace ManaHub.Services
                             Toughness = reader.IsDBNull(7) ? "" : reader.GetString(7),
                             Rarity = reader.IsDBNull(8) ? "" : reader.GetString(8),
                             CollectorNumber = reader.IsDBNull(9) ? "" : reader.GetString(9),
-                            OracleText = reader.IsDBNull(10) ? "" : reader.GetString(10)
+                            OracleText = reader.IsDBNull(10) ? "" : reader.GetString(10),
+                            Layout = reader.IsDBNull(11) ? "" : reader.GetString(11)
                         });
                     }
                 }
