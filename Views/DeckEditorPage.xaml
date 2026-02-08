@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ManaHub.Views"
         xmlns:svg="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
+        xmlns:conv="clr-namespace:ManaHub.Converters"
         mc:Ignorable="d"
         d:DesignHeight="720" d:DesignWidth="1280">
+    <UserControl.Resources>
+        <conv:CardToVisibilityConverter x:Key="CardToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="225" />
@@ -24,7 +28,9 @@
                     <Label FontSize="10" Content="Deck Name:"/>
                     <TextBlock Text="New Deck" VerticalAlignment="Center" FontSize="10" FontWeight="Bold"/>
                 </StackPanel>
-                <local:CardDisplay Grid.Row="1" DataContext="{Binding CardDisplayVM}"/>
+                <Grid Grid.Row="1" Visibility="{Binding CardDisplayVM.CardDisplay, Converter={StaticResource CardToVisibilityConverter}}">
+                    <local:CardDisplay DataContext="{Binding CardDisplayVM}" />
+                </Grid>
             </Grid>
         </Border>
         <Grid Grid.Column="1">
