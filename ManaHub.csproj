@@ -73,7 +73,6 @@
     <None Remove="Assets\Symbols\WU.svg" />
     <None Remove="Assets\Symbols\WUP.svg" />
     <None Remove="Assets\Symbols\X.svg" />
-    <None Remove="Data\sample-of-cards.json" />
     <None Remove="Iona-Shield-of-Emeria-MtG-Art.jpg" />
   </ItemGroup>
 
@@ -153,12 +152,6 @@
     <Resource Include="Assets\Symbols\B.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Data\sample-of-cards.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -310,12 +303,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.1" />
     <PackageReference Include="SharpVectors" Version="1.8.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Data\oracle-cards-20260117221532.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
