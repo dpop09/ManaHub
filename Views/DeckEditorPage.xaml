@@ -92,8 +92,9 @@
                         </ToggleButton>
                     </StackPanel>
                 </Grid>
-                <DataGrid x:Name="CollectionGrid" Grid.Row="1" ItemsSource="{Binding FilteredCards}" SelectedItem="{Binding CardDisplayVM.CardDisplay}" 
-                          AutoGenerateColumns="False" IsReadOnly="True" CanUserResizeColumns="True" Background="White" 
+                <DataGrid x:Name="CollectionGrid" Grid.Row="1" ItemsSource="{Binding FilteredCards}" 
+                          SelectedItem="{Binding SelectedCollectionCard}" AutoGenerateColumns="False" 
+                          IsReadOnly="True" CanUserResizeColumns="True" Background="White" 
                           BorderThickness="0" SelectionMode="Single">
                     <DataGrid.InputBindings>
                         <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding AddToDeckCommand}" 
@@ -186,8 +187,10 @@
                             <TextBlock VerticalAlignment="Center" Text="{Binding MainDeckCardCount}"/>
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid x:Name="MainDeckGrid" Grid.Row="1" ItemsSource="{Binding DeckList}" AutoGenerateColumns="False" IsReadOnly="True" 
-                              CanUserResizeColumns="True" Background="White" BorderThickness="0" SelectionMode="Single">
+                    <DataGrid x:Name="MainDeckGrid" Grid.Row="1" ItemsSource="{Binding DeckList}" 
+                              SelectedItem="{Binding SelectedMainDeckCard}" AutoGenerateColumns="False" 
+                              IsReadOnly="True" CanUserResizeColumns="True" Background="White" 
+                              BorderThickness="0" SelectionMode="Single">
                         <DataGrid.InputBindings>
                             <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RemoveFromDeckCommand}" 
                                           CommandParameter="{Binding SelectedItem, ElementName=MainDeckGrid}" />
@@ -242,8 +245,10 @@
                             <TextBlock VerticalAlignment="Center" Text="{Binding SideboardCardCount}"/>
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid x:Name="SideboardGrid" Grid.Row="1" ItemsSource="{Binding SideboardList}" AutoGenerateColumns="False" 
-                              IsReadOnly="True" CanUserResizeColumns="True" Background="White" BorderThickness="0" SelectionMode="Single">
+                    <DataGrid x:Name="SideboardGrid" Grid.Row="1" ItemsSource="{Binding SideboardList}" 
+                              SelectedItem="{Binding SelectedSideboardCard}" AutoGenerateColumns="False" 
+                              IsReadOnly="True" CanUserResizeColumns="True" Background="White" BorderThickness="0" 
+                              SelectionMode="Single">
                         <DataGrid.InputBindings>
                             <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RemoveFromSideboardCommand}"
                                           CommandParameter="{Binding SelectedItem, ElementName=SideboardGrid}" />

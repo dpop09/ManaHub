@@ -9,10 +9,74 @@ namespace ManaHub.ViewModels
     internal class DeckEditorPageViewModel : ViewModelBase
     {
         private MainWindowViewModel _mainVM;
+        private Card _selectedCollectionCard;
+        private Card _selectedMainDeckCard;
+        private Card _selectedSideboardCard;
         public ObservableCollection<Card> FilteredCards { get; set; }
-        public CardDisplayViewModel CardDisplayVM { get; set; }
         public ObservableCollection<Card> DeckList { get; set; }
         public ObservableCollection<Card> SideboardList { get; set; }
+        public CardDisplayViewModel CardDisplayVM { get; set; }
+        public Card SelectedCollectionCard
+        {
+            get => _selectedCollectionCard;
+            set
+            {
+                if (_selectedCollectionCard == value) 
+                    return;
+                _selectedCollectionCard = value;
+                if (value != null)
+                {
+                    _selectedMainDeckCard = null;
+                    _selectedSideboardCard = null;
+                    CardDisplayVM.CardDisplay = value;
+                    // Notify all three so the other grids clear their highlights
+                    OnPropertyChanged(nameof(SelectedCollectionCard));
+                    OnPropertyChanged(nameof(SelectedMainDeckCard));
+                    OnPropertyChanged(nameof(SelectedSideboardCard));
+                }
+                OnPropertyChanged();
+            }
+        }
+        public Card SelectedMainDeckCard 
+        {
+            get => _selectedMainDeckCard;
+            set
+            {
+                if (_selectedMainDeckCard == value)
+                    return;
+                _selectedMainDeckCard = value;
+                if (value != null)
+                {
+                    _selectedCollectionCard = null;
+                    _selectedSideboardCard = null;
+                    CardDisplayVM.CardDisplay = value;
+                    OnPropertyChanged(nameof(SelectedCollectionCard));
+                    OnPropertyChanged(nameof(SelectedMainDeckCard));
+                    OnPropertyChanged(nameof(SelectedSideboardCard));
+                }
+                OnPropertyChanged();
+            }
+        }
+        public Card SelectedSideboardCard 
+        {
+            get => _selectedSideboardCard;
+            set
+            {
+                if (_selectedSideboardCard == value)
+                    return;
+                _selectedSideboardCard = value;
+                if (value != null)
+                {
+                    _selectedCollectionCard = null;
+                    _selectedMainDeckCard = null;
+                    CardDisplayVM.CardDisplay = value;
+                    OnPropertyChanged(nameof(SelectedCollectionCard));
+                    OnPropertyChanged(nameof(SelectedMainDeckCard));
+                    OnPropertyChanged(nameof(SelectedSideboardCard));
+                }
+                OnPropertyChanged();
+            }
+        }
         public int CardCount => FilteredCards.Count;
         public int MainDeckCardCount => DeckList.Count;
         public int SideboardCardCount => SideboardList.Count;
