@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Data;
 
 namespace ManaHub.Converters
@@ -18,8 +19,21 @@ namespace ManaHub.Converters
                 {   
                     // Clean the symbol to remove the slash
                     string symbol = m.Groups[1].Value.Replace("/", "");
-                    // Return the absolute path of the mana symbol's correlating svg file
-                    return $"pack://application:,,,/ManaHub;component/Assets/Symbols/{symbol}.svg";
+                    string primaryPath = $"pack://application:,,,/ManaHub;component/Assets/Symbols/{symbol}.svg";
+                    const string fallbackPath = "pack://application:,,,/ManaHub;component/Assets/Symbols/fallback.svg";
+                    
+                    try
+                    {
+                        var uri = new Uri(primaryPath);
+                        var resource = Application.GetResourceStream(uri);
+                        if (resource != null)
+                            return primaryPath;
+                    }
+                    catch 
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Mana Symbol Missing: {symbol}. Using placeholder.");
+                    }
+                    return fallbackPath;
                 }).ToList();
             }
             return new List<string>();

@@ -4,6 +4,8 @@ namespace ManaHub.Models
 {
     public class Card
     {
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
         [JsonPropertyName("name")]
         public string Name { get; set; }
 

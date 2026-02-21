@@ -2,6 +2,8 @@
 using ManaHub.MVVMs;
 using ManaHub.Services;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ManaHub.ViewModels
@@ -9,14 +11,127 @@ namespace ManaHub.ViewModels
     internal class DeckEditorPageViewModel : ViewModelBase
     {
         private MainWindowViewModel _mainVM;
+        private Card _selectedCollectionCard;
+        private Card _selectedMainDeckCard;
+        private Card _selectedSideboardCard;
+        private string _deckName = "";
+        private string _filterSearchText = "";
+        private bool _searchNames = true; // Default to true
+        private bool _searchTypes = false;
+        private bool _searchRules = false;
         public ObservableCollection<Card> FilteredCards { get; set; }
-        public CardDisplayViewModel CardDisplayVM { get; set; }
         public ObservableCollection<Card> DeckList { get; set; }
         public ObservableCollection<Card> SideboardList { get; set; }
+        public CardDisplayViewModel CardDisplayVM { get; set; }
+        public Card SelectedCollectionCard
+        {
+            get => _selectedCollectionCard;
+            set
+            {
+                if (_selectedCollectionCard == value) 
+                    return;
+                _selectedCollectionCard = value;
+                if (value != null)
+                {
+                    _selectedMainDeckCard = null;
+                    _selectedSideboardCard = null;
+                    CardDisplayVM.CardDisplay = value;
+                    // Notify all three so the other grids clear their highlights
+                    OnPropertyChanged(nameof(SelectedCollectionCard));
+                    OnPropertyChanged(nameof(SelectedMainDeckCard));
+                    OnPropertyChanged(nameof(SelectedSideboardCard));
+                }
+                OnPropertyChanged();
+            }
+        }
+        public Card SelectedMainDeckCard 
+        {
+            get => _selectedMainDeckCard;
+            set
+            {
+                if (_selectedMainDeckCard == value)
+                    return;
+                _selectedMainDeckCard = value;
+                if (value != null)
+                {
+                    _selectedCollectionCard = null;
+                    _selectedSideboardCard = null;
+                    CardDisplayVM.CardDisplay = value;
+                    OnPropertyChanged(nameof(SelectedCollectionCard));
+                    OnPropertyChanged(nameof(SelectedMainDeckCard));
+                    OnPropertyChanged(nameof(SelectedSideboardCard));
+                }
+                OnPropertyChanged();
+            }
+        }
+        public Card SelectedSideboardCard 
+        {
+            get => _selectedSideboardCard;
+            set
+            {
+                if (_selectedSideboardCard == value)
+                    return;
+                _selectedSideboardCard = value;
+                if (value != null)
+                {
+                    _selectedCollectionCard = null;
+                    _selectedMainDeckCard = null;
+                    CardDisplayVM.CardDisplay = value;
+                    OnPropertyChanged(nameof(SelectedCollectionCard));
+                    OnPropertyChanged(nameof(SelectedMainDeckCard));
+                    OnPropertyChanged(nameof(SelectedSideboardCard));
+                }
+                OnPropertyChanged();
+            }
+        }
+        public string DeckName 
+        {
+            get => _deckName;
+            set
+            {
+                _deckName = value;
+                OnPropertyChanged();
+            }
+        }
+        public string FilterSearchText 
+        {
+            get => _filterSearchText;
+            set
+            {
+                _filterSearchText = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool SearchNames 
+        { 
+            get => _searchNames; 
+            set 
+            { 
+                _searchNames = value; 
+                OnPropertyChanged();
+            } 
+        }
+        public bool SearchTypes 
+        { 
+            get => _searchTypes; 
+            set 
+            { 
+                _searchTypes = value;
+                OnPropertyChanged(); 
+            } 
+        }
+        public bool SearchRules 
+        { 
+            get => _searchRules; 
+            set 
+            { 
+                _searchRules = value; 
+                OnPropertyChanged(); 
+            } 
+        }
         public int CardCount => FilteredCards.Count;
         public int MainDeckCardCount => DeckList.Count;
         public int SideboardCardCount => SideboardList.Count;
-
         public ICommand GoToLoginPageCommand { get; }
         public ICommand AddToDeckCommand { get; }
         public ICommand RemoveFromDeckCommand { get; }
@@ -24,6 +139,11 @@ namespace ManaHub.ViewModels
         public ICommand RemoveFromSideboardCommand { get; }
         public ICommand MoveCardFromMainDeckToSideboardCommand {  get; }
         public ICommand MoveCardFromSideboardToMainDeckCommand { get; }
+        public ICommand NewDeckCommand { get; }
+        public ICommand SaveDeckCommand { get; }
+        public ICommand LoadDeckCommand { get; }
+        public ICommand FilterSearchCardsCommand { get; }
+        public ICommand ClearFilterSearchCommand { get; }
 
         public DeckEditorPageViewModel(MainWindowViewModel mainVM)
         {
@@ -46,6 +166,11 @@ namespace ManaHub.ViewModels
             RemoveFromSideboardCommand = new RelayCommand((obj) => RemoveFromSideboard(obj));
             MoveCardFromMainDeckToSideboardCommand = new RelayCommand((obj) => MoveCardFromMainDeckToSideboard(obj));
             MoveCardFromSideboardToMainDeckCommand = new RelayCommand((obj) => MoveCardFromSideboardToMainDeck(obj));
+            NewDeckCommand = new RelayCommand(o => NewDeck());
+            SaveDeckCommand = new RelayCommand(o => SaveDeck());
+            LoadDeckCommand = new RelayCommand(o => LoadDeck());
+            FilterSearchCardsCommand = new RelayCommand(o => FilterSearchCards());
+            ClearFilterSearchCommand = new RelayCommand(o => ClearFilterSearch());
 
             CardDisplayVM = new CardDisplayViewModel(this);
 
@@ -100,6 +225,74 @@ namespace ManaHub.ViewModels
         {
             AddToDeck(obj);
             RemoveFromSideboard(obj);
+        }
+        private void NewDeck()
+        {
+            if (DeckList.Count > 0 && MessageBox.Show("Clear current deck?", "New Deck", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                DeckList.Clear();
+                SideboardList.Clear();
+                DeckName = "";
+            }
+        }
+        private void SaveDeck()
+        {
+            // check if there are any cards
+            if (!DeckList.Any() && !SideboardList.Any())
+                return;
+            var sfd = new Microsoft.Win32.SaveFileDialog { Filter = "ManaHub Deck (*.json)|*.json" };
+            if (sfd.ShowDialog() == true)
+                DeckName = Path.GetFileNameWithoutExtension(sfd.SafeFileName);
+                DeckService.SaveToFile(sfd.FileName, DeckName, DeckList, SideboardList);
+        }
+        private void LoadDeck()
+        {
+            var ofd = new Microsoft.Win32.OpenFileDialog { Filter = "ManaHub Deck (*.json)|*.json" };
+            if (ofd.ShowDialog() == true)
+            {
+                var data = DeckService.LoadFromFile(ofd.FileName);
+
+                DeckName = data.DeckName;
+                // 1. Fetch unique card data from DB (one instance per ID)
+                var uniqueIds = data.MainDeckIds.Distinct().Concat(data.SideboardIds.Distinct());
+                // Quick lookup table
+                var cardLibrary = DatabaseService.Instance.GetCardsByIds(uniqueIds).ToDictionary(c => c.Id); 
+
+                DeckList.Clear();
+                // 2. Loop through the ORIGINAL ID list (which contains duplicates)
+                foreach (var id in data.MainDeckIds)
+                {
+                    if (cardLibrary.TryGetValue(id, out var card))
+                    {
+                        // We add the same card object reference multiple times
+                        DeckList.Add(card);
+                    }
+                }
+
+                SideboardList.Clear();
+                foreach (var id in data.SideboardIds)
+                {
+                    if (cardLibrary.TryGetValue(id, out var card))
+                    {
+                        SideboardList.Add(card);
+                    }
+                }
+            }
+        }
+        private void FilterSearchCards()
+        {
+            if (string.IsNullOrWhiteSpace(FilterSearchText))
+                return;
+            var cards = DatabaseService.Instance.GetCardsByFilteredSearch(FilterSearchText, SearchNames, SearchTypes, SearchRules);
+            // clear and fill the observable collection
+            FilteredCards.Clear();
+            foreach (var card in cards)
+                FilteredCards.Add(card);
+        }
+        private void ClearFilterSearch()
+        {
+            FilterSearchText = "";
+            LoadInitialCards();
         }
     }
 }
