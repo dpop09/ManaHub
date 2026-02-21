@@ -15,6 +15,10 @@ namespace ManaHub.ViewModels
         private Card _selectedMainDeckCard;
         private Card _selectedSideboardCard;
         private string _deckName = "";
+        private string _filterSearchText = "";
+        private bool _searchNames = true; // Default to true
+        private bool _searchTypes = false;
+        private bool _searchRules = false;
         public ObservableCollection<Card> FilteredCards { get; set; }
         public ObservableCollection<Card> DeckList { get; set; }
         public ObservableCollection<Card> SideboardList { get; set; }
@@ -89,11 +93,45 @@ namespace ManaHub.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        public string FilterSearchText 
+        {
+            get => _filterSearchText;
+            set
+            {
+                _filterSearchText = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool SearchNames 
+        { 
+            get => _searchNames; 
+            set 
+            { 
+                _searchNames = value; 
+                OnPropertyChanged();
+            } 
+        }
+        public bool SearchTypes 
+        { 
+            get => _searchTypes; 
+            set 
+            { 
+                _searchTypes = value;
+                OnPropertyChanged(); 
+            } 
+        }
+        public bool SearchRules 
+        { 
+            get => _searchRules; 
+            set 
+            { 
+                _searchRules = value; 
+                OnPropertyChanged(); 
+            } 
+        }
         public int CardCount => FilteredCards.Count;
         public int MainDeckCardCount => DeckList.Count;
         public int SideboardCardCount => SideboardList.Count;
-
         public ICommand GoToLoginPageCommand { get; }
         public ICommand AddToDeckCommand { get; }
         public ICommand RemoveFromDeckCommand { get; }
@@ -104,6 +142,8 @@ namespace ManaHub.ViewModels
         public ICommand NewDeckCommand { get; }
         public ICommand SaveDeckCommand { get; }
         public ICommand LoadDeckCommand { get; }
+        public ICommand FilterSearchCardsCommand { get; }
+        public ICommand ClearFilterSearchCommand { get; }
 
         public DeckEditorPageViewModel(MainWindowViewModel mainVM)
         {
@@ -129,6 +169,8 @@ namespace ManaHub.ViewModels
             NewDeckCommand = new RelayCommand(o => NewDeck());
             SaveDeckCommand = new RelayCommand(o => SaveDeck());
             LoadDeckCommand = new RelayCommand(o => LoadDeck());
+            FilterSearchCardsCommand = new RelayCommand(o => FilterSearchCards());
+            ClearFilterSearchCommand = new RelayCommand(o => ClearFilterSearch());
 
             CardDisplayVM = new CardDisplayViewModel(this);
 
@@ -236,6 +278,21 @@ namespace ManaHub.ViewModels
                     }
                 }
             }
+        }
+        private void FilterSearchCards()
+        {
+            if (string.IsNullOrWhiteSpace(FilterSearchText))
+                return;
+            var cards = DatabaseService.Instance.GetCardsByFilteredSearch(FilterSearchText, SearchNames, SearchTypes, SearchRules);
+            // clear and fill the observable collection
+            FilteredCards.Clear();
+            foreach (var card in cards)
+                FilteredCards.Add(card);
+        }
+        private void ClearFilterSearch()
+        {
+            FilterSearchText = "";
+            LoadInitialCards();
         }
     }
 }

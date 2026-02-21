@@ -43,7 +43,13 @@
     <None Remove="Assets\Symbols\BR.svg" />
     <None Remove="Assets\Symbols\BRP.svg" />
     <None Remove="Assets\Symbols\C.svg" />
+    <None Remove="Assets\Symbols\CB.svg" />
+    <None Remove="Assets\Symbols\CG.svg" />
+    <None Remove="Assets\Symbols\CR.svg" />
+    <None Remove="Assets\Symbols\CU.svg" />
+    <None Remove="Assets\Symbols\CW.svg" />
     <None Remove="Assets\Symbols\E.svg" />
+    <None Remove="Assets\Symbols\Fallback.svg" />
     <None Remove="Assets\Symbols\G.svg" />
     <None Remove="Assets\Symbols\GP.svg" />
     <None Remove="Assets\Symbols\GU.svg" />
@@ -184,7 +190,15 @@
     <Resource Include="Assets\Symbols\C.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Symbols\CB.svg" />
+    <Resource Include="Assets\Symbols\CG.svg" />
+    <Resource Include="Assets\Symbols\CR.svg" />
+    <Resource Include="Assets\Symbols\CU.svg" />
+    <Resource Include="Assets\Symbols\CW.svg" />
     <Resource Include="Assets\Symbols\E.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Symbols\Fallback.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Symbols\G.svg">

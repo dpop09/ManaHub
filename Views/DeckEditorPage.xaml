@@ -165,16 +165,15 @@
                         <DataGridTextColumn Header="Card Number" Binding="{Binding CollectorNumber}" Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
-                <Border Grid.Row="2" Background="LightGray" BorderBrush="Black" BorderThickness="0,1,0,1" Padding="10,5,0,0">
+                <Border Grid.Row="2" Background="LightGray" BorderBrush="Black" BorderThickness="0,1,0,1" Padding="3,0,0,0">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <TextBox Width="250" Height="20" FontSize="12" Margin="0,0,5,0" />
-                        <Button Content="Search" Height="20" FontSize="12" Margin="0,0,5,0"/>
-                        <Button Content="Clear" Height="20" FontSize="12" Margin="0,0,20,0"/>
+                        <TextBox Width="250" Height="20" FontSize="12" Margin="0,0,5,0" Text="{Binding FilterSearchText}"/>
+                        <Button Content="Search" Height="20" FontSize="12" Margin="0,0,5,0" Command="{Binding FilterSearchCardsCommand}"/> 
+                        <Button Content="Clear" Height="20" FontSize="12" Margin="0,0,20,0" Command="{Binding ClearFilterSearchCommand}"/>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <CheckBox Content="Names" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <CheckBox Content="Types" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <CheckBox Content="Rules" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <CheckBox Content="Unique" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <CheckBox Content="Names" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding SearchNames}"/>
+                            <CheckBox Content="Types" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding SearchTypes}"/>
+                            <CheckBox Content="Rules" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding SearchRules}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock VerticalAlignment="Center" Text="Card count:" Margin="0,0,2,0"/>

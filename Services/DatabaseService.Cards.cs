@@ -25,8 +25,8 @@ namespace ManaHub.Services
                     var command = connection.CreateCommand();
                     command.Transaction = transaction;
                     command.CommandText = @"
-                        INSERT INTO Cards (Id, Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, Toughness, Rarity, CollectorNumber, OracleText, Layout) 
-                        VALUES ($id, $name, $colors, $mana, $cmc, $type, $set, $power, $tough, $rarity, $colnum, $text, $layout)";
+                        INSERT INTO Cards (Id, Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, Toughness, Rarity, CollectorNumber, OracleText, Layout)" +
+                        "VALUES ($id, $name, $colors, $mana, $cmc, $type, $set, $power, $tough, $rarity, $colnum, $text, $layout)";
 
                     var pId = command.Parameters.Add("$id", SqliteType.Text);
                     var pName = command.Parameters.Add("$name", SqliteType.Text);
@@ -44,7 +44,12 @@ namespace ManaHub.Services
 
                     await foreach (var card in cards)
                     {
-                        if (card == null) continue;
+                        if (card == null) 
+                            continue;
+
+                        var forbiddenLayouts = new[] { "token", "double_faced_token", "emblem", "art_series" };
+                        if (forbiddenLayouts.Contains(card.Layout?.ToLower()))
+                            continue;
 
                         pId.Value = card.Id ?? (object)DBNull.Value;
                         pName.Value = card.Name ?? (object)DBNull.Value;
@@ -79,8 +84,7 @@ namespace ManaHub.Services
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT COUNT(*) FROM Cards " +
-                    "WHERE Layout NOT IN ('token', 'double_faced_token', 'emblem', 'art_series')";
+                command.CommandText = "SELECT COUNT(*) FROM Cards ";
                 return (long)command.ExecuteScalar();
             }
         }
@@ -115,7 +119,6 @@ namespace ManaHub.Services
                 command.CommandText = "SELECT Id, Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, " +
                     "Toughness, Rarity, CollectorNumber, OracleText, Layout " +
                     "FROM Cards " +
-                    "WHERE Layout NOT IN ('token', 'double_faced_token', 'emblem', 'art_series') " +
                     "LIMIT $limit";
                 command.Parameters.AddWithValue("$limit", limit);
 
@@ -152,6 +155,41 @@ namespace ManaHub.Services
                 {
                     while (reader.Read())
                         cardList.Add(MapReaderToCard(reader)); // Helper method to keep it clean
+                }
+            }
+            return cardList;
+        }
+        public List<Card> GetCardsByFilteredSearch(string filter, bool inName, bool inTypes, bool inRules)
+        {
+            List<Card> cardList = new List<Card>();
+
+            // default to search by name if no boxes are checked
+            if (!inName && !inTypes && !inRules)
+                inName = true;
+
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+
+                // dynamically build the WHERE clause
+                List<string> filters = new List<string>();
+                if (inName) filters.Add("Name LIKE $filter");
+                if (inTypes) filters.Add("TypeLine LIKE $filter");
+                if (inRules) filters.Add("OracleText LIKE $filter");
+                string whereClause = string.Join(" OR ", filters);
+
+                command.CommandText = $@"
+                    SELECT Id, Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, 
+                           Toughness, Rarity, CollectorNumber, OracleText, Layout 
+                    FROM Cards 
+                    WHERE ({whereClause})";
+                command.Parameters.AddWithValue("$filter", $"%{filter}%");
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                        cardList.Add(MapReaderToCard(reader));
                 }
             }
             return cardList;
