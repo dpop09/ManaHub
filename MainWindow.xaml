@@ -53,7 +53,7 @@
                 <TextBlock VerticalAlignment="Center" 
                         Foreground="White" 
                         Margin="5,4.5,0,0" 
-                        Text="Pre-Alpha v1.1.0" />
+                        Text="Pre-Alpha v1.2.1" />
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="—" Background="Transparent" Foreground="White" BorderThickness="0" 
