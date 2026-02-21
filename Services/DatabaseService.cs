@@ -45,7 +45,7 @@ namespace ManaHub.Services
                        );";
                 command.CommandText += @"
                        CREATE TABLE IF NOT EXISTS Cards (
-                            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            Id TEXT PRIMARY KEY,
                             Name TEXT,
                             Colors TEXT,
                             ManaCost TEXT,

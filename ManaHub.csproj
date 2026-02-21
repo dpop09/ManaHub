@@ -305,4 +305,10 @@
     <PackageReference Include="SharpVectors" Version="1.8.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\oracle-cards-20260117221532.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

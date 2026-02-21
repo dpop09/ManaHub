@@ -2,6 +2,8 @@
 using ManaHub.MVVMs;
 using ManaHub.Services;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ManaHub.ViewModels
@@ -12,6 +14,7 @@ namespace ManaHub.ViewModels
         private Card _selectedCollectionCard;
         private Card _selectedMainDeckCard;
         private Card _selectedSideboardCard;
+        private string _deckName = "";
         public ObservableCollection<Card> FilteredCards { get; set; }
         public ObservableCollection<Card> DeckList { get; set; }
         public ObservableCollection<Card> SideboardList { get; set; }
@@ -77,6 +80,16 @@ namespace ManaHub.ViewModels
                 OnPropertyChanged();
             }
         }
+        public string DeckName 
+        {
+            get => _deckName;
+            set
+            {
+                _deckName = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int CardCount => FilteredCards.Count;
         public int MainDeckCardCount => DeckList.Count;
         public int SideboardCardCount => SideboardList.Count;
@@ -88,6 +101,9 @@ namespace ManaHub.ViewModels
         public ICommand RemoveFromSideboardCommand { get; }
         public ICommand MoveCardFromMainDeckToSideboardCommand {  get; }
         public ICommand MoveCardFromSideboardToMainDeckCommand { get; }
+        public ICommand NewDeckCommand { get; }
+        public ICommand SaveDeckCommand { get; }
+        public ICommand LoadDeckCommand { get; }
 
         public DeckEditorPageViewModel(MainWindowViewModel mainVM)
         {
@@ -110,6 +126,9 @@ namespace ManaHub.ViewModels
             RemoveFromSideboardCommand = new RelayCommand((obj) => RemoveFromSideboard(obj));
             MoveCardFromMainDeckToSideboardCommand = new RelayCommand((obj) => MoveCardFromMainDeckToSideboard(obj));
             MoveCardFromSideboardToMainDeckCommand = new RelayCommand((obj) => MoveCardFromSideboardToMainDeck(obj));
+            NewDeckCommand = new RelayCommand(o => NewDeck());
+            SaveDeckCommand = new RelayCommand(o => SaveDeck());
+            LoadDeckCommand = new RelayCommand(o => LoadDeck());
 
             CardDisplayVM = new CardDisplayViewModel(this);
 
@@ -164,6 +183,59 @@ namespace ManaHub.ViewModels
         {
             AddToDeck(obj);
             RemoveFromSideboard(obj);
+        }
+        private void NewDeck()
+        {
+            if (DeckList.Count > 0 && MessageBox.Show("Clear current deck?", "New Deck", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                DeckList.Clear();
+                SideboardList.Clear();
+                DeckName = "";
+            }
+        }
+        private void SaveDeck()
+        {
+            // check if there are any cards
+            if (!DeckList.Any() && !SideboardList.Any())
+                return;
+            var sfd = new Microsoft.Win32.SaveFileDialog { Filter = "ManaHub Deck (*.json)|*.json" };
+            if (sfd.ShowDialog() == true)
+                DeckName = Path.GetFileNameWithoutExtension(sfd.SafeFileName);
+                DeckService.SaveToFile(sfd.FileName, DeckName, DeckList, SideboardList);
+        }
+        private void LoadDeck()
+        {
+            var ofd = new Microsoft.Win32.OpenFileDialog { Filter = "ManaHub Deck (*.json)|*.json" };
+            if (ofd.ShowDialog() == true)
+            {
+                var data = DeckService.LoadFromFile(ofd.FileName);
+
+                DeckName = data.DeckName;
+                // 1. Fetch unique card data from DB (one instance per ID)
+                var uniqueIds = data.MainDeckIds.Distinct().Concat(data.SideboardIds.Distinct());
+                // Quick lookup table
+                var cardLibrary = DatabaseService.Instance.GetCardsByIds(uniqueIds).ToDictionary(c => c.Id); 
+
+                DeckList.Clear();
+                // 2. Loop through the ORIGINAL ID list (which contains duplicates)
+                foreach (var id in data.MainDeckIds)
+                {
+                    if (cardLibrary.TryGetValue(id, out var card))
+                    {
+                        // We add the same card object reference multiple times
+                        DeckList.Add(card);
+                    }
+                }
+
+                SideboardList.Clear();
+                foreach (var id in data.SideboardIds)
+                {
+                    if (cardLibrary.TryGetValue(id, out var card))
+                    {
+                        SideboardList.Add(card);
+                    }
+                }
+            }
         }
     }
 }

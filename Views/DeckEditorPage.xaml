@@ -24,10 +24,27 @@
                     <RowDefinition Height="315" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top" Margin="5">
-                    <Label FontSize="10" Content="Deck Name:"/>
-                    <TextBlock Text="New Deck" VerticalAlignment="Center" FontSize="10" FontWeight="Bold"/>
-                </StackPanel>
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
+                                   FontSize="14" FontWeight="Bold" Margin="3,0,0,0" Text="Deck Name: " />
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                   FontSize="14" FontWeight="Bold" Foreground="Blue" Text="{Binding DeckName}" />
+                    </StackPanel>
+                    <UniformGrid Grid.Row="1" Columns="3" Margin="4">
+                        <Button FontSize="14" Margin="0,0,3,0"  Content="New" 
+                                Command="{Binding NewDeckCommand}" />
+                        <Button FontSize="14" Margin="0,0,3,0" Content="Save" 
+                                Command="{Binding SaveDeckCommand}" />
+                        <Button FontSize="14" Margin="0,0,3,0" Content="Load" 
+                                Command="{Binding LoadDeckCommand}" />
+                    </UniformGrid>
+                </Grid>
                 <Grid Grid.Row="1" Visibility="{Binding CardDisplayVM.CardDisplay, Converter={StaticResource CardToVisibilityConverter}}">
                     <local:CardDisplay DataContext="{Binding CardDisplayVM}" />
                 </Grid>
