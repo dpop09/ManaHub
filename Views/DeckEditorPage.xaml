@@ -10,6 +10,7 @@
         d:DesignHeight="720" d:DesignWidth="1280">
     <UserControl.Resources>
         <conv:CardToVisibilityConverter x:Key="CardToVisibilityConverter" />
+        <conv:ColorIdentityToImageConverter x:Key="ColorIdentityToImageConverter" />
     </UserControl.Resources>
     <Grid Background="White">
         <Grid.ColumnDefinitions>
@@ -162,7 +163,26 @@
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="Rarity" Binding="{Binding Rarity}" Width="*" />
                         <DataGridTextColumn Header="Set" Binding="{Binding Set}" Width="*" />
-                        <DataGridTextColumn Header="Card Number" Binding="{Binding CollectorNumber}" Width="*" />
+                        <DataGridTemplateColumn Header="Color Identity" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ItemsControl ItemsSource="{Binding ColorIdentityString, Converter={StaticResource ColorIdentityToImageConverter}}" 
+                                        HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <svg:SvgViewbox UriSource="{Binding}" Width="14" Height="14" Margin="1,0"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
                 <Border Grid.Row="2" Background="LightGray" BorderBrush="Black" BorderThickness="0,1,0,1" Padding="3,0,0,0">

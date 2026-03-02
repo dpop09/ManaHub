@@ -57,7 +57,15 @@ namespace ManaHub.Services
                             Rarity TEXT,
                             CollectorNumber TEXT,
                             OracleText TEXT,
-                            Layout TEXT
+                            Layout TEXT,
+                            ColorIdentity TEXT,
+                            SecondName TEXT,
+                            SecondManaCost TEXT,
+                            SecondTypeLine TEXT,
+                            SecondOracleText TEXT,
+                            SecondColors TEXT,
+                            SecondPower TEXT,
+                            SecondToughness TEXT
                        );";
                 command.ExecuteNonQuery();
             }
