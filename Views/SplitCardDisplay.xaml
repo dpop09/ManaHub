@@ -9,60 +9,98 @@
              xmlns:helpers="clr-namespace:ManaHub.Helpers"
              mc:Ignorable="d" 
              d:DesignHeight="315" d:DesignWidth="225">
-    <Border BorderBrush="#111111" BorderThickness="5" CornerRadius="15" Background="#444444">
-        <UniformGrid Columns="1">
-            <Grid Margin="5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <DockPanel Grid.Row="0">
-                    <ItemsControl DockPanel.Dock="Right" ItemsSource="{Binding ManaCost, Converter={StaticResource SymbolToImageConverter}}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <svg:SvgViewbox UriSource="{Binding}" Width="11" Height="11" Margin="1,0"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <TextBlock Text="{Binding Name}" Foreground="White" FontWeight="Bold" FontSize="11" 
-                               TextTrimming="CharacterEllipsis"/>
-                </DockPanel>
-                <TextBlock Grid.Row="1" helpers:TextBlockHelper.FormattedText="{Binding OracleText}" 
-                           Foreground="White" FontSize="10" TextWrapping="Wrap" Margin="0,2,0,0"/>
-            </Grid>
+    <Border BorderBrush="#111111" Background="#444444" BorderThickness="5" CornerRadius="15">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".5*" />
+                <RowDefinition Height=".5*" />
+            </Grid.RowDefinitions>
 
-            <Rectangle Fill="#222222" Height="2" VerticalAlignment="Center" Margin="10,0"/>
+            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="0,0,0,1" Padding="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Vertical">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{Binding Name}" TextTrimming="CharacterEllipsis" 
+                                           Foreground="White" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                            <ItemsControl Grid.Column="1" ItemsSource="{Binding ManaCost, Converter={StaticResource SymbolToImageConverter}}" 
+                                              Margin="5,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <svg:SvgViewbox UriSource="{Binding}" Width="12" Height="12" Margin="1,0"  
+                                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                        <Grid>
+                            <TextBlock HorizontalAlignment="Left" Text="{Binding TypeLine}"
+                                           Foreground="White" FontSize="10" VerticalAlignment="Center"/>
+                            <TextBlock HorizontalAlignment="Right" Text="{Binding Set}"
+                                           Foreground="#FFD700" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        </Grid>
+                    </StackPanel>
+                    <Grid Grid.Row="1">
+                        <TextBlock helpers:TextBlockHelper.FormattedText="{Binding OracleText}" 
+                                   TextWrapping="Wrap" Foreground="White" FontSize="11" LineHeight="10" />
+                    </Grid>
+                </Grid>
+            </Border>
 
-            <Grid Margin="5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <DockPanel Grid.Row="0">
-                    <ItemsControl DockPanel.Dock="Right" 
-                                  ItemsSource="{Binding SecondManaCost, Converter={StaticResource SymbolToImageConverter}}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <svg:SvgViewbox UriSource="{Binding}" Width="11" Height="11" Margin="1,0"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <TextBlock Text="{Binding SecondName}" Foreground="White" FontWeight="Bold" FontSize="11" 
-                               TextTrimming="CharacterEllipsis"/>
-                </DockPanel>
-                <TextBlock Grid.Row="1" helpers:TextBlockHelper.FormattedText="{Binding SecondOracleText}" 
-                           Foreground="White" FontSize="10" TextWrapping="Wrap" Margin="0,2,0,0"/>
-            </Grid>
-        </UniformGrid>
+            <Border Grid.Row="1" BorderBrush="Black" BorderThickness="0,1,0,0" Padding="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Vertical">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{Binding SecondName}" TextTrimming="CharacterEllipsis" 
+                                           Foreground="White" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
+                            <ItemsControl Grid.Column="1" ItemsSource="{Binding SecondManaCost, Converter={StaticResource SymbolToImageConverter}}" 
+                                              Margin="5,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <svg:SvgViewbox UriSource="{Binding}" Width="12" Height="12" Margin="1,0"  
+                                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                        <Grid>
+                            <TextBlock HorizontalAlignment="Left" Text="{Binding SecondTypeLine}" 
+                                           Foreground="White" FontSize="10" VerticalAlignment="Center"/>
+                            <TextBlock HorizontalAlignment="Right" Text="{Binding Set}" 
+                                           Foreground="#FFD700" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        </Grid>
+                    </StackPanel>
+                    <Grid Grid.Row="1">
+                        <TextBlock helpers:TextBlockHelper.FormattedText="{Binding SecondOracleText}" 
+                                   TextWrapping="Wrap" Foreground="White" FontSize="11" LineHeight="10" />
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
     </Border>
 </UserControl>
