@@ -21,6 +21,10 @@
         <DataTemplate x:Key="TransformCardTemplate">
             <local:TransformCardDisplay DataContext="{Binding}" />
         </DataTemplate>
+
+        <DataTemplate x:Key="AdventureCardTemplate">
+            <local:AdventureCardDisplay DataContext="{Binding}" />
+        </DataTemplate>
     </UserControl.Resources>
     <ContentControl Content="{Binding}">
         <ContentControl.Style>
@@ -35,6 +39,9 @@
                     </DataTrigger>
                     <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="modal_dfc">
                         <Setter Property="ContentTemplate" Value="{StaticResource TransformCardTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="adventure">
+                        <Setter Property="ContentTemplate" Value="{StaticResource AdventureCardTemplate}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>

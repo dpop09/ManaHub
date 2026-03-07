@@ -7,8 +7,7 @@
         xmlns:conv="clr-namespace:ManaHub.Converters"
         xmlns:svg="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
         xmlns:helpers="clr-namespace:ManaHub.Helpers"
-        d:DesignHeight="315" d:DesignWidth="225"
-        mc:Ignorable="d">
+        d:DesignHeight="315" d:DesignWidth="225" mc:Ignorable="d">
     <UserControl.Resources>
         <conv:StringToVisibilityConverter x:Key="StatToVisibility" />
     </UserControl.Resources>
