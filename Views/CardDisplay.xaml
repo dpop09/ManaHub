@@ -17,14 +17,24 @@
         <DataTemplate x:Key="SplitCardTemplate">
             <local:SplitCardDisplay DataContext="{Binding}" />
         </DataTemplate>
+
+        <DataTemplate x:Key="TransformCardTemplate">
+            <local:TransformCardDisplay DataContext="{Binding}" />
+        </DataTemplate>
     </UserControl.Resources>
-    <ContentControl Content="{Binding CardDisplay}">
+    <ContentControl Content="{Binding}">
         <ContentControl.Style>
             <Style TargetType="ContentControl">
                 <Setter Property="ContentTemplate" Value="{StaticResource NormalCardTemplate}" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="split">
                         <Setter Property="ContentTemplate" Value="{StaticResource SplitCardTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="transform">
+                        <Setter Property="ContentTemplate" Value="{StaticResource TransformCardTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="modal_dfc">
+                        <Setter Property="ContentTemplate" Value="{StaticResource TransformCardTemplate}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>

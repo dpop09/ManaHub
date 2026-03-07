@@ -28,9 +28,9 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{Binding Name}" TextTrimming="CharacterEllipsis" 
+                            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{Binding CardDisplay.Name}" TextTrimming="CharacterEllipsis" 
                                            Foreground="White" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
-                            <ItemsControl Grid.Column="1" ItemsSource="{Binding ManaCost, Converter={StaticResource SymbolToImageConverter}}" 
+                            <ItemsControl Grid.Column="1" ItemsSource="{Binding CardDisplay.ManaCost, Converter={StaticResource SymbolToImageConverter}}" 
                                               Margin="5,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -46,14 +46,14 @@
                             </ItemsControl>
                         </Grid>
                         <Grid>
-                            <TextBlock HorizontalAlignment="Left" Text="{Binding TypeLine}"
+                            <TextBlock HorizontalAlignment="Left" Text="{Binding CardDisplay.TypeLine}"
                                            Foreground="White" FontSize="10" VerticalAlignment="Center"/>
-                            <TextBlock HorizontalAlignment="Right" Text="{Binding Set}"
+                            <TextBlock HorizontalAlignment="Right" Text="{Binding CardDisplay.Set}"
                                            Foreground="#FFD700" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"/>
                         </Grid>
                     </StackPanel>
                     <Grid Grid.Row="1">
-                        <TextBlock helpers:TextBlockHelper.FormattedText="{Binding OracleText}" 
+                        <TextBlock helpers:TextBlockHelper.FormattedText="{Binding CardDisplay.OracleText}" 
                                    TextWrapping="Wrap" Foreground="White" FontSize="11" LineHeight="10" />
                     </Grid>
                 </Grid>
@@ -71,9 +71,9 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{Binding SecondName}" TextTrimming="CharacterEllipsis" 
+                            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{Binding CardDisplay.SecondName}" TextTrimming="CharacterEllipsis" 
                                            Foreground="White" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
-                            <ItemsControl Grid.Column="1" ItemsSource="{Binding SecondManaCost, Converter={StaticResource SymbolToImageConverter}}" 
+                            <ItemsControl Grid.Column="1" ItemsSource="{Binding CardDisplay.SecondManaCost, Converter={StaticResource SymbolToImageConverter}}" 
                                               Margin="5,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -89,14 +89,14 @@
                             </ItemsControl>
                         </Grid>
                         <Grid>
-                            <TextBlock HorizontalAlignment="Left" Text="{Binding SecondTypeLine}" 
+                            <TextBlock HorizontalAlignment="Left" Text="{Binding CardDisplay.SecondTypeLine}" 
                                            Foreground="White" FontSize="10" VerticalAlignment="Center"/>
-                            <TextBlock HorizontalAlignment="Right" Text="{Binding Set}" 
+                            <TextBlock HorizontalAlignment="Right" Text="{Binding CardDisplay.Set}" 
                                            Foreground="#FFD700" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"/>
                         </Grid>
                     </StackPanel>
                     <Grid Grid.Row="1">
-                        <TextBlock helpers:TextBlockHelper.FormattedText="{Binding SecondOracleText}" 
+                        <TextBlock helpers:TextBlockHelper.FormattedText="{Binding CardDisplay.SecondOracleText}" 
                                    TextWrapping="Wrap" Foreground="White" FontSize="11" LineHeight="10" />
                     </Grid>
                 </Grid>

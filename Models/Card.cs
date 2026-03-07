@@ -61,9 +61,6 @@ namespace ManaHub.Models
 
         [JsonPropertyName("card_faces")]
         public List<CardFace> CardFaces { get; set; }
-        public string RowDisplayName { get; set; }
-        public string RowDisplayManaCost { get; set; }
-        public string RowDisplayColors { get; set; }
     }
 
     public class CardFace

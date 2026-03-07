@@ -58,7 +58,7 @@ namespace ManaHub.Services
                             continue;
 
                         var forbiddenLayouts = new[] { "token", "double_faced_token", "emblem", "art_series", "planar" };
-                        var forbiddenSets = new[] { "FJMP", "CMB2", "UNH", "HHO", "JTLA", "OARC", "SUNF", "FCLU", "OPCA", "FLTR", "MOC", "PVAN" };
+                        var forbiddenSets = new[] { "FJMP", "CMB2", "UNH", "HHO", "JTLA", "OARC", "SUNF", "FCLU", "OPCA", "FLTR", "MOC", "PVAN", "UNK" };
                         if (forbiddenLayouts.Contains(card.Layout?.ToLower()) || 
                             forbiddenSets.Contains(card.Set?.ToUpper()))
                             continue;

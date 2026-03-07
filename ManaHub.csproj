@@ -83,6 +83,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\ActionSymbols\black-flip.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\ActionSymbols\white-flip.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Symbols\0.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
