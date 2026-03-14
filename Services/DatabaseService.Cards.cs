@@ -77,6 +77,11 @@ namespace ManaHub.Services
                             pColorIdentity.Value = string.Join(",", card.ColorIdentity);
                         else
                             pColorIdentity.Value = DBNull.Value; // colorless
+                        if (card.Colors != null && card.Colors.Any())
+                            pColors.Value = string.Join(",", card.Colors);
+                        else
+                            pColors.Value = DBNull.Value; // colorless
+
 
                         // If the card has multiple faces
                         if (card.CardFaces != null && card.CardFaces.Count >= 2)
@@ -90,10 +95,6 @@ namespace ManaHub.Services
                             pText.Value = face1.OracleText ?? (object)DBNull.Value;
                             pPower.Value = face1.Power ?? (object)DBNull.Value;
                             pTough.Value = face1.Toughness ?? (object)DBNull.Value;
-                            if (face1.Colors != null && face1.Colors.Any())
-                                pColors.Value = string.Join(",", face1.Colors);
-                            else
-                                pColors.Value = DBNull.Value; // colorless
 
                             pSecondName.Value = face2.Name ?? (object)DBNull.Value;
                             pSecondMana.Value = face2.ManaCost ?? (object)DBNull.Value;
@@ -101,10 +102,20 @@ namespace ManaHub.Services
                             pSecondText.Value = face2.OracleText ?? (object)DBNull.Value;
                             pSecondPower.Value = face2.Power ?? (object)DBNull.Value;
                             pSecondTough.Value = face2.Toughness ?? (object)DBNull.Value;
-                            if (face2.Colors != null && face2.Colors.Any())
-                                pSecondColors.Value = string.Join(",", face2.Colors);
-                            else
-                                pSecondColors.Value = DBNull.Value; // colorless
+
+                            // if there was nothing given with Color being a main property,
+                            // try the card faces array color properties
+                            if (pColors.Value == DBNull.Value)
+                            {
+                                if (face1.Colors != null && face1.Colors.Any())
+                                    pColors.Value = string.Join(",", face1.Colors);
+                                else
+                                    pColors.Value = DBNull.Value; // colorless
+                                if (face2.Colors != null && face2.Colors.Any())
+                                    pSecondColors.Value = string.Join(",", face2.Colors);
+                                else
+                                    pSecondColors.Value = DBNull.Value; // colorless
+                            }
                         }
                         else // If the card does not have multiple faces
                         {
@@ -114,10 +125,6 @@ namespace ManaHub.Services
                             pPower.Value = card.Power ?? (object)DBNull.Value;
                             pTough.Value = card.Toughness ?? (object)DBNull.Value;
                             pText.Value = card.OracleText ?? (object)DBNull.Value;
-                            if (card.Colors != null && card.Colors.Any())
-                                pColors.Value = string.Join(",", card.Colors);
-                            else
-                                pColors.Value = DBNull.Value; // colorless
 
                             pSecondName.Value = DBNull.Value;
                             pSecondMana.Value = DBNull.Value;

@@ -61,6 +61,34 @@ namespace ManaHub.Models
 
         [JsonPropertyName("card_faces")]
         public List<CardFace> CardFaces { get; set; }
+
+        public string RowDisplayName 
+        { 
+            get
+            {
+                if (!string.IsNullOrEmpty(SecondName))
+                    return $"{Name} // {SecondName}";
+                return Name;
+            }
+        }
+        public string RowDisplayTypeLine
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(SecondTypeLine))
+                    return $"{TypeLine} // {SecondTypeLine}";
+                return TypeLine;
+            }
+        }
+        public string RowDisplayManaCost
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(SecondManaCost))
+                    return $"{ManaCost} // {SecondManaCost}";
+                return ManaCost;
+            }
+        }
     }
 
     public class CardFace
