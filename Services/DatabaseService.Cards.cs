@@ -253,8 +253,11 @@ namespace ManaHub.Services
                 // dynamically build the WHERE clause
                 List<string> filters = new List<string>();
                 if (inName) filters.Add("Name LIKE $filter");
+                if (inName) filters.Add("SecondName LIKE $filter");
                 if (inTypes) filters.Add("TypeLine LIKE $filter");
+                if (inTypes) filters.Add("SecondTypeLine LIKE $filter");
                 if (inRules) filters.Add("OracleText LIKE $filter");
+                if (inRules) filters.Add("SecondOracleText LIKE $filter");
                 string whereClause = string.Join(" OR ", filters);
 
                 command.CommandText = $@"
