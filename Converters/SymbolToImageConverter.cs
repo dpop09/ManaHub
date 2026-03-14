@@ -11,17 +11,24 @@ namespace ManaHub.Converters
         {
             if (value is string manaCost && !string.IsNullOrWhiteSpace(manaCost))
             {
-                // Find everything between { }
-                var matches = Regex.Matches(manaCost, @"\{([^}]+)\}");
+                // Matches either {symbol} OR //
+                // Group 1: The content inside { }
+                // Group 2: The double slash //
+                var matches = Regex.Matches(manaCost, @"\{([^}]+)\}|(//)");
 
-                // Convert each symbol (like "W") into a Pack URI path
                 return matches.Cast<Match>().Select(m =>
-                {   
-                    // Clean the symbol to remove the slash
+                {
+                    // If it's a double slash, return our special token
+                    if (m.Groups[2].Success)
+                    {
+                        return "SEPARATOR";
+                    }
+
+                    // It's a standard symbol
                     string symbol = m.Groups[1].Value.Replace("/", "");
                     string primaryPath = $"pack://application:,,,/ManaHub;component/Assets/Symbols/{symbol}.svg";
                     const string fallbackPath = "pack://application:,,,/ManaHub;component/Assets/Symbols/fallback.svg";
-                    
+
                     try
                     {
                         var uri = new Uri(primaryPath);
@@ -29,10 +36,12 @@ namespace ManaHub.Converters
                         if (resource != null)
                             return primaryPath;
                     }
-                    catch 
+                    catch
                     {
                         System.Diagnostics.Debug.WriteLine($"Mana Symbol Missing: {symbol}. Using placeholder.");
                     }
+
+                    // Your dedicated question mark svg placeholder is returned here
                     return fallbackPath;
                 }).ToList();
             }

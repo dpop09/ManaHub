@@ -10,66 +10,48 @@
              mc:Ignorable="d" 
              d:DesignHeight="315" d:DesignWidth="225">
     <UserControl.Resources>
-        <conv:StringToVisibilityConverter x:Key="StatToVisibility" />
+        <DataTemplate x:Key="NormalCardTemplate">
+            <local:NormalCardDisplay DataContext="{Binding}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="SplitCardTemplate">
+            <local:SplitCardDisplay DataContext="{Binding}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="TransformCardTemplate">
+            <local:TransformCardDisplay DataContext="{Binding}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="AdventureCardTemplate">
+            <local:AdventureCardDisplay DataContext="{Binding}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="FlipCardTemplate">
+            <local:FlipCardDisplay DataContext="{Binding}" />
+        </DataTemplate>
     </UserControl.Resources>
-    <Border BorderBrush="#111111" BorderThickness="5" CornerRadius="15">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <Border Grid.Row="0" Background="#444444"  Padding="5" CornerRadius="12,12,0,0">
-                <StackPanel Orientation="Vertical">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{Binding CardDisplay.Name}" TextTrimming="CharacterEllipsis"
-                            Foreground="White" FontWeight="Bold" FontSize="11" VerticalAlignment="Center"/>
-                        <ItemsControl Grid.Column="1" ItemsSource="{Binding CardDisplay.ManaCost, Converter={StaticResource SymbolToImageConverter}}" 
-                                      Margin="5,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <svg:SvgViewbox UriSource="{Binding}" Width="12" Height="12" Margin="1,0"
-                                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Grid>
-                    <Grid>
-                        <TextBlock HorizontalAlignment="Left" Text="{Binding CardDisplay.TypeLine}" 
-                            Foreground="White" FontSize="10" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Right" Text="{Binding CardDisplay.Set}" 
-                            Foreground="#FFD700" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                    </Grid>
-                </StackPanel>
-            </Border>
-
-            <Border Grid.Row="1" Background="#444444" CornerRadius="0,0,12,12" Padding="5">
-                <Grid>
-                    <TextBlock helpers:TextBlockHelper.FormattedText="{Binding CardDisplay.OracleText}" 
-                               TextWrapping="Wrap" Foreground="White" FontWeight="Bold" FontSize="11" LineHeight="10" />
-
-                    <Border VerticalAlignment="Bottom" HorizontalAlignment="Right" 
-                            Background="#AAAAAA" CornerRadius="12,0,12,0" 
-                            Padding="8,4" Margin="-5,-5"
-                            Visibility="{Binding CardDisplay.Power, Converter={StaticResource StatToVisibility}}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding CardDisplay.Power}" FontWeight="Bold" FontSize="11" Foreground="Black"/>
-                            <TextBlock Text="/" FontWeight="Bold" FontSize="11" Foreground="Black"/>
-                            <TextBlock Text="{Binding CardDisplay.Toughness}" FontWeight="Bold" FontSize="11" Foreground="Black"/>
-                        </StackPanel>
-                        
-                    </Border>
-                </Grid>
-            </Border>
-        </Grid>
-    </Border>
+    <ContentControl Content="{Binding}">
+        <ContentControl.Style>
+            <Style TargetType="ContentControl">
+                <Setter Property="ContentTemplate" Value="{StaticResource NormalCardTemplate}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="split">
+                        <Setter Property="ContentTemplate" Value="{StaticResource SplitCardTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="transform">
+                        <Setter Property="ContentTemplate" Value="{StaticResource TransformCardTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="modal_dfc">
+                        <Setter Property="ContentTemplate" Value="{StaticResource TransformCardTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="adventure">
+                        <Setter Property="ContentTemplate" Value="{StaticResource AdventureCardTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="flip">
+                        <Setter Property="ContentTemplate" Value="{StaticResource FlipCardTemplate}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ContentControl.Style>
+    </ContentControl>
 </UserControl>

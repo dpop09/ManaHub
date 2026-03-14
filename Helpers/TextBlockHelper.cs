@@ -1,10 +1,8 @@
-﻿using System;
+﻿using SharpVectors.Converters;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
-using SharpVectors.Converters;
 
 namespace ManaHub.Helpers
 {
@@ -25,10 +23,7 @@ namespace ManaHub.Helpers
                 textBlock.Inlines.Clear();
                 if (string.IsNullOrEmpty(text)) return;
 
-                // ONLY split by symbols and newlines. 
-                // We will handle italics manually by detecting ( and ).
                 var tokens = Regex.Split(text, @"(\{.+?\}|\n)");
-
                 bool isInsideParentheses = false;
 
                 foreach (var token in tokens)
@@ -41,34 +36,38 @@ namespace ManaHub.Helpers
                     }
                     else if (token.StartsWith("{") && token.EndsWith("}"))
                     {
-                        // Handle the Symbol SVG
+                        // Handle Symbol SVG...
                         string symbol = token.Trim('{', '}').Replace("/", "");
                         string path = $"pack://application:,,,/ManaHub;component/Assets/Symbols/{symbol}.svg";
 
+                        // Personalization: If file is missing, we use your question mark placeholder logic
+                        string fallbackPath = "pack://application:,,,/ManaHub;component/Assets/Symbols/question.svg";
+
                         try
                         {
-                            var container = new InlineUIContainer(new SvgViewbox
-                            {
-                                UriSource = new Uri(path),
-                                Width = 11,
-                                Height = 11,
-                                Margin = new Thickness(1, 0, 1, -2)
-                            });
-                            textBlock.Inlines.Add(container);
+                            // Try to load the symbol
+                            textBlock.Inlines.Add(CreateSvgInline(path));
                         }
                         catch
                         {
-                            // If image fails, add text. Apply italics if we are mid-reminder text.
-                            textBlock.Inlines.Add(new Run(token)
+                            try
                             {
-                                FontStyle = isInsideParentheses ? FontStyles.Italic : FontStyles.Normal
-                            });
+                                // Attempt fallback to your dedicated question mark SVG
+                                textBlock.Inlines.Add(CreateSvgInline(fallbackPath));
+                            }
+                            catch
+                            {
+                                // Absolute fallback to text if even the question mark is missing
+                                textBlock.Inlines.Add(new Run(token)
+                                {
+                                    FontStyle = isInsideParentheses ? FontStyles.Italic : FontStyles.Normal,
+                                    FontWeight = isInsideParentheses ? FontWeights.Normal : FontWeights.Bold
+                                });
+                            }
                         }
                     }
                     else
                     {
-                        // This is a text block. It might contain '(' or ')'
-                        // We need to handle the case where italics start or end mid-string.
                         ProcessTextWithItalics(textBlock, token, ref isInsideParentheses);
                     }
                 }
@@ -77,7 +76,6 @@ namespace ManaHub.Helpers
 
         private static void ProcessTextWithItalics(TextBlock tb, string text, ref bool isInside)
         {
-            // Split the text by ( and ) but keep the delimiters
             string[] parts = Regex.Split(text, @"([\(\)])");
 
             foreach (var part in parts)
@@ -88,11 +86,25 @@ namespace ManaHub.Helpers
 
                 tb.Inlines.Add(new Run(part)
                 {
-                    FontStyle = isInside ? FontStyles.Italic : FontStyles.Normal
+                    // Reminder text: Italics + Regular. Main text: Normal + Bold.
+                    FontStyle = isInside ? FontStyles.Italic : FontStyles.Normal,
+                    FontWeight = isInside ? FontWeights.Normal : FontWeights.Bold
                 });
 
                 if (part == ")") isInside = false;
             }
+        }
+
+        // Helper to keep the try/catch clean
+        private static InlineUIContainer CreateSvgInline(string path)
+        {
+            return new InlineUIContainer(new SvgViewbox
+            {
+                UriSource = new Uri(path),
+                Width = 11,
+                Height = 11,
+                Margin = new Thickness(1, 0, 1, -2)
+            });
         }
     }
 }
