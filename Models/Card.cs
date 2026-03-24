@@ -48,6 +48,11 @@ namespace ManaHub.Models
         [JsonPropertyName("layout")]
         public string Layout { get; set; }
 
+        public string PrimaryImageUrl { get; set; }
+        public string SecondaryImageUrl { get; set; }
+        [JsonPropertyName("image_uris")]
+        public ImageUris ImageUris { get; set; }
+
         public string SecondName { get; set; }
         public string SecondManaCost { get; set; }
         public string SecondTypeLine { get; set; }
@@ -90,7 +95,11 @@ namespace ManaHub.Models
             }
         }
     }
-
+    public class ImageUris
+    {
+        [JsonPropertyName("normal")]
+        public string Normal { get; set; }
+    }
     public class CardFace
     {
         [JsonPropertyName("name")]
@@ -113,5 +122,8 @@ namespace ManaHub.Models
 
         [JsonPropertyName("toughness")]
         public string Toughness { get; set; }
+
+        [JsonPropertyName("image_uris")]
+        public ImageUris ImageUris { get; set; }
     }
 }

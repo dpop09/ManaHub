@@ -30,28 +30,44 @@
             <local:FlipCardDisplay DataContext="{Binding}" />
         </DataTemplate>
     </UserControl.Resources>
-    <ContentControl Content="{Binding}">
-        <ContentControl.Style>
-            <Style TargetType="ContentControl">
-                <Setter Property="ContentTemplate" Value="{StaticResource NormalCardTemplate}" />
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="split">
-                        <Setter Property="ContentTemplate" Value="{StaticResource SplitCardTemplate}" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="transform">
-                        <Setter Property="ContentTemplate" Value="{StaticResource TransformCardTemplate}" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="modal_dfc">
-                        <Setter Property="ContentTemplate" Value="{StaticResource TransformCardTemplate}" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="adventure">
-                        <Setter Property="ContentTemplate" Value="{StaticResource AdventureCardTemplate}" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="flip">
-                        <Setter Property="ContentTemplate" Value="{StaticResource FlipCardTemplate}" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </ContentControl.Style>
-    </ContentControl>
+    <Grid>
+        <ContentControl Content="{Binding}">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Setter Property="ContentTemplate" Value="{StaticResource NormalCardTemplate}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="split">
+                            <Setter Property="ContentTemplate" Value="{StaticResource SplitCardTemplate}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="transform">
+                            <Setter Property="ContentTemplate" Value="{StaticResource TransformCardTemplate}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="modal_dfc">
+                            <Setter Property="ContentTemplate" Value="{StaticResource TransformCardTemplate}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="adventure">
+                            <Setter Property="ContentTemplate" Value="{StaticResource AdventureCardTemplate}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CardDisplay.Layout}" Value="flip">
+                            <Setter Property="ContentTemplate" Value="{StaticResource FlipCardTemplate}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+        <Border CornerRadius="10" ClipToBounds="True">
+            <Image Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Source" Value="{Binding DisplayImageUri, TargetNullValue={x:Null}, FallbackValue={x:Null}}" />
+                        <Style.Triggers>
+                            <Trigger Property="Source" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+        </Border>
+    </Grid>
 </UserControl>

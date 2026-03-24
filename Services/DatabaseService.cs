@@ -59,13 +59,15 @@ namespace ManaHub.Services
                             OracleText TEXT,
                             Layout TEXT,
                             ColorIdentity TEXT,
+                            PrimaryImageUrl TEXT,
                             SecondName TEXT,
                             SecondManaCost TEXT,
                             SecondTypeLine TEXT,
                             SecondOracleText TEXT,
                             SecondColors TEXT,
                             SecondPower TEXT,
-                            SecondToughness TEXT
+                            SecondToughness TEXT,
+                            SecondaryImageUrl TEXT
                        );";
                 command.ExecuteNonQuery();
             }

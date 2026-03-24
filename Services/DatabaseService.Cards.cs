@@ -26,9 +26,9 @@ namespace ManaHub.Services
                     command.Transaction = transaction;
                     command.CommandText = @"
                         INSERT INTO Cards (Id, Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, Toughness, Rarity, CollectorNumber, OracleText, Layout, " +
-                        "ColorIdentity, SecondName, SecondManaCost, SecondTypeLine, SecondOracleText, SecondColors, SecondPower, SecondToughness) " +
+                        "ColorIdentity, SecondName, SecondManaCost, SecondTypeLine, SecondOracleText, SecondColors, SecondPower, SecondToughness, PrimaryImageUrl, SecondaryImageUrl) " +
                         "VALUES ($id, $name, $colors, $mana, $cmc, $type, $set, $power, $tough, $rarity, $colnum, $text, $layout, " +
-                        "$coloridentity, $secondname, $secondmana, $secondtype, $secondtext, $secondcolors, $secondpower, $secondtough)";
+                        "$coloridentity, $secondname, $secondmana, $secondtype, $secondtext, $secondcolors, $secondpower, $secondtough, $primaryurl, $secondaryurl)";
 
                     var pId = command.Parameters.Add("$id", SqliteType.Text);
                     var pName = command.Parameters.Add("$name", SqliteType.Text);
@@ -51,6 +51,8 @@ namespace ManaHub.Services
                     var pSecondColors = command.Parameters.Add("$secondcolors", SqliteType.Text);
                     var pSecondPower = command.Parameters.Add("$secondpower", SqliteType.Text);
                     var pSecondTough = command.Parameters.Add("$secondtough", SqliteType.Text);
+                    var pPrimaryUrl = command.Parameters.Add("$primaryurl", SqliteType.Text);
+                    var pSecondaryUrl = command.Parameters.Add("$secondaryurl", SqliteType.Text);
 
                     await foreach (var card in cards)
                     {
@@ -82,7 +84,6 @@ namespace ManaHub.Services
                         else
                             pColors.Value = DBNull.Value; // colorless
 
-
                         // If the card has multiple faces
                         if (card.CardFaces != null && card.CardFaces.Count >= 2)
                         {
@@ -95,6 +96,7 @@ namespace ManaHub.Services
                             pText.Value = face1.OracleText ?? (object)DBNull.Value;
                             pPower.Value = face1.Power ?? (object)DBNull.Value;
                             pTough.Value = face1.Toughness ?? (object)DBNull.Value;
+                            pPrimaryUrl.Value = face1.ImageUris?.Normal ?? (object)DBNull.Value;
 
                             pSecondName.Value = face2.Name ?? (object)DBNull.Value;
                             pSecondMana.Value = face2.ManaCost ?? (object)DBNull.Value;
@@ -102,6 +104,7 @@ namespace ManaHub.Services
                             pSecondText.Value = face2.OracleText ?? (object)DBNull.Value;
                             pSecondPower.Value = face2.Power ?? (object)DBNull.Value;
                             pSecondTough.Value = face2.Toughness ?? (object)DBNull.Value;
+                            pSecondaryUrl.Value = face2.ImageUris?.Normal ?? (object)DBNull.Value;
 
                             // if there was nothing given with Color being a main property,
                             // try the card faces array color properties
@@ -125,6 +128,7 @@ namespace ManaHub.Services
                             pPower.Value = card.Power ?? (object)DBNull.Value;
                             pTough.Value = card.Toughness ?? (object)DBNull.Value;
                             pText.Value = card.OracleText ?? (object)DBNull.Value;
+                            pPrimaryUrl.Value = card.ImageUris.Normal ?? (object)DBNull.Value;
 
                             pSecondName.Value = DBNull.Value;
                             pSecondMana.Value = DBNull.Value;
@@ -133,6 +137,7 @@ namespace ManaHub.Services
                             pSecondPower.Value = DBNull.Value;
                             pSecondTough.Value = DBNull.Value;
                             pSecondColors.Value = DBNull.Value;
+                            pSecondaryUrl.Value = DBNull.Value;
                         }
 
                         await command.ExecuteNonQueryAsync();
@@ -170,13 +175,15 @@ namespace ManaHub.Services
                 OracleText = reader.IsDBNull(11) ? "" : reader.GetString(11),
                 Layout = reader.IsDBNull(12) ? "" : reader.GetString(12),
                 ColorIdentityString = reader.IsDBNull(13) ? "" : reader.GetString(13),
-                SecondName = reader.IsDBNull(14) ? "" : reader.GetString(14),
-                SecondManaCost = reader.IsDBNull(15) ? "" : reader.GetString(15),
-                SecondTypeLine = reader.IsDBNull(16) ? "" : reader.GetString(16),
-                SecondOracleText = reader.IsDBNull(17) ? "" : reader.GetString(17),
-                SecondColorsString = reader.IsDBNull(18) ? "" : reader.GetString(18),
-                SecondPower = reader.IsDBNull(19) ? "" : reader.GetString(19),
-                SecondToughness = reader.IsDBNull(20) ? "" : reader.GetString(20)
+                PrimaryImageUrl = reader.IsDBNull(14) ? "" : reader.GetString(14),
+                SecondName = reader.IsDBNull(15) ? "" : reader.GetString(15),
+                SecondManaCost = reader.IsDBNull(16) ? "" : reader.GetString(16),
+                SecondTypeLine = reader.IsDBNull(17) ? "" : reader.GetString(17),
+                SecondOracleText = reader.IsDBNull(18) ? "" : reader.GetString(18),
+                SecondColorsString = reader.IsDBNull(19) ? "" : reader.GetString(19),
+                SecondPower = reader.IsDBNull(20) ? "" : reader.GetString(20),
+                SecondToughness = reader.IsDBNull(21) ? "" : reader.GetString(21),
+                SecondaryImageUrl = reader.IsDBNull(22) ? "" : reader.GetString(22)
             };
         }
         public List<Card> GetCards(int limit = 100)
@@ -192,8 +199,8 @@ namespace ManaHub.Services
                     SELECT 
                         Id, Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, 
                         Toughness, Rarity, CollectorNumber, OracleText, Layout, ColorIdentity, 
-                        SecondName, SecondManaCost, SecondTypeLine, SecondOracleText, 
-                        SecondColors, SecondPower, SecondToughness
+                        PrimaryImageUrl, SecondName, SecondManaCost, SecondTypeLine, SecondOracleText, 
+                        SecondColors, SecondPower, SecondToughness, SecondaryImageUrl
                     FROM Cards 
                     LIMIT $limit";
 
@@ -223,7 +230,7 @@ namespace ManaHub.Services
                 var IN_Clause = string.Join(",", parameterNames);
 
                 command.CommandText = $"SELECT Id, Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, Toughness, Rarity, CollectorNumber, OracleText, Layout, ColorIdentity, " +
-                                      $"SecondName, SecondManaCost, SecondTypeLine, SecondOracleText, SecondColors, SecondPower, SecondToughness " +
+                                      $"PrimaryImageUrl, SecondName, SecondManaCost, SecondTypeLine, SecondOracleText, SecondColors, SecondPower, SecondToughness, SecondaryImageUrl " +
                                       $"FROM Cards WHERE Id IN ({IN_Clause})";
 
                 for (int i = 0; i < parameterNames.Length; i++)
@@ -262,8 +269,8 @@ namespace ManaHub.Services
 
                 command.CommandText = $@"
                     SELECT Id, Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, 
-                           Toughness, Rarity, CollectorNumber, OracleText, Layout, ColorIdentity, 
-                           SecondName, SecondManaCost, SecondTypeLine, SecondOracleText, SecondColors, SecondPower, SecondToughness
+                           Toughness, Rarity, CollectorNumber, OracleText, Layout, ColorIdentity, PrimaryImageUrl,
+                           SecondName, SecondManaCost, SecondTypeLine, SecondOracleText, SecondColors, SecondPower, SecondToughness, SecondaryImageUrl
                     FROM Cards 
                     WHERE ({whereClause})";
                 command.Parameters.AddWithValue("$filter", $"%{filter}%");

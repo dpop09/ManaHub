@@ -1,5 +1,6 @@
 ﻿using ManaHub.Models;
 using ManaHub.MVVMs;
+using ManaHub.Services;
 using System.Windows.Input;
 
 namespace ManaHub.ViewModels
@@ -16,6 +17,7 @@ namespace ManaHub.ViewModels
                 _cardDisplay = value;
                 IsFlipped = false;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayImageUri));
             }
         }
         private bool _isFlipped;
@@ -27,6 +29,26 @@ namespace ManaHub.ViewModels
                 _isFlipped = value;
                 OnPropertyChanged();
             } 
+        }
+        public Uri DisplayImageUri
+        {
+            get
+            {
+                if (CardDisplay == null) return null;
+
+                // Determine which URL to use from the model
+                string urlToUse = IsFlipped ? CardDisplay.SecondaryImageUrl : CardDisplay.PrimaryImageUrl;
+
+                // Fallback: If the card isn't flipped but has no Primary, or is flipped but has no Secondary
+                if (string.IsNullOrEmpty(urlToUse))
+                    return null;
+
+                return CardImageService.GetImagePath(
+                    $"{CardDisplay.Id}_{(IsFlipped ? "back" : "front")}", // Cache front and back separately!
+                    urlToUse,
+                    () => OnPropertyChanged(nameof(DisplayImageUri))
+                );
+            }
         }
         public ICommand FlipCardCommand { get; }
         
