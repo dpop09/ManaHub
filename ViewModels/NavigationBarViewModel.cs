@@ -18,7 +18,8 @@ namespace ManaHub.ViewModels
         private MainWindowViewModel _mainVM;
         public ICommand ExecuteLogoutCommand { get; }
         public ICommand GoToTablesPageCommand { get; }
-        public ICommand GoToDeckEditorPageCommand {  get; }
+        public ICommand GoToDeckEditorPageCommand { get; }
+        public ICommand GoToSettingsPageCommand { get; }
 
         public NavigationBarViewModel(MainWindowViewModel mainVM) 
         {
@@ -26,6 +27,7 @@ namespace ManaHub.ViewModels
             ExecuteLogoutCommand = new RelayCommand(o => LogoutCommand());
             GoToTablesPageCommand = new RelayCommand((o) => GoToTablesPage());
             GoToDeckEditorPageCommand = new RelayCommand((o) => GoToDeckEditorPage());
+            GoToSettingsPageCommand = new RelayCommand((o) => GoToSettingsPage());
         }
 
         private void LogoutCommand()
@@ -43,6 +45,13 @@ namespace ManaHub.ViewModels
             if (_mainVM.CurrentView is TablesPageViewModel)
                 return;
             _mainVM.CurrentView = new TablesPageViewModel(this._mainVM);
+        }
+
+        private void GoToSettingsPage()
+        {
+            if (_mainVM.CurrentView is SettingsPageViewModel)
+                return;
+            _mainVM.CurrentView = new SettingsPageViewModel(this._mainVM);
         }
 
         private void GoToDeckEditorPage()
