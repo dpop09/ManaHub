@@ -131,6 +131,8 @@ namespace ManaHub.ViewModels
         }
         public int CardCount => FilteredCards.Count;
         public int MainDeckCardCount => DeckList.Count;
+        public int MainDeckLandCount => GetMainDeckLandCount();
+        public int MainDeckCreatureCount => GetMainDeckCreatureCount();
         public int SideboardCardCount => SideboardList.Count;
         public ICommand GoToLoginPageCommand { get; }
         public ICommand AddToDeckCommand { get; }
@@ -156,7 +158,12 @@ namespace ManaHub.ViewModels
 
             // subscribe to changes in the collection
             FilteredCards.CollectionChanged += (s, e) => OnPropertyChanged(nameof(CardCount));
-            DeckList.CollectionChanged += (s, e) => OnPropertyChanged(nameof(MainDeckCardCount));
+            DeckList.CollectionChanged += (s, e) =>
+            {
+                OnPropertyChanged(nameof(MainDeckCardCount));
+                OnPropertyChanged(nameof(MainDeckLandCount));
+                OnPropertyChanged(nameof(MainDeckCreatureCount));
+            };
             SideboardList.CollectionChanged += (s, e) => OnPropertyChanged(nameof(SideboardCardCount));
 
             // commands
@@ -294,5 +301,9 @@ namespace ManaHub.ViewModels
             FilterSearchText = "";
             LoadInitialCards();
         }
+        private int GetMainDeckLandCount() 
+            => DeckList.Count(c => c.TypeLine != null && c.TypeLine.Contains("Land"));
+        private int GetMainDeckCreatureCount()
+            => DeckList.Count(c => c.TypeLine != null && c.TypeLine.Contains("Creature"));
     }
 }

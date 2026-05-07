@@ -243,7 +243,11 @@
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Background="LightGray">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock VerticalAlignment="Center" Text="Maindeck - " Margin="3,0,0,0"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding MainDeckCardCount}"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding MainDeckCardCount}" Margin="0,0,3,0"/>
+                            <TextBlock VerticalAlignment="Center" Text="Lands - " Margin="3,0,0,0"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding MainDeckLandCount}" Margin="0,0,3,0"/>
+                            <TextBlock VerticalAlignment="Center" Text="Creatures - " Margin="3,0,0,0"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding MainDeckCreatureCount}" Margin="0,0,3,0"/>
                         </StackPanel>
                     </StackPanel>
                     <DataGrid x:Name="MainDeckGrid" Grid.Row="1" ItemsSource="{Binding DeckList}" 
