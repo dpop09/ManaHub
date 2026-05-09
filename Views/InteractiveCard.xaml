@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="ManaHub.Views.InteractiveCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ManaHub.Views"
+             xmlns:conv="clr-namespace:ManaHub.Converters"
+             xmlns:svg="clr-namespace:SharpVectors.Converters;assembly=SharpVectors.Converters.Wpf"
+             xmlns:helpers="clr-namespace:ManaHub.Helpers"
+             mc:Ignorable="d"
+             d:DesignHeight="189" d:DesignWidth="135">
+	<UserControl.Resources>
+		<DataTemplate x:Key="NormalCardTemplate">
+			<local:NormalInteractiveCard DataContext="{Binding}" />
+		</DataTemplate>
+	</UserControl.Resources>
+	<Grid>
+		<ContentControl Content="{Binding}">
+			<ContentControl.Style>
+				<Style TargetType="ContentControl">
+					<Setter Property="ContentTemplate" Value="{StaticResource NormalCardTemplate}" />
+				</Style>
+			</ContentControl.Style>
+		</ContentControl>
+		<Border CornerRadius="10" ClipToBounds="True">
+			<Image Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality">
+				<Image.Style>
+					<Style TargetType="Image">
+						<Setter Property="Source" Value="{Binding InteractiveCardImageUri, TargetNullValue={x:Null}, FallbackValue={x:Null}}" />
+						<Style.Triggers>
+							<Trigger Property="Source" Value="{x:Null}">
+								<Setter Property="Visibility" Value="Collapsed" />
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</Image.Style>
+			</Image>
+		</Border>
+    </Grid>
+</UserControl>

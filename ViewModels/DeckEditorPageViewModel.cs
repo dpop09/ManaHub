@@ -1,6 +1,7 @@
 ﻿using ManaHub.Models;
 using ManaHub.MVVMs;
 using ManaHub.Services;
+using ManaHub.Views;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
