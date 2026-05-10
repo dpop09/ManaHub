@@ -24,6 +24,7 @@ namespace ManaHub.ViewModels
         public ObservableCollection<Card> DeckList { get; set; }
         public ObservableCollection<Card> SideboardList { get; set; }
         public CardDisplayViewModel CardDisplayVM { get; set; }
+        public ObservableCollection<DeckGroup> GroupedDeckColumns { get; set; }
         public Card SelectedCollectionCard
         {
             get => _selectedCollectionCard;
@@ -157,6 +158,8 @@ namespace ManaHub.ViewModels
             DeckList = new ObservableCollection<Card>();
             SideboardList = new ObservableCollection<Card>();
 
+            GroupedDeckColumns = new ObservableCollection<DeckGroup>();
+
             // subscribe to changes in the collection
             FilteredCards.CollectionChanged += (s, e) => OnPropertyChanged(nameof(CardCount));
             DeckList.CollectionChanged += (s, e) =>
@@ -164,6 +167,7 @@ namespace ManaHub.ViewModels
                 OnPropertyChanged(nameof(MainDeckCardCount));
                 OnPropertyChanged(nameof(MainDeckLandCount));
                 OnPropertyChanged(nameof(MainDeckCreatureCount));
+                UpdateGroupedDeck();
             };
             SideboardList.CollectionChanged += (s, e) => OnPropertyChanged(nameof(SideboardCardCount));
 
@@ -306,5 +310,24 @@ namespace ManaHub.ViewModels
             => DeckList.Count(c => c.TypeLine != null && c.TypeLine.Contains("Land"));
         private int GetMainDeckCreatureCount()
             => DeckList.Count(c => c.TypeLine != null && c.TypeLine.Contains("Creature"));
+
+        private void UpdateGroupedDeck()
+        {
+            var groups = DeckList
+                .GroupBy(c => (int)c.Cmc)
+                .OrderBy(g => g.Key)
+                .Select(g => new DeckGroup
+                {
+                    ManaValue = g.Key,
+                    Cards = new ObservableCollection<Card>(g.ToList())
+                })
+                .ToList();
+            // Clear and refill to keep the same collection reference for the UI
+            GroupedDeckColumns.Clear();
+            foreach (var group in groups)
+            {
+                GroupedDeckColumns.Add(group);
+            }
+        }
     }
 }
