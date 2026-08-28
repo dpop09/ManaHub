@@ -1,33 +1,17 @@
 ﻿using Microsoft.Data.Sqlite;
 
+using ManaHub.Contracts;
+
 namespace ManaHub.Services
 {
-    // DatabaseService follows singleton design pattern to ensure there is only at least 1 instance of it
-    internal sealed partial class DatabaseService
+    internal sealed partial class DatabaseService : IUserRepository, ICardRepository
     {
-        // static instance that holds our single object
-        private static DatabaseService _instance;
-        // lock object to make it thread-safe
-        private static readonly object _lock = new object();
-        public string _connectionString = "Data Source=manahub.db";
+        private readonly string _connectionString;
 
-        private DatabaseService()
+        public DatabaseService(string connectionString)
         {
+            _connectionString = connectionString;
             InitalizeDatabase();
-        }
-
-        public static DatabaseService Instance
-        {
-            get
-            {
-                // to prevent race conditions
-                lock (_lock)
-                {
-                    if (_instance == null)
-                        _instance = new DatabaseService();
-                    return _instance;
-                }
-            }
         }
 
         private void InitalizeDatabase()

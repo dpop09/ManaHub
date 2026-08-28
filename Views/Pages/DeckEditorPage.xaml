@@ -14,6 +14,27 @@
         <conv:ColorIdentityToImageConverter x:Key="ColorIdentityToImageConverter" />
         <conv:CardToInteractiveCardViewModelConverter x:Key="CardToInteractiveCardVMConverter" />
         <helpers:BindingProxy x:Key="MainViewModelProxy" Data="{Binding}" />
+        <DataTemplate x:Key="CardHoverModalTemplate">
+            <Border BorderBrush="#222222" BorderThickness="2" Background="#1E1E1E" CornerRadius="6" Padding="10" MaxWidth="250">
+                <StackPanel Orientation="Vertical">
+                    <Grid Margin="0,0,0,6">
+                        <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <Separator Background="#444444" Margin="0,2,0,6"/>
+
+                    <TextBlock Text="{Binding TypeLine}" FontSize="12" FontStyle="Italic" Foreground="#CCCCCC" Margin="0,0,0,6"/>
+
+                    <TextBlock Text="{Binding OracleText}" FontSize="11" Foreground="#E0E0E0" TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4,0,0">
+                        <TextBlock Text="{Binding Power}" FontSize="13" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock Text="/" FontSize="13" FontWeight="Bold" Foreground="White" Margin="2,0"/>
+                        <TextBlock Text="{Binding Toughness}" FontSize="13" FontWeight="Bold" Foreground="White"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid Background="White">
         <Grid.ColumnDefinitions>
@@ -301,6 +322,10 @@
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <local:InteractiveCard DataContext="{Binding Converter={StaticResource CardToInteractiveCardVMConverter}}" Width="135" Height="189">
+                                                        <ToolTipService.ToolTip>
+                                                            <ToolTip Content="{Binding InteractiveCard}" ContentTemplate="{StaticResource CardHoverModalTemplate}" 
+                                                                     Background="Transparent" BorderThickness="0" Placement="Right" HorizontalOffset="10" VerticalOffset="0"/>
+                                                        </ToolTipService.ToolTip>
                                                         <local:InteractiveCard.InputBindings>
                                                             <MouseBinding MouseAction="LeftDoubleClick" 
                                                                           Command="{Binding Data.RemoveFromDeckCommand, Source={StaticResource MainViewModelProxy}}"

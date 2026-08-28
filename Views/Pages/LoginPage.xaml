@@ -8,7 +8,7 @@
         d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="../Assets/Iona-Shield-of-Emeria-MtG-Art.jpg" Stretch="UniformToFill" Opacity="0.75" />
+            <ImageBrush ImageSource="../../Assets/Iona-Shield-of-Emeria-MtG-Art.jpg" Stretch="UniformToFill" Opacity="0.75" />
         </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=".25*"/>

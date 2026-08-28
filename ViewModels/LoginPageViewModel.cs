@@ -1,7 +1,7 @@
 ﻿using ManaHub.MVVMs;
-using ManaHub.Services;
-using System.Windows;
 using System.Windows.Input;
+
+using ManaHub.Contracts;
 
 namespace ManaHub.ViewModels
 {
@@ -28,43 +28,51 @@ namespace ManaHub.ViewModels
             }
         }
 
-        private MainWindowViewModel _mainVM;
+        private readonly INavigationService _navigation;
+        private readonly IUserRepository _users;
+        private readonly ISessionService _session;
+        private readonly IDialogService _dialogs;
         public ICommand GoToCreateAccountPageCommand { get; }
         public ICommand ExecuteLoginCommand { get; }
 
-        // We pass the MainViewModel through the constructor
-        public LoginPageViewModel(MainWindowViewModel mainVM)
+        public LoginPageViewModel(
+            INavigationService navigation,
+            IUserRepository users,
+            ISessionService session,
+            IDialogService dialogs)
         {
-            _mainVM = mainVM;
-            var db = DatabaseService.Instance;
+            _navigation = navigation;
+            _users = users;
+            _session = session;
+            _dialogs = dialogs;
             GoToCreateAccountPageCommand = new RelayCommand(o => GoToCreateAccountPage());
             ExecuteLoginCommand = new RelayCommand(o => ExecuteLogin());
         }
 
         private void GoToCreateAccountPage()
         {
-            _mainVM.CurrentView = new CreateAccountPageViewModel(this._mainVM);
+            _navigation.NavigateTo(AppPage.CreateAccount);
         }
         private void GoToTablesPage()
         {
-            _mainVM.CurrentView = new TablesPageViewModel(this._mainVM);
+            _navigation.NavigateTo(AppPage.Tables);
         }
         private void ExecuteLogin()
         {
             // ensure username and password is not null or whitespace
             if (string.IsNullOrWhiteSpace(_username) || string.IsNullOrWhiteSpace(Password))
             {
-                MessageBox.Show("Please fill in all fields.", "Notification", MessageBoxButton.OK);
+                _dialogs.ShowMessage("Please fill in all fields.");
                 return;
             }
             // check database if user exists, else display incorrect message
-            if (DatabaseService.Instance.CheckUser(Username, Password))
+            if (_users.CheckUser(Username, Password))
             {
-                _mainVM.NavVM.Username = Username;
+                _session.Username = Username;
                 GoToTablesPage();
             }
             else
-                MessageBox.Show("Incorrect username or password.", "Notification", MessageBoxButton.OK);
+                _dialogs.ShowMessage("Incorrect username or password.");
         }
     }
 }

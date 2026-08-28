@@ -1,17 +1,19 @@
 ﻿using ManaHub.Models;
 using ManaHub.MVVMs;
-using ManaHub.Services;
-using ManaHub.Views;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
 using System.Windows.Input;
+
+using ManaHub.Contracts;
 
 namespace ManaHub.ViewModels
 {
     internal class DeckEditorPageViewModel : ViewModelBase
     {
-        private MainWindowViewModel _mainVM;
+        private readonly ICardRepository _cards;
+        private readonly IDeckService _decks;
+        private readonly IFileDialogService _fileDialogs;
+        private readonly IDialogService _dialogs;
         private Card _selectedCollectionCard;
         private Card _selectedMainDeckCard;
         private Card _selectedSideboardCard;
@@ -136,7 +138,6 @@ namespace ManaHub.ViewModels
         public int MainDeckLandCount => GetMainDeckLandCount();
         public int MainDeckCreatureCount => GetMainDeckCreatureCount();
         public int SideboardCardCount => SideboardList.Count;
-        public ICommand GoToLoginPageCommand { get; }
         public ICommand AddToDeckCommand { get; }
         public ICommand RemoveFromDeckCommand { get; }
         public ICommand AddToSideboardCommand { get; }
@@ -149,9 +150,16 @@ namespace ManaHub.ViewModels
         public ICommand FilterSearchCardsCommand { get; }
         public ICommand ClearFilterSearchCommand { get; }
 
-        public DeckEditorPageViewModel(MainWindowViewModel mainVM)
+        public DeckEditorPageViewModel(
+            ICardRepository cards,
+            IDeckService decks,
+            IFileDialogService fileDialogs,
+            IDialogService dialogs)
         {
-            _mainVM = mainVM;
+            _cards = cards;
+            _decks = decks;
+            _fileDialogs = fileDialogs;
+            _dialogs = dialogs;
 
             // initialize collections
             FilteredCards = new ObservableCollection<Card>();
@@ -192,7 +200,7 @@ namespace ManaHub.ViewModels
         private void LoadInitialCards()
         {
             // retrive the cards from the db
-            var cards = DatabaseService.Instance.GetCards(limit: 40000);
+            var cards = _cards.GetCards(limit: 40000);
 
             // clear and fill the observable collection
             FilteredCards.Clear();
@@ -240,35 +248,40 @@ namespace ManaHub.ViewModels
         }
         private void NewDeck()
         {
-            if (DeckList.Count > 0 && MessageBox.Show("Clear current deck?", "New Deck", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                DeckList.Clear();
-                SideboardList.Clear();
-                DeckName = "";
-            }
+            if (DeckList.Count == 0 && SideboardList.Count == 0)
+                return;
+
+            if (!_dialogs.Confirm("Clear current deck?", "New Deck"))
+                return;
+
+            DeckList.Clear();
+            SideboardList.Clear();
+            DeckName = "";
         }
         private void SaveDeck()
         {
             // check if there are any cards
             if (!DeckList.Any() && !SideboardList.Any())
                 return;
-            var sfd = new Microsoft.Win32.SaveFileDialog { Filter = "ManaHub Deck (*.json)|*.json" };
-            if (sfd.ShowDialog() == true)
-                DeckName = Path.GetFileNameWithoutExtension(sfd.SafeFileName);
-                DeckService.SaveToFile(sfd.FileName, DeckName, DeckList, SideboardList);
+            string? path = _fileDialogs.SelectDeckToSave();
+            if (path == null)
+                return;
+
+            DeckName = Path.GetFileNameWithoutExtension(path);
+            _decks.SaveToFile(path, DeckName, DeckList, SideboardList);
         }
         private void LoadDeck()
         {
-            var ofd = new Microsoft.Win32.OpenFileDialog { Filter = "ManaHub Deck (*.json)|*.json" };
-            if (ofd.ShowDialog() == true)
+            string? path = _fileDialogs.SelectDeckToOpen();
+            if (path != null)
             {
-                var data = DeckService.LoadFromFile(ofd.FileName);
+                var data = _decks.LoadFromFile(path);
 
                 DeckName = data.DeckName;
                 // 1. Fetch unique card data from DB (one instance per ID)
                 var uniqueIds = data.MainDeckIds.Distinct().Concat(data.SideboardIds.Distinct());
                 // Quick lookup table
-                var cardLibrary = DatabaseService.Instance.GetCardsByIds(uniqueIds).ToDictionary(c => c.Id); 
+                var cardLibrary = _cards.GetCardsByIds(uniqueIds).ToDictionary(c => c.Id);
 
                 DeckList.Clear();
                 // 2. Loop through the ORIGINAL ID list (which contains duplicates)
@@ -295,7 +308,7 @@ namespace ManaHub.ViewModels
         {
             if (string.IsNullOrWhiteSpace(FilterSearchText))
                 return;
-            var cards = DatabaseService.Instance.GetCardsByFilteredSearch(FilterSearchText, SearchNames, SearchTypes, SearchRules);
+            var cards = _cards.GetCardsByFilteredSearch(FilterSearchText, SearchNames, SearchTypes, SearchRules);
             // clear and fill the observable collection
             FilteredCards.Clear();
             foreach (var card in cards)

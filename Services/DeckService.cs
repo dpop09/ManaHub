@@ -2,11 +2,13 @@
 using System.IO;
 using System.Text.Json;
 
+using ManaHub.Contracts;
+
 namespace ManaHub.Services
 {
-    internal static class DeckService
+    internal sealed class DeckService : IDeckService
     {
-        public static void SaveToFile(string path, string name, IEnumerable<Card> main, IEnumerable<Card> side)
+        public void SaveToFile(string path, string name, IEnumerable<Card> main, IEnumerable<Card> side)
         {
             var data = new DeckSaveModel
             {
@@ -18,10 +20,11 @@ namespace ManaHub.Services
             File.WriteAllText(path, json);
         }
 
-        public static DeckSaveModel LoadFromFile(string path)
+        public DeckSaveModel LoadFromFile(string path)
         {
             string json = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<DeckSaveModel>(json);
+            return JsonSerializer.Deserialize<DeckSaveModel>(json)
+                ?? throw new InvalidDataException("The selected deck file is invalid.");
         }
     }
 }

@@ -3,11 +3,15 @@ using ManaHub.Services;
 using System.Windows;
 using System.Windows.Input;
 
+using ManaHub.Contracts;
+
 namespace ManaHub.ViewModels
 {
     internal class CreateAccountPageViewModel : ViewModelBase
     {
-        private MainWindowViewModel _mainVM;
+        private readonly INavigationService _navigation;
+        private readonly IUserRepository _users;
+        private readonly IDialogService _dialogs;
         private string _username;
         private string _password;
         public string Username
@@ -31,40 +35,45 @@ namespace ManaHub.ViewModels
         public ICommand GoToLoginPageCommand { get; }
         public ICommand ExecuteCreateAccountCommand { get; }
 
-        public CreateAccountPageViewModel(MainWindowViewModel mainVM)
+        public CreateAccountPageViewModel(
+            INavigationService navigation,
+            IUserRepository users,
+            IDialogService dialogs)
         {
-            _mainVM = mainVM;
+            _navigation = navigation;
+            _users = users;
+            _dialogs = dialogs;
             GoToLoginPageCommand = new RelayCommand(o => GoToLoginPage());
             ExecuteCreateAccountCommand = new RelayCommand(o =>  ExecuteCreateAccount());
         }
 
         private void GoToLoginPage()
         {
-            _mainVM.CurrentView = new LoginPageViewModel(this._mainVM);
+            _navigation.NavigateTo(AppPage.Login);
         }
 
         private void ExecuteCreateAccount()
         {
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
             {
-                MessageBox.Show("Please fill in all fields.", "Notification", MessageBoxButton.OK);
+                _dialogs.ShowMessage("Please fill in all fields.");
                 return;
             }
-            if (DatabaseService.Instance.CheckExistUsername(Username))
+            if (_users.CheckExistUsername(Username))
             {
                 string message = $"\"{Username}\" already exists. Please choose a different username.";
-                MessageBox.Show(message, "Notification", MessageBoxButton.OK);
+                _dialogs.ShowMessage(message);
                 return;
             }
-            if (DatabaseService.Instance.CreateUserAccount(Username, Password))
+            if (_users.CreateUserAccount(Username, Password))
             {
-                MessageBox.Show("Your account has been created successfully.", "Notification", MessageBoxButton.OK);
+                _dialogs.ShowMessage("Your account has been created successfully.");
                 GoToLoginPage();
             }
             else
             {
-                MessageBox.Show("Something has gone wrong with the database. " +
-                    "Your account cannot be created at this time.", "Notification", MessageBoxButton.OK);
+                _dialogs.ShowMessage("Something has gone wrong with the database. " +
+                    "Your account cannot be created at this time.");
                 return;
             }
         }
