@@ -19,7 +19,7 @@ namespace ManaHub
                 _compositionRoot = new CompositionRoot();
                 await _compositionRoot.InitializeAsync();
 
-                MainWindow = _compositionRoot.CreateMainWindow();
+                MainWindow = await _compositionRoot.CreateMainWindowAsync();
                 MainWindow.Show();
             }
             catch (Exception ex)

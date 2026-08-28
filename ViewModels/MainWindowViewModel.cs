@@ -34,7 +34,7 @@ namespace ManaHub.ViewModels
             }
         }
         public NavigationBarViewModel NavVM { get; }
-        public RelayCommand ShowGoToCreateAccountPageCommand { get; }
+        public AsyncRelayCommand ShowGoToCreateAccountPageCommand { get; }
         public RelayCommand CloseWindowCommand { get; }
         public RelayCommand MinimizeWindowCommand { get; }
         public RelayCommand MaximizeWindowCommand { get; }
@@ -51,7 +51,8 @@ namespace ManaHub.ViewModels
             _navigation.CurrentViewChanged += OnCurrentViewChanged;
             
             // Commands to swap the view
-            ShowGoToCreateAccountPageCommand = new RelayCommand(o => _navigation.NavigateTo(AppPage.CreateAccount));
+            ShowGoToCreateAccountPageCommand = new AsyncRelayCommand(
+                (o, cancellationToken) => _navigation.NavigateToAsync(AppPage.CreateAccount, cancellationToken));
             MinimizeWindowCommand = new RelayCommand(o => _windowService.Minimize());
             MaximizeWindowCommand = new RelayCommand(o => _windowService.ToggleMaximize());
             CloseWindowCommand = new RelayCommand(o => _windowService.Close());

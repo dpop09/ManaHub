@@ -8,7 +8,12 @@ namespace ManaHub.Services
 {
     internal sealed class DeckService : IDeckService
     {
-        public void SaveToFile(string path, string name, IEnumerable<Card> main, IEnumerable<Card> side)
+        public async Task SaveToFileAsync(
+            string path,
+            string name,
+            IEnumerable<Card> main,
+            IEnumerable<Card> side,
+            CancellationToken cancellationToken = default)
         {
             var data = new DeckSaveModel
             {
@@ -17,12 +22,14 @@ namespace ManaHub.Services
                 SideboardIds = side.Select(c => c.Id).ToList()
             };
             string json = JsonSerializer.Serialize(data);
-            File.WriteAllText(path, json);
+            await File.WriteAllTextAsync(path, json, cancellationToken);
         }
 
-        public DeckSaveModel LoadFromFile(string path)
+        public async Task<DeckSaveModel> LoadFromFileAsync(
+            string path,
+            CancellationToken cancellationToken = default)
         {
-            string json = File.ReadAllText(path);
+            string json = await File.ReadAllTextAsync(path, cancellationToken);
             return JsonSerializer.Deserialize<DeckSaveModel>(json)
                 ?? throw new InvalidDataException("The selected deck file is invalid.");
         }

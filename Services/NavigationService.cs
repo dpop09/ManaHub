@@ -14,13 +14,16 @@ namespace ManaHub.Services
             _pageFactories[page] = factory;
         }
 
-        public void NavigateTo(AppPage page)
+        public async Task NavigateToAsync(AppPage page, CancellationToken cancellationToken = default)
         {
             if (!_pageFactories.TryGetValue(page, out var factory))
                 throw new InvalidOperationException($"No view model is registered for {page}.");
 
             CurrentView = factory();
             CurrentViewChanged?.Invoke(this, EventArgs.Empty);
+
+            if (CurrentView is IAsyncInitializable initializable)
+                await initializable.InitializeAsync(cancellationToken);
         }
     }
 }

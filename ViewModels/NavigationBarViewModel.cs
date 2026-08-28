@@ -22,37 +22,37 @@ namespace ManaHub.ViewModels
             _navigation = navigation;
             _session = session;
             _session.PropertyChanged += OnSessionPropertyChanged;
-            ExecuteLogoutCommand = new RelayCommand(o => LogoutCommand());
-            GoToTablesPageCommand = new RelayCommand((o) => GoToTablesPage());
-            GoToDeckEditorPageCommand = new RelayCommand((o) => GoToDeckEditorPage());
-            GoToSettingsPageCommand = new RelayCommand((o) => GoToSettingsPage());
+            ExecuteLogoutCommand = new AsyncRelayCommand((o, cancellationToken) => LogoutAsync(cancellationToken));
+            GoToTablesPageCommand = new AsyncRelayCommand((o, cancellationToken) => GoToTablesPageAsync(cancellationToken));
+            GoToDeckEditorPageCommand = new AsyncRelayCommand((o, cancellationToken) => GoToDeckEditorPageAsync(cancellationToken));
+            GoToSettingsPageCommand = new AsyncRelayCommand((o, cancellationToken) => GoToSettingsPageAsync(cancellationToken));
         }
 
-        private void LogoutCommand()
+        private async Task LogoutAsync(CancellationToken cancellationToken)
         {
             _session.Clear();
-            _navigation.NavigateTo(AppPage.Login);
+            await _navigation.NavigateToAsync(AppPage.Login, cancellationToken);
         }
 
-        private void GoToTablesPage()
+        private async Task GoToTablesPageAsync(CancellationToken cancellationToken)
         {
             if (_navigation.CurrentView is TablesPageViewModel)
                 return;
-            _navigation.NavigateTo(AppPage.Tables);
+            await _navigation.NavigateToAsync(AppPage.Tables, cancellationToken);
         }
 
-        private void GoToSettingsPage()
+        private async Task GoToSettingsPageAsync(CancellationToken cancellationToken)
         {
             if (_navigation.CurrentView is SettingsPageViewModel)
                 return;
-            _navigation.NavigateTo(AppPage.Settings);
+            await _navigation.NavigateToAsync(AppPage.Settings, cancellationToken);
         }
 
-        private void GoToDeckEditorPage()
+        private async Task GoToDeckEditorPageAsync(CancellationToken cancellationToken)
         {
             if (_navigation.CurrentView is DeckEditorPageViewModel)
                 return;
-            _navigation.NavigateTo(AppPage.DeckEditor);
+            await _navigation.NavigateToAsync(AppPage.DeckEditor, cancellationToken);
         }
 
         private void OnSessionPropertyChanged(object? sender, PropertyChangedEventArgs e)

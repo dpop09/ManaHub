@@ -46,14 +46,15 @@ namespace ManaHub
                 AppDomain.CurrentDomain.BaseDirectory,
                 "Data",
                 "oracle-cards-20260117221532.json");
-            _initializer = new ApplicationInitializer(cards, cardCatalogPath);
+            _initializer = new ApplicationInitializer(database, cards, cardCatalogPath);
         }
 
-        public Task InitializeAsync() => _initializer.InitializeAsync();
+        public Task InitializeAsync(CancellationToken cancellationToken = default)
+            => _initializer.InitializeAsync(cancellationToken);
 
-        public MainWindow CreateMainWindow()
+        public async Task<MainWindow> CreateMainWindowAsync(CancellationToken cancellationToken = default)
         {
-            _navigation.NavigateTo(AppPage.Login);
+            await _navigation.NavigateToAsync(AppPage.Login, cancellationToken);
             return new MainWindow { DataContext = _mainWindowViewModel };
         }
     }

@@ -6,20 +6,30 @@ namespace ManaHub.Services
     internal sealed class ApplicationInitializer : IApplicationInitializer
     {
         private readonly ICardRepository _cards;
+        private readonly IDatabaseInitializer _database;
         private readonly string _cardCatalogPath;
 
-        public ApplicationInitializer(ICardRepository cards, string cardCatalogPath)
+        public ApplicationInitializer(
+            IDatabaseInitializer database,
+            ICardRepository cards,
+            string cardCatalogPath)
         {
+            _database = database;
             _cards = cards;
             _cardCatalogPath = cardCatalogPath;
         }
 
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            if (_cards.GetCardCount() != 0 || !File.Exists(_cardCatalogPath))
+            await _database.InitializeAsync(cancellationToken);
+
+            if (await _cards.GetCardCountAsync(cancellationToken) != 0)
                 return;
 
-            await _cards.BulkImportCards(_cardCatalogPath);
+            if (!File.Exists(_cardCatalogPath))
+                throw new FileNotFoundException("The card catalog required for first-run setup was not found.", _cardCatalogPath);
+
+            await _cards.BulkImportCardsAsync(_cardCatalogPath, cancellationToken);
         }
     }
 }

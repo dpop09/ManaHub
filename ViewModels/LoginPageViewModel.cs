@@ -7,8 +7,8 @@ namespace ManaHub.ViewModels
 {
     internal class LoginPageViewModel : ViewModelBase
     {
-        private string _username;
-        private string _password;
+        private string _username = string.Empty;
+        private string _password = string.Empty;
         public string Username 
         {
             get { return  _username; }
@@ -45,19 +45,23 @@ namespace ManaHub.ViewModels
             _users = users;
             _session = session;
             _dialogs = dialogs;
-            GoToCreateAccountPageCommand = new RelayCommand(o => GoToCreateAccountPage());
-            ExecuteLoginCommand = new RelayCommand(o => ExecuteLogin());
+            GoToCreateAccountPageCommand = new AsyncRelayCommand(
+                (o, cancellationToken) => GoToCreateAccountPageAsync(cancellationToken));
+            ExecuteLoginCommand = new AsyncRelayCommand(
+                (o, cancellationToken) => ExecuteLoginAsync(cancellationToken));
         }
 
-        private void GoToCreateAccountPage()
+        private Task GoToCreateAccountPageAsync(CancellationToken cancellationToken)
         {
-            _navigation.NavigateTo(AppPage.CreateAccount);
+            return _navigation.NavigateToAsync(AppPage.CreateAccount, cancellationToken);
         }
-        private void GoToTablesPage()
+
+        private Task GoToTablesPageAsync(CancellationToken cancellationToken)
         {
-            _navigation.NavigateTo(AppPage.Tables);
+            return _navigation.NavigateToAsync(AppPage.Tables, cancellationToken);
         }
-        private void ExecuteLogin()
+
+        private async Task ExecuteLoginAsync(CancellationToken cancellationToken)
         {
             // ensure username and password is not null or whitespace
             if (string.IsNullOrWhiteSpace(_username) || string.IsNullOrWhiteSpace(Password))
@@ -66,10 +70,10 @@ namespace ManaHub.ViewModels
                 return;
             }
             // check database if user exists, else display incorrect message
-            if (_users.CheckUser(Username, Password))
+            if (await _users.CheckUserAsync(Username, Password, cancellationToken))
             {
                 _session.Username = Username;
-                GoToTablesPage();
+                await GoToTablesPageAsync(cancellationToken);
             }
             else
                 _dialogs.ShowMessage("Incorrect username or password.");

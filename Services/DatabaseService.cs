@@ -4,22 +4,21 @@ using ManaHub.Contracts;
 
 namespace ManaHub.Services
 {
-    internal sealed partial class DatabaseService : IUserRepository, ICardRepository
+    internal sealed partial class DatabaseService : IUserRepository, ICardRepository, IDatabaseInitializer
     {
         private readonly string _connectionString;
 
         public DatabaseService(string connectionString)
         {
             _connectionString = connectionString;
-            InitalizeDatabase();
         }
 
-        private void InitalizeDatabase()
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             // create the file and table if they don't exist
             using (var connection = new SqliteConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync(cancellationToken);
                 var command = connection.CreateCommand();
                 command.CommandText = @"
                        CREATE TABLE IF NOT EXISTS Users (
@@ -53,7 +52,7 @@ namespace ManaHub.Services
                             SecondToughness TEXT,
                             SecondaryImageUrl TEXT
                        );";
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync(cancellationToken);
             }
         }
     }

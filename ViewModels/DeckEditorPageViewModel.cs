@@ -8,7 +8,7 @@ using ManaHub.Contracts;
 
 namespace ManaHub.ViewModels
 {
-    internal class DeckEditorPageViewModel : ViewModelBase
+    internal class DeckEditorPageViewModel : ViewModelBase, IAsyncInitializable
     {
         private readonly ICardRepository _cards;
         private readonly IDeckService _decks;
@@ -22,6 +22,7 @@ namespace ManaHub.ViewModels
         private bool _searchNames = true; // Default to true
         private bool _searchTypes = false;
         private bool _searchRules = false;
+        private bool _isLoading;
         public ObservableCollection<Card> FilteredCards { get; set; }
         public ObservableCollection<Card> DeckList { get; set; }
         public ObservableCollection<Card> SideboardList { get; set; }
@@ -133,6 +134,18 @@ namespace ManaHub.ViewModels
                 OnPropertyChanged(); 
             } 
         }
+        public bool IsLoading
+        {
+            get => _isLoading;
+            private set
+            {
+                if (_isLoading == value)
+                    return;
+
+                _isLoading = value;
+                OnPropertyChanged();
+            }
+        }
         public int CardCount => FilteredCards.Count;
         public int MainDeckCardCount => DeckList.Count;
         public int MainDeckLandCount => GetMainDeckLandCount();
@@ -187,22 +200,39 @@ namespace ManaHub.ViewModels
             MoveCardFromMainDeckToSideboardCommand = new RelayCommand((obj) => MoveCardFromMainDeckToSideboard(obj));
             MoveCardFromSideboardToMainDeckCommand = new RelayCommand((obj) => MoveCardFromSideboardToMainDeck(obj));
             NewDeckCommand = new RelayCommand(o => NewDeck());
-            SaveDeckCommand = new RelayCommand(o => SaveDeck());
-            LoadDeckCommand = new RelayCommand(o => LoadDeck());
-            FilterSearchCardsCommand = new RelayCommand(o => FilterSearchCards());
-            ClearFilterSearchCommand = new RelayCommand(o => ClearFilterSearch());
+            SaveDeckCommand = new AsyncRelayCommand((o, cancellationToken) => SaveDeckAsync(cancellationToken));
+            LoadDeckCommand = new AsyncRelayCommand((o, cancellationToken) => LoadDeckAsync(cancellationToken));
+            FilterSearchCardsCommand = new AsyncRelayCommand((o, cancellationToken) => FilterSearchCardsAsync(cancellationToken));
+            ClearFilterSearchCommand = new AsyncRelayCommand((o, cancellationToken) => ClearFilterSearchAsync(cancellationToken));
 
             CardDisplayVM = new CardDisplayViewModel(this);
-
-            LoadInitialCards();
         }
 
-        private void LoadInitialCards()
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            // retrive the cards from the db
-            var cards = _cards.GetCards(limit: 40000);
+            IsLoading = true;
+            try
+            {
+                await LoadInitialCardsAsync(cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _dialogs.ShowMessage($"Cards could not be loaded.\n\n{ex.Message}", "Card Load Error");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
 
-            // clear and fill the observable collection
+        private async Task LoadInitialCardsAsync(CancellationToken cancellationToken)
+        {
+            var cards = await _cards.GetCardsAsync(limit: 40000, cancellationToken);
+
             FilteredCards.Clear();
             foreach (var card in cards)
                 FilteredCards.Add(card);
@@ -258,7 +288,7 @@ namespace ManaHub.ViewModels
             SideboardList.Clear();
             DeckName = "";
         }
-        private void SaveDeck()
+        private async Task SaveDeckAsync(CancellationToken cancellationToken)
         {
             // check if there are any cards
             if (!DeckList.Any() && !SideboardList.Any())
@@ -268,20 +298,27 @@ namespace ManaHub.ViewModels
                 return;
 
             DeckName = Path.GetFileNameWithoutExtension(path);
-            _decks.SaveToFile(path, DeckName, DeckList, SideboardList);
+            await _decks.SaveToFileAsync(
+                path,
+                DeckName,
+                DeckList.ToList(),
+                SideboardList.ToList(),
+                cancellationToken);
         }
-        private void LoadDeck()
+
+        private async Task LoadDeckAsync(CancellationToken cancellationToken)
         {
             string? path = _fileDialogs.SelectDeckToOpen();
             if (path != null)
             {
-                var data = _decks.LoadFromFile(path);
+                var data = await _decks.LoadFromFileAsync(path, cancellationToken);
 
                 DeckName = data.DeckName;
                 // 1. Fetch unique card data from DB (one instance per ID)
                 var uniqueIds = data.MainDeckIds.Distinct().Concat(data.SideboardIds.Distinct());
                 // Quick lookup table
-                var cardLibrary = _cards.GetCardsByIds(uniqueIds).ToDictionary(c => c.Id);
+                var cards = await _cards.GetCardsByIdsAsync(uniqueIds, cancellationToken);
+                var cardLibrary = cards.ToDictionary(c => c.Id);
 
                 DeckList.Clear();
                 // 2. Loop through the ORIGINAL ID list (which contains duplicates)
@@ -304,20 +341,25 @@ namespace ManaHub.ViewModels
                 }
             }
         }
-        private void FilterSearchCards()
+        private async Task FilterSearchCardsAsync(CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(FilterSearchText))
                 return;
-            var cards = _cards.GetCardsByFilteredSearch(FilterSearchText, SearchNames, SearchTypes, SearchRules);
+            var cards = await _cards.GetCardsByFilteredSearchAsync(
+                FilterSearchText,
+                SearchNames,
+                SearchTypes,
+                SearchRules,
+                cancellationToken);
             // clear and fill the observable collection
             FilteredCards.Clear();
             foreach (var card in cards)
                 FilteredCards.Add(card);
         }
-        private void ClearFilterSearch()
+        private async Task ClearFilterSearchAsync(CancellationToken cancellationToken)
         {
             FilterSearchText = "";
-            LoadInitialCards();
+            await LoadInitialCardsAsync(cancellationToken);
         }
         private int GetMainDeckLandCount() 
             => DeckList.Count(c => c.TypeLine != null && c.TypeLine.Contains("Land"));

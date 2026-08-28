@@ -14,12 +14,13 @@ namespace ManaHub.ViewModels
         public GamePageViewModel(INavigationService navigation)
         {
             _navigation = navigation;
-            GoToTablesPageCommand = new RelayCommand((o) => GoToTablesPage());
+            GoToTablesPageCommand = new AsyncRelayCommand(
+                (o, cancellationToken) => GoToTablesPageAsync(cancellationToken));
         }
 
-        private void GoToTablesPage()
+        private Task GoToTablesPageAsync(CancellationToken cancellationToken)
         {
-            _navigation.NavigateTo(AppPage.Tables);
+            return _navigation.NavigateToAsync(AppPage.Tables, cancellationToken);
         }
     }
 }

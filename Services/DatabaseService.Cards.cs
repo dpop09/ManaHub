@@ -7,18 +7,20 @@ namespace ManaHub.Services
 {
     internal sealed partial class DatabaseService
     {
-        public async Task BulkImportCards(string filePath)
+        public async Task BulkImportCardsAsync(
+            string filePath,
+            CancellationToken cancellationToken = default)
         {
             using var stream = File.OpenRead(filePath);
 
-            var cards = JsonSerializer.DeserializeAsyncEnumerable<Card>(stream, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            var cards = JsonSerializer.DeserializeAsyncEnumerable<Card>(
+                stream,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true },
+                cancellationToken);
 
             using (var connection = new SqliteConnection(_connectionString))
             {
-                await connection.OpenAsync();
+                await connection.OpenAsync(cancellationToken);
 
                 using (var transaction = connection.BeginTransaction())
                 {
@@ -54,7 +56,7 @@ namespace ManaHub.Services
                     var pPrimaryUrl = command.Parameters.Add("$primaryurl", SqliteType.Text);
                     var pSecondaryUrl = command.Parameters.Add("$secondaryurl", SqliteType.Text);
 
-                    await foreach (var card in cards)
+                    await foreach (var card in cards.WithCancellation(cancellationToken))
                     {
                         if (card == null) 
                             continue;
@@ -140,21 +142,21 @@ namespace ManaHub.Services
                             pSecondaryUrl.Value = DBNull.Value;
                         }
 
-                        await command.ExecuteNonQueryAsync();
+                        await command.ExecuteNonQueryAsync(cancellationToken);
                     }
-                    await transaction.CommitAsync();
+                    await transaction.CommitAsync(cancellationToken);
                 }
             }
         }
 
-        public long GetCardCount()
+        public async Task<long> GetCardCountAsync(CancellationToken cancellationToken = default)
         {
             using (var connection = new SqliteConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync(cancellationToken);
                 var command = connection.CreateCommand();
                 command.CommandText = "SELECT COUNT(*) FROM Cards ";
-                return (long)command.ExecuteScalar();
+                return (long)(await command.ExecuteScalarAsync(cancellationToken) ?? 0L);
             }
         }
         private Card MapReaderToCard(SqliteDataReader reader)
@@ -186,13 +188,15 @@ namespace ManaHub.Services
                 SecondaryImageUrl = reader.IsDBNull(22) ? "" : reader.GetString(22)
             };
         }
-        public List<Card> GetCards(int limit = 100)
+        public async Task<List<Card>> GetCardsAsync(
+            int limit = 100,
+            CancellationToken cancellationToken = default)
         {
             List<Card> cardList = new List<Card>();
 
             using (var connection = new SqliteConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync(cancellationToken);
 
                 var command = connection.CreateCommand();
                 command.CommandText = @"
@@ -206,27 +210,30 @@ namespace ManaHub.Services
 
                 command.Parameters.AddWithValue("$limit", limit);
 
-                using (var reader = command.ExecuteReader())
+                using (var reader = await command.ExecuteReaderAsync(cancellationToken))
                 {
-                    while (reader.Read())
+                    while (await reader.ReadAsync(cancellationToken))
                         cardList.Add(MapReaderToCard(reader));
                 }
             }
             return cardList;
         }
-        public List<Card> GetCardsByIds(IEnumerable<string> ids)
+        public async Task<List<Card>> GetCardsByIdsAsync(
+            IEnumerable<string> ids,
+            CancellationToken cancellationToken = default)
         {
             var cardList = new List<Card>();
-            if (!ids.Any()) 
+            var idList = ids.ToList();
+            if (idList.Count == 0)
                 return cardList;
 
             using (var connection = new SqliteConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync(cancellationToken);
                 var command = connection.CreateCommand();
 
                 // Creates a string like: '$id0,$id1,$id2'
-                var parameterNames = ids.Select((id, index) => $"$id{index}").ToArray();
+                var parameterNames = idList.Select((id, index) => $"$id{index}").ToArray();
                 var IN_Clause = string.Join(",", parameterNames);
 
                 command.CommandText = $"SELECT Id, Name, Colors, ManaCost, Cmc, TypeLine, [Set], Power, Toughness, Rarity, CollectorNumber, OracleText, Layout, ColorIdentity, " +
@@ -234,17 +241,22 @@ namespace ManaHub.Services
                                       $"FROM Cards WHERE Id IN ({IN_Clause})";
 
                 for (int i = 0; i < parameterNames.Length; i++)
-                    command.Parameters.AddWithValue(parameterNames[i], ids.ElementAt(i));
+                    command.Parameters.AddWithValue(parameterNames[i], idList[i]);
 
-                using (var reader = command.ExecuteReader())
+                using (var reader = await command.ExecuteReaderAsync(cancellationToken))
                 {
-                    while (reader.Read())
+                    while (await reader.ReadAsync(cancellationToken))
                         cardList.Add(MapReaderToCard(reader)); // Helper method to keep it clean
                 }
             }
             return cardList;
         }
-        public List<Card> GetCardsByFilteredSearch(string filter, bool inName, bool inTypes, bool inRules)
+        public async Task<List<Card>> GetCardsByFilteredSearchAsync(
+            string filter,
+            bool inName,
+            bool inTypes,
+            bool inRules,
+            CancellationToken cancellationToken = default)
         {
             List<Card> cardList = new List<Card>();
 
@@ -254,7 +266,7 @@ namespace ManaHub.Services
 
             using (var connection = new SqliteConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync(cancellationToken);
                 var command = connection.CreateCommand();
 
                 // dynamically build the WHERE clause
@@ -275,9 +287,9 @@ namespace ManaHub.Services
                     WHERE ({whereClause})";
                 command.Parameters.AddWithValue("$filter", $"%{filter}%");
 
-                using (var reader = command.ExecuteReader())
+                using (var reader = await command.ExecuteReaderAsync(cancellationToken))
                 {
-                    while (reader.Read())
+                    while (await reader.ReadAsync(cancellationToken))
                         cardList.Add(MapReaderToCard(reader));
                 }
             }

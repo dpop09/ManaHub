@@ -12,8 +12,8 @@ namespace ManaHub.ViewModels
         private readonly INavigationService _navigation;
         private readonly IUserRepository _users;
         private readonly IDialogService _dialogs;
-        private string _username;
-        private string _password;
+        private string _username = string.Empty;
+        private string _password = string.Empty;
         public string Username
         {
             get { return _username; }
@@ -43,32 +43,34 @@ namespace ManaHub.ViewModels
             _navigation = navigation;
             _users = users;
             _dialogs = dialogs;
-            GoToLoginPageCommand = new RelayCommand(o => GoToLoginPage());
-            ExecuteCreateAccountCommand = new RelayCommand(o =>  ExecuteCreateAccount());
+            GoToLoginPageCommand = new AsyncRelayCommand(
+                (o, cancellationToken) => GoToLoginPageAsync(cancellationToken));
+            ExecuteCreateAccountCommand = new AsyncRelayCommand(
+                (o, cancellationToken) => ExecuteCreateAccountAsync(cancellationToken));
         }
 
-        private void GoToLoginPage()
+        private Task GoToLoginPageAsync(CancellationToken cancellationToken)
         {
-            _navigation.NavigateTo(AppPage.Login);
+            return _navigation.NavigateToAsync(AppPage.Login, cancellationToken);
         }
 
-        private void ExecuteCreateAccount()
+        private async Task ExecuteCreateAccountAsync(CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
             {
                 _dialogs.ShowMessage("Please fill in all fields.");
                 return;
             }
-            if (_users.CheckExistUsername(Username))
+            if (await _users.CheckExistUsernameAsync(Username, cancellationToken))
             {
                 string message = $"\"{Username}\" already exists. Please choose a different username.";
                 _dialogs.ShowMessage(message);
                 return;
             }
-            if (_users.CreateUserAccount(Username, Password))
+            if (await _users.CreateUserAccountAsync(Username, Password, cancellationToken))
             {
                 _dialogs.ShowMessage("Your account has been created successfully.");
-                GoToLoginPage();
+                await GoToLoginPageAsync(cancellationToken);
             }
             else
             {

@@ -5,24 +5,44 @@ namespace ManaHub.Contracts
 {
     internal interface IUserRepository
     {
-        bool CheckUser(string username, string password);
-        bool CheckExistUsername(string username);
-        bool CreateUserAccount(string username, string password);
+        Task<bool> CheckUserAsync(string username, string password, CancellationToken cancellationToken = default);
+        Task<bool> CheckExistUsernameAsync(string username, CancellationToken cancellationToken = default);
+        Task<bool> CreateUserAccountAsync(string username, string password, CancellationToken cancellationToken = default);
     }
 
     internal interface ICardRepository
     {
-        Task BulkImportCards(string filePath);
-        long GetCardCount();
-        List<Card> GetCards(int limit = 100);
-        List<Card> GetCardsByIds(IEnumerable<string> ids);
-        List<Card> GetCardsByFilteredSearch(string filter, bool inName, bool inTypes, bool inRules);
+        Task BulkImportCardsAsync(string filePath, CancellationToken cancellationToken = default);
+        Task<long> GetCardCountAsync(CancellationToken cancellationToken = default);
+        Task<List<Card>> GetCardsAsync(int limit = 100, CancellationToken cancellationToken = default);
+        Task<List<Card>> GetCardsByIdsAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default);
+        Task<List<Card>> GetCardsByFilteredSearchAsync(
+            string filter,
+            bool inName,
+            bool inTypes,
+            bool inRules,
+            CancellationToken cancellationToken = default);
     }
 
     internal interface IDeckService
     {
-        void SaveToFile(string path, string name, IEnumerable<Card> main, IEnumerable<Card> side);
-        DeckSaveModel LoadFromFile(string path);
+        Task SaveToFileAsync(
+            string path,
+            string name,
+            IEnumerable<Card> main,
+            IEnumerable<Card> side,
+            CancellationToken cancellationToken = default);
+        Task<DeckSaveModel> LoadFromFileAsync(string path, CancellationToken cancellationToken = default);
+    }
+
+    internal interface IDatabaseInitializer
+    {
+        Task InitializeAsync(CancellationToken cancellationToken = default);
+    }
+
+    internal interface IAsyncInitializable
+    {
+        Task InitializeAsync(CancellationToken cancellationToken = default);
     }
 
     internal enum AppPage
@@ -39,7 +59,7 @@ namespace ManaHub.Contracts
     {
         object? CurrentView { get; }
         event EventHandler? CurrentViewChanged;
-        void NavigateTo(AppPage page);
+        Task NavigateToAsync(AppPage page, CancellationToken cancellationToken = default);
     }
 
     internal interface ISessionService : INotifyPropertyChanged
@@ -69,6 +89,6 @@ namespace ManaHub.Contracts
 
     internal interface IApplicationInitializer
     {
-        Task InitializeAsync();
+        Task InitializeAsync(CancellationToken cancellationToken = default);
     }
 }
