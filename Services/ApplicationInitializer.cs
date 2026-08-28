@@ -6,16 +6,19 @@ namespace ManaHub.Services
     internal sealed class ApplicationInitializer : IApplicationInitializer
     {
         private readonly ICardRepository _cards;
+        private readonly ICardCatalogImporter _cardCatalogImporter;
         private readonly IDatabaseInitializer _database;
         private readonly string _cardCatalogPath;
 
         public ApplicationInitializer(
             IDatabaseInitializer database,
             ICardRepository cards,
+            ICardCatalogImporter cardCatalogImporter,
             string cardCatalogPath)
         {
             _database = database;
             _cards = cards;
+            _cardCatalogImporter = cardCatalogImporter;
             _cardCatalogPath = cardCatalogPath;
         }
 
@@ -29,7 +32,7 @@ namespace ManaHub.Services
             if (!File.Exists(_cardCatalogPath))
                 throw new FileNotFoundException("The card catalog required for first-run setup was not found.", _cardCatalogPath);
 
-            await _cards.BulkImportCardsAsync(_cardCatalogPath, cancellationToken);
+            await _cardCatalogImporter.ImportAsync(_cardCatalogPath, cancellationToken);
         }
     }
 }

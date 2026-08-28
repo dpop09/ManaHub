@@ -12,7 +12,6 @@ namespace ManaHub.Contracts
 
     internal interface ICardRepository
     {
-        Task BulkImportCardsAsync(string filePath, CancellationToken cancellationToken = default);
         Task<long> GetCardCountAsync(CancellationToken cancellationToken = default);
         Task<List<Card>> GetCardsAsync(int limit = 100, CancellationToken cancellationToken = default);
         Task<List<Card>> GetCardsByIdsAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default);
@@ -22,6 +21,11 @@ namespace ManaHub.Contracts
             bool inTypes,
             bool inRules,
             CancellationToken cancellationToken = default);
+    }
+
+    internal interface ICardCatalogImporter
+    {
+        Task ImportAsync(string filePath, CancellationToken cancellationToken = default);
     }
 
     internal interface IDeckService

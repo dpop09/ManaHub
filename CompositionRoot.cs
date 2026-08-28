@@ -15,10 +15,11 @@ namespace ManaHub
         {
             // Preserve the existing database location while making its ownership explicit.
             // Moving it to LocalApplicationData should be handled by a separate data migration.
-            var database = new DatabaseService("Data Source=manahub.db");
-
-            IUserRepository users = database;
-            ICardRepository cards = database;
+            var connectionFactory = new SqliteConnectionFactory("Data Source=manahub.db");
+            IDatabaseInitializer databaseInitializer = new SqliteDatabaseInitializer(connectionFactory);
+            IUserRepository users = new SqliteUserRepository(connectionFactory);
+            ICardRepository cards = new SqliteCardRepository(connectionFactory);
+            ICardCatalogImporter cardCatalogImporter = new CardCatalogImporter(connectionFactory);
             IDeckService decks = new DeckService();
             IDialogService dialogs = new WpfDialogService();
             IFileDialogService fileDialogs = new WpfFileDialogService();
@@ -46,7 +47,11 @@ namespace ManaHub
                 AppDomain.CurrentDomain.BaseDirectory,
                 "Data",
                 "oracle-cards-20260117221532.json");
-            _initializer = new ApplicationInitializer(database, cards, cardCatalogPath);
+            _initializer = new ApplicationInitializer(
+                databaseInitializer,
+                cards,
+                cardCatalogImporter,
+                cardCatalogPath);
         }
 
         public Task InitializeAsync(CancellationToken cancellationToken = default)
