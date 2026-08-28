@@ -1,5 +1,5 @@
 using ManaHub.Contracts;
-using ManaHub.Models;
+using ManaHub.Services.External;
 using Microsoft.Data.Sqlite;
 using System.IO;
 using System.Text.Json;
@@ -28,7 +28,7 @@ namespace ManaHub.Services
             CancellationToken cancellationToken = default)
         {
             using var stream = File.OpenRead(filePath);
-            var cards = JsonSerializer.DeserializeAsyncEnumerable<Card>(
+            var cards = JsonSerializer.DeserializeAsyncEnumerable<ScryfallCardDto>(
                 stream,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true },
                 cancellationToken);
@@ -100,17 +100,17 @@ namespace ManaHub.Services
             command.Parameters.Add(name, type);
         }
 
-        private static bool ShouldSkip(Card card)
+        private static bool ShouldSkip(ScryfallCardDto card)
         {
             return ForbiddenLayouts.Contains(card.Layout ?? string.Empty)
-                || ForbiddenSets.Contains(card.Set ?? string.Empty);
+                || ForbiddenSets.Contains(card.SetCode ?? string.Empty);
         }
 
-        private static void BindCard(SqliteCommand command, Card card)
+        private static void BindCard(SqliteCommand command, ScryfallCardDto card)
         {
             Set(command, "$id", card.Id);
-            Set(command, "$cmc", card.Cmc);
-            Set(command, "$set", card.Set?.ToUpperInvariant());
+            Set(command, "$cmc", card.ManaValue);
+            Set(command, "$set", card.SetCode?.ToUpperInvariant());
             Set(command, "$rarity", FormatRarity(card.Rarity));
             Set(command, "$collectorNumber", card.CollectorNumber);
             Set(command, "$layout", card.Layout);
@@ -127,9 +127,9 @@ namespace ManaHub.Services
 
         private static void BindMultiFaceCard(
             SqliteCommand command,
-            Card card,
-            CardFace front,
-            CardFace back)
+            ScryfallCardDto card,
+            ScryfallCardFaceDto front,
+            ScryfallCardFaceDto back)
         {
             Set(command, "$name", front.Name);
             Set(command, "$colors", JoinColors(card.Colors) ?? JoinColors(front.Colors));
@@ -150,7 +150,7 @@ namespace ManaHub.Services
             Set(command, "$secondaryUrl", back.ImageUris?.Normal);
         }
 
-        private static void BindSingleFaceCard(SqliteCommand command, Card card)
+        private static void BindSingleFaceCard(SqliteCommand command, ScryfallCardDto card)
         {
             Set(command, "$name", card.Name);
             Set(command, "$colors", JoinColors(card.Colors));

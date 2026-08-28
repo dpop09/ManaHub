@@ -3,6 +3,8 @@ using ManaHub.MVVMs;
 using ManaHub.Services;
 using System.Windows.Input;
 
+using ManaHub.Domain;
+
 namespace ManaHub.ViewModels
 {
     internal class InteractiveCardViewModel : ViewModelBase
@@ -35,7 +37,7 @@ namespace ManaHub.ViewModels
             {
                 if (InteractiveCard == null) return null;
 
-                string urlToUse = IsFlipped ? InteractiveCard.SecondaryImageUrl : InteractiveCard.PrimaryImageUrl;
+                string? urlToUse = IsFlipped ? InteractiveCard.Back?.ImageUrl : InteractiveCard.Front.ImageUrl;
 
                 if (string.IsNullOrEmpty(urlToUse))
                     return null;

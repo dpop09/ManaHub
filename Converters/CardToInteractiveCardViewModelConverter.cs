@@ -3,6 +3,8 @@ using ManaHub.ViewModels;
 using System.Globalization;
 using System.Windows.Data;
 
+using ManaHub.Domain;
+
 namespace ManaHub.Converters
 {
     class CardToInteractiveCardViewModelConverter : IValueConverter

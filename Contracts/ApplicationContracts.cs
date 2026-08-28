@@ -1,6 +1,8 @@
 using ManaHub.Models;
 using System.ComponentModel;
 
+using ManaHub.Domain;
+
 namespace ManaHub.Contracts
 {
     internal interface IUserRepository

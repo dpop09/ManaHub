@@ -3,6 +3,8 @@ using ManaHub.MVVMs;
 using ManaHub.Services;
 using System.Windows.Input;
 
+using ManaHub.Domain;
+
 namespace ManaHub.ViewModels
 {
     class CardDisplayViewModel : ViewModelBase
@@ -37,7 +39,7 @@ namespace ManaHub.ViewModels
                 if (CardDisplay == null) return null;
 
                 // Determine which URL to use from the model
-                string urlToUse = IsFlipped ? CardDisplay.SecondaryImageUrl : CardDisplay.PrimaryImageUrl;
+                string? urlToUse = IsFlipped ? CardDisplay.Back?.ImageUrl : CardDisplay.Front.ImageUrl;
 
                 // Fallback: If the card isn't flipped but has no Primary, or is flipped but has no Secondary
                 if (string.IsNullOrEmpty(urlToUse))

@@ -6,6 +6,8 @@ using System.Windows.Input;
 
 using ManaHub.Contracts;
 
+using ManaHub.Domain;
+
 namespace ManaHub.ViewModels
 {
     internal class DeckEditorPageViewModel : ViewModelBase, IAsyncInitializable
@@ -362,14 +364,14 @@ namespace ManaHub.ViewModels
             await LoadInitialCardsAsync(cancellationToken);
         }
         private int GetMainDeckLandCount() 
-            => DeckList.Count(c => c.TypeLine != null && c.TypeLine.Contains("Land"));
+            => DeckList.Count(c => c.Front.TypeLine.Contains("Land", StringComparison.Ordinal));
         private int GetMainDeckCreatureCount()
-            => DeckList.Count(c => c.TypeLine != null && c.TypeLine.Contains("Creature"));
+            => DeckList.Count(c => c.Front.TypeLine.Contains("Creature", StringComparison.Ordinal));
 
         private void UpdateGroupedDeck()
         {
             var groups = DeckList
-                .GroupBy(c => (int)c.Cmc)
+                .GroupBy(c => (int)c.ManaValue)
                 .OrderBy(g => g.Key)
                 .Select(g => new DeckGroup
                 {

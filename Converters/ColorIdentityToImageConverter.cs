@@ -8,14 +8,9 @@ namespace ManaHub.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // Use a List instead of a fixed-size array
             List<string> symbols = new List<string>();
-            string colorIdentityString = value as string;
-
-            if (!string.IsNullOrWhiteSpace(colorIdentityString))
+            if (value is IEnumerable<string> colors)
             {
-                string[] colors = colorIdentityString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
                 foreach (string color in colors)
                 {
                     string primaryPath = $"pack://application:,,,/ManaHub;component/Assets/Symbols/{color.Trim()}.svg";

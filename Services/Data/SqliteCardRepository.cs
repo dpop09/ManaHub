@@ -1,5 +1,5 @@
 using ManaHub.Contracts;
-using ManaHub.Models;
+using ManaHub.Domain;
 
 namespace ManaHub.Services
 {

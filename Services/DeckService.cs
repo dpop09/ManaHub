@@ -4,6 +4,8 @@ using System.Text.Json;
 
 using ManaHub.Contracts;
 
+using ManaHub.Domain;
+
 namespace ManaHub.Services
 {
     internal sealed class DeckService : IDeckService
