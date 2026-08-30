@@ -8,7 +8,7 @@ using ManaHub.MVVMs;
 
 namespace ManaHub.ViewModels
 {
-    internal sealed class DeckDocumentViewModel : ViewModelBase
+    internal sealed class DeckDocumentViewModel : ViewModelBase, IDisposable
     {
         private readonly DeckWorkspaceViewModel _workspace;
         private readonly ICardRepository _cards;
@@ -64,6 +64,13 @@ namespace ManaHub.ViewModels
         public ICommand NewCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand LoadCommand { get; }
+
+        public void Dispose()
+        {
+            _saveCommand.Cancel();
+            _loadCommand.Cancel();
+            _workspace.PropertyChanged -= OnWorkspacePropertyChanged;
+        }
 
         private void NewDeck()
         {

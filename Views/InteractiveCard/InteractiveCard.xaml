@@ -26,7 +26,7 @@
 			<Image Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality">
 				<Image.Style>
 					<Style TargetType="Image">
-						<Setter Property="Source" Value="{Binding InteractiveCardImageUri, TargetNullValue={x:Null}, FallbackValue={x:Null}}" />
+						<Setter Property="Source" Value="{Binding Image.Source, TargetNullValue={x:Null}, FallbackValue={x:Null}}" />
 						<Style.Triggers>
 							<Trigger Property="Source" Value="{x:Null}">
 								<Setter Property="Visibility" Value="Collapsed" />

@@ -40,7 +40,10 @@ namespace ManaHub.Contracts
 
     internal interface ICardImageService
     {
-        Uri? GetImagePath(string cacheKey, string remoteUri, Action onDownloadComplete);
+        Task<Uri?> GetImageAsync(
+            string cacheKey,
+            string remoteUri,
+            CancellationToken cancellationToken = default);
     }
 
     internal interface IDatabaseInitializer

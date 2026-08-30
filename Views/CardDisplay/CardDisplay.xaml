@@ -59,7 +59,7 @@
             <Image Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality">
                 <Image.Style>
                     <Style TargetType="Image">
-                        <Setter Property="Source" Value="{Binding DisplayImageUri, TargetNullValue={x:Null}, FallbackValue={x:Null}}" />
+                        <Setter Property="Source" Value="{Binding Image.Source, TargetNullValue={x:Null}, FallbackValue={x:Null}}" />
                         <Style.Triggers>
                             <Trigger Property="Source" Value="{x:Null}">
                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -69,5 +69,18 @@
                 </Image.Style>
             </Image>
         </Border>
+        <ProgressBar Width="90" Height="5" IsIndeterminate="True"
+                     HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ProgressBar.Style>
+                <Style TargetType="ProgressBar">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Image.IsLoading}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ProgressBar.Style>
+        </ProgressBar>
     </Grid>
 </UserControl>

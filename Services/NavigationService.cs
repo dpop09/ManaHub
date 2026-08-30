@@ -19,8 +19,12 @@ namespace ManaHub.Services
             if (!_pageFactories.TryGetValue(page, out var factory))
                 throw new InvalidOperationException($"No view model is registered for {page}.");
 
+            object? previousView = CurrentView;
             CurrentView = factory();
             CurrentViewChanged?.Invoke(this, EventArgs.Empty);
+
+            if (previousView is IDisposable disposable)
+                disposable.Dispose();
 
             if (CurrentView is IAsyncInitializable initializable)
                 await initializable.InitializeAsync(cancellationToken);

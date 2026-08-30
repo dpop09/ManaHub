@@ -6,51 +6,91 @@ using ManaHub.MVVMs;
 
 namespace ManaHub.ViewModels
 {
-    internal sealed class InteractiveCardViewModel : ViewModelBase
+    internal sealed class InteractiveCardViewModel : ViewModelBase, IDisposable
     {
-        private readonly ICardImageService _images;
         private bool _isFlipped;
+        private bool _isActive;
 
         public InteractiveCardViewModel(Card card, ICardImageService images)
         {
             InteractiveCard = card;
-            _images = images;
-            FlipCardCommand = new RelayCommand(_ => IsFlipped = !IsFlipped);
+            Image = new AsyncImageViewModel(images);
+            FlipCardCommand = new RelayCommand(_ => Flip());
         }
 
         public Card InteractiveCard { get; }
+        public AsyncImageViewModel Image { get; }
+        public ICommand FlipCardCommand { get; }
 
         public bool IsFlipped
         {
             get => _isFlipped;
-            set
+            private set
             {
                 if (_isFlipped == value)
                     return;
 
                 _isFlipped = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(InteractiveCardImageUri));
             }
         }
 
-        public Uri? InteractiveCardImageUri
+        public Task ActivateAsync(CancellationToken cancellationToken = default)
         {
-            get
-            {
-                string? imageUrl = IsFlipped
-                    ? InteractiveCard.Back?.ImageUrl
-                    : InteractiveCard.Front.ImageUrl;
-                if (string.IsNullOrEmpty(imageUrl))
-                    return null;
-
-                return _images.GetImagePath(
-                    $"{InteractiveCard.Id}_{(IsFlipped ? "back" : "front")}",
-                    imageUrl,
-                    () => OnPropertyChanged(nameof(InteractiveCardImageUri)));
-            }
+            _isActive = true;
+            return LoadCurrentImageAsync(cancellationToken);
         }
 
-        public ICommand FlipCardCommand { get; }
+        public void Deactivate()
+        {
+            _isActive = false;
+            Image.Clear();
+        }
+
+        public void Dispose()
+        {
+            Deactivate();
+            Image.Dispose();
+        }
+
+        private void Flip()
+        {
+            IsFlipped = !IsFlipped;
+            if (_isActive)
+                StartCurrentImageLoad();
+        }
+
+        private void StartCurrentImageLoad()
+        {
+            string? imageUrl = GetCurrentImageUrl();
+            if (string.IsNullOrWhiteSpace(imageUrl))
+            {
+                Image.Clear();
+                return;
+            }
+
+            string cacheKey = $"{InteractiveCard.Id}_{(IsFlipped ? "back" : "front")}";
+            Image.StartLoad(cacheKey, imageUrl);
+        }
+
+        private Task LoadCurrentImageAsync(CancellationToken cancellationToken)
+        {
+            string? imageUrl = GetCurrentImageUrl();
+            if (string.IsNullOrWhiteSpace(imageUrl))
+            {
+                Image.Clear();
+                return Task.CompletedTask;
+            }
+
+            string cacheKey = $"{InteractiveCard.Id}_{(IsFlipped ? "back" : "front")}";
+            return Image.LoadAsync(cacheKey, imageUrl, cancellationToken);
+        }
+
+        private string? GetCurrentImageUrl()
+        {
+            return IsFlipped
+                ? InteractiveCard.Back?.ImageUrl
+                : InteractiveCard.Front.ImageUrl;
+        }
     }
 }

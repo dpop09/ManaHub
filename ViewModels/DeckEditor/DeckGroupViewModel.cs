@@ -1,6 +1,6 @@
 namespace ManaHub.ViewModels
 {
-    internal sealed class DeckGroupViewModel
+    internal sealed class DeckGroupViewModel : IDisposable
     {
         public DeckGroupViewModel(int manaValue, IReadOnlyList<InteractiveCardViewModel> cards)
         {
@@ -10,5 +10,11 @@ namespace ManaHub.ViewModels
 
         public int ManaValue { get; }
         public IReadOnlyList<InteractiveCardViewModel> Cards { get; }
+
+        public void Dispose()
+        {
+            foreach (var card in Cards)
+                card.Dispose();
+        }
     }
 }

@@ -7,7 +7,7 @@ using ManaHub.MVVMs;
 
 namespace ManaHub.ViewModels
 {
-    internal sealed class CardCatalogViewModel : ViewModelBase, IAsyncInitializable
+    internal sealed class CardCatalogViewModel : ViewModelBase, IAsyncInitializable, IDisposable
     {
         private const int InitialCardLimit = 40000;
 
@@ -118,6 +118,12 @@ namespace ManaHub.ViewModels
                 "Cards could not be loaded.",
                 cancellationToken,
                 propagateCancellation: true);
+        }
+
+        public void Dispose()
+        {
+            _searchCommand.Cancel();
+            _clearSearchCommand.Cancel();
         }
 
         private Task SearchAsync(CancellationToken cancellationToken)

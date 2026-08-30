@@ -91,6 +91,9 @@ namespace ManaHub
 
         public void Dispose()
         {
+            if (_navigation.CurrentView is IDisposable disposable)
+                disposable.Dispose();
+
             _imageHttpClient.Dispose();
         }
     }

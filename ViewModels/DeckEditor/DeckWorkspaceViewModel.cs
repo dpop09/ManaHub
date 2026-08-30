@@ -6,7 +6,7 @@ using ManaHub.MVVMs;
 
 namespace ManaHub.ViewModels
 {
-    internal sealed class DeckWorkspaceViewModel : ViewModelBase
+    internal sealed class DeckWorkspaceViewModel : ViewModelBase, IDisposable
     {
         private readonly CardViewModelFactory _cardViewModels;
         private string _name = string.Empty;
@@ -91,6 +91,14 @@ namespace ManaHub.ViewModels
             Name = name;
         }
 
+        public void Dispose()
+        {
+            foreach (var group in MainDeckGroups)
+                group.Dispose();
+
+            MainDeckGroups.Clear();
+        }
+
         private void AddToMainDeck(object? value)
         {
             if (value is Card card)
@@ -173,6 +181,9 @@ namespace ManaHub.ViewModels
                     group.Key,
                     group.Select(_cardViewModels.CreateInteractive).ToArray()))
                 .ToArray();
+
+            foreach (var existingGroup in MainDeckGroups)
+                existingGroup.Dispose();
 
             MainDeckGroups.Clear();
             foreach (var group in groups)

@@ -3,7 +3,7 @@ using ManaHub.MVVMs;
 
 namespace ManaHub.ViewModels
 {
-    internal sealed class DeckSelectionViewModel : ViewModelBase
+    internal sealed class DeckSelectionViewModel : ViewModelBase, IDisposable
     {
         private Card? _selectedCollectionCard;
         private Card? _selectedMainDeckCard;
@@ -34,6 +34,11 @@ namespace ManaHub.ViewModels
             set => SetSelection(value, SelectionSource.Sideboard);
         }
 
+        public void Dispose()
+        {
+            CardDisplay.Dispose();
+        }
+
         private void SetSelection(Card? card, SelectionSource source)
         {
             ref Card? selected = ref GetSelection(source);
@@ -46,7 +51,7 @@ namespace ManaHub.ViewModels
                 _selectedCollectionCard = source == SelectionSource.Collection ? card : null;
                 _selectedMainDeckCard = source == SelectionSource.MainDeck ? card : null;
                 _selectedSideboardCard = source == SelectionSource.Sideboard ? card : null;
-                CardDisplay.CardDisplay = card;
+                CardDisplay.Show(card);
 
                 OnPropertyChanged(nameof(SelectedCollectionCard));
                 OnPropertyChanged(nameof(SelectedMainDeckCard));

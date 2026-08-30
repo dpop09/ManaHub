@@ -5,7 +5,7 @@ using ManaHub.MVVMs;
 
 namespace ManaHub.ViewModels
 {
-    internal sealed class DeckEditorPageViewModel : ViewModelBase, IAsyncInitializable
+    internal sealed class DeckEditorPageViewModel : ViewModelBase, IAsyncInitializable, IDisposable
     {
         public DeckEditorPageViewModel(
             CardCatalogViewModel catalog,
@@ -31,6 +31,16 @@ namespace ManaHub.ViewModels
         public Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             return Catalog.InitializeAsync(cancellationToken);
+        }
+
+        public void Dispose()
+        {
+            Catalog.PropertyChanged -= OnCollaboratorPropertyChanged;
+            Documents.PropertyChanged -= OnCollaboratorPropertyChanged;
+            Documents.Dispose();
+            Selection.Dispose();
+            Deck.Dispose();
+            Catalog.Dispose();
         }
 
         private void OnCollaboratorPropertyChanged(object? sender, PropertyChangedEventArgs e)
