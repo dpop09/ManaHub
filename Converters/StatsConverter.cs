@@ -7,8 +7,8 @@ namespace ManaHub.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            string power = values[0].ToString();
-            string toughness = values[1].ToString();
+            string power = values.ElementAtOrDefault(0)?.ToString() ?? string.Empty;
+            string toughness = values.ElementAtOrDefault(1)?.ToString() ?? string.Empty;
 
             if (string.IsNullOrEmpty(power) && string.IsNullOrEmpty(toughness))
                 return "-";

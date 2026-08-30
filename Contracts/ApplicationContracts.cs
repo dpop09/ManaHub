@@ -1,4 +1,3 @@
-using ManaHub.Models;
 using System.ComponentModel;
 
 using ManaHub.Domain;
@@ -34,11 +33,14 @@ namespace ManaHub.Contracts
     {
         Task SaveToFileAsync(
             string path,
-            string name,
-            IEnumerable<Card> main,
-            IEnumerable<Card> side,
+            DeckDocument document,
             CancellationToken cancellationToken = default);
-        Task<DeckSaveModel> LoadFromFileAsync(string path, CancellationToken cancellationToken = default);
+        Task<DeckDocument> LoadFromFileAsync(string path, CancellationToken cancellationToken = default);
+    }
+
+    internal interface ICardImageService
+    {
+        Uri? GetImagePath(string cacheKey, string remoteUri, Action onDownloadComplete);
     }
 
     internal interface IDatabaseInitializer

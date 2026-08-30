@@ -1,60 +1,56 @@
-﻿using ManaHub.Models;
-using ManaHub.MVVMs;
-using ManaHub.Services;
 using System.Windows.Input;
 
+using ManaHub.Contracts;
 using ManaHub.Domain;
+using ManaHub.MVVMs;
 
 namespace ManaHub.ViewModels
 {
-    internal class InteractiveCardViewModel : ViewModelBase
+    internal sealed class InteractiveCardViewModel : ViewModelBase
     {
-        private Card _interactiveCard;
-        public Card InteractiveCard 
-        {
-            get => _interactiveCard;
-            set
-            {
-                _interactiveCard = value;
-                IsFlipped = false;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(InteractiveCardImageUri));
-            }
-        }
+        private readonly ICardImageService _images;
         private bool _isFlipped;
-        public bool IsFlipped 
+
+        public InteractiveCardViewModel(Card card, ICardImageService images)
+        {
+            InteractiveCard = card;
+            _images = images;
+            FlipCardCommand = new RelayCommand(_ => IsFlipped = !IsFlipped);
+        }
+
+        public Card InteractiveCard { get; }
+
+        public bool IsFlipped
         {
             get => _isFlipped;
             set
             {
+                if (_isFlipped == value)
+                    return;
+
                 _isFlipped = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(InteractiveCardImageUri));
             }
         }
-        public Uri InteractiveCardImageUri 
+
+        public Uri? InteractiveCardImageUri
         {
             get
             {
-                if (InteractiveCard == null) return null;
-
-                string? urlToUse = IsFlipped ? InteractiveCard.Back?.ImageUrl : InteractiveCard.Front.ImageUrl;
-
-                if (string.IsNullOrEmpty(urlToUse))
+                string? imageUrl = IsFlipped
+                    ? InteractiveCard.Back?.ImageUrl
+                    : InteractiveCard.Front.ImageUrl;
+                if (string.IsNullOrEmpty(imageUrl))
                     return null;
 
-                return CardImageService.GetImagePath(
-                    $"{InteractiveCard.Id}_{(IsFlipped ? "back" : "front")}", 
-                    urlToUse, 
-                    () => OnPropertyChanged(nameof(InteractiveCardImageUri))
-                );
+                return _images.GetImagePath(
+                    $"{InteractiveCard.Id}_{(IsFlipped ? "back" : "front")}",
+                    imageUrl,
+                    () => OnPropertyChanged(nameof(InteractiveCardImageUri)));
             }
         }
-        public ICommand FlipCardCommand { get; }
 
-        public InteractiveCardViewModel(Card card) 
-        {
-            _interactiveCard = card;
-            FlipCardCommand = new RelayCommand(o => IsFlipped = !IsFlipped);
-        }
+        public ICommand FlipCardCommand { get; }
     }
 }

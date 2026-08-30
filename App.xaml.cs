@@ -32,6 +32,12 @@ namespace ManaHub
                 Shutdown(-1);
             }
         }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            _compositionRoot?.Dispose();
+            base.OnExit(e);
+        }
     }
 
 }

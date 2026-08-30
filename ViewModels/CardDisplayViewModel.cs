@@ -1,64 +1,70 @@
-﻿using ManaHub.Models;
-using ManaHub.MVVMs;
-using ManaHub.Services;
 using System.Windows.Input;
 
+using ManaHub.Contracts;
 using ManaHub.Domain;
+using ManaHub.MVVMs;
 
 namespace ManaHub.ViewModels
 {
-    class CardDisplayViewModel : ViewModelBase
+    internal sealed class CardDisplayViewModel : ViewModelBase
     {
-        private readonly DeckEditorPageViewModel _depvm;
-        private Card _cardDisplay;
-        public Card CardDisplay 
+        private readonly ICardImageService _images;
+        private Card? _card;
+        private bool _isFlipped;
+
+        public CardDisplayViewModel(ICardImageService images)
         {
-            get => _cardDisplay;
-            set 
-            { 
-                _cardDisplay = value;
+            _images = images;
+            FlipCardCommand = new RelayCommand(_ => IsFlipped = !IsFlipped);
+        }
+
+        public Card? CardDisplay
+        {
+            get => _card;
+            set
+            {
+                if (ReferenceEquals(_card, value))
+                    return;
+
+                _card = value;
                 IsFlipped = false;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(DisplayImageUri));
             }
         }
-        private bool _isFlipped;
-        public bool IsFlipped 
+
+        public bool IsFlipped
         {
             get => _isFlipped;
             set
             {
+                if (_isFlipped == value)
+                    return;
+
                 _isFlipped = value;
                 OnPropertyChanged();
-            } 
+                OnPropertyChanged(nameof(DisplayImageUri));
+            }
         }
-        public Uri DisplayImageUri
+
+        public Uri? DisplayImageUri
         {
             get
             {
-                if (CardDisplay == null) return null;
-
-                // Determine which URL to use from the model
-                string? urlToUse = IsFlipped ? CardDisplay.Back?.ImageUrl : CardDisplay.Front.ImageUrl;
-
-                // Fallback: If the card isn't flipped but has no Primary, or is flipped but has no Secondary
-                if (string.IsNullOrEmpty(urlToUse))
+                if (CardDisplay == null)
                     return null;
 
-                return CardImageService.GetImagePath(
-                    $"{CardDisplay.Id}_{(IsFlipped ? "back" : "front")}", // Cache front and back separately!
-                    urlToUse,
-                    () => OnPropertyChanged(nameof(DisplayImageUri))
-                );
+                string? imageUrl = IsFlipped ? CardDisplay.Back?.ImageUrl : CardDisplay.Front.ImageUrl;
+                if (string.IsNullOrEmpty(imageUrl))
+                    return null;
+
+                return _images.GetImagePath(
+                    $"{CardDisplay.Id}_{(IsFlipped ? "back" : "front")}",
+                    imageUrl,
+                    () => OnPropertyChanged(nameof(DisplayImageUri)));
             }
         }
-        public ICommand FlipCardCommand { get; }
-        
 
-        public CardDisplayViewModel(DeckEditorPageViewModel depvm)
-        {
-            _depvm = depvm;
-            FlipCardCommand = new RelayCommand(o => IsFlipped = !IsFlipped);
-        }
+        public ICommand FlipCardCommand { get; }
     }
 }

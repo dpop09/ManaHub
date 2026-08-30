@@ -52,5 +52,10 @@ namespace ManaHub.MVVMs
         }
 
         public void Cancel() => _executionCancellation?.Cancel();
+
+        public void NotifyCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

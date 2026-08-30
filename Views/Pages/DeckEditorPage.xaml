@@ -12,7 +12,6 @@
     <UserControl.Resources>
         <conv:CardToVisibilityConverter x:Key="CardToVisibilityConverter" />
         <conv:ColorIdentityToImageConverter x:Key="ColorIdentityToImageConverter" />
-        <conv:CardToInteractiveCardViewModelConverter x:Key="CardToInteractiveCardVMConverter" />
         <helpers:BindingProxy x:Key="MainViewModelProxy" Data="{Binding}" />
         <DataTemplate x:Key="CardHoverModalTemplate">
             <Border BorderBrush="#222222" BorderThickness="2" Background="#1E1E1E" CornerRadius="6" Padding="10" MaxWidth="250">
@@ -59,19 +58,19 @@
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
                                    FontSize="14" FontWeight="Bold" Margin="3,0,0,0" Text="Deck Name: " />
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
-                                   FontSize="14" FontWeight="Bold" Foreground="Blue" Text="{Binding DeckName}" />
+                                   FontSize="14" FontWeight="Bold" Foreground="Blue" Text="{Binding Deck.Name}" />
                     </StackPanel>
                     <UniformGrid Grid.Row="1" Columns="3" Margin="4">
                         <Button FontSize="14" Margin="0,0,3,0"  Content="New"
-                                Command="{Binding NewDeckCommand}" />
+                                Command="{Binding Documents.NewCommand}" />
                         <Button FontSize="14" Margin="0,0,3,0" Content="Save"
-                                Command="{Binding SaveDeckCommand}" />
+                                Command="{Binding Documents.SaveCommand}" />
                         <Button FontSize="14" Margin="0,0,3,0" Content="Load"
-                                Command="{Binding LoadDeckCommand}" />
+                                Command="{Binding Documents.LoadCommand}" />
                     </UniformGrid>
                 </Grid>
-                <Grid Grid.Row="1" Visibility="{Binding CardDisplayVM.CardDisplay, Converter={StaticResource CardToVisibilityConverter}}">
-                    <local:CardDisplay DataContext="{Binding CardDisplayVM}" />
+                <Grid Grid.Row="1" Visibility="{Binding Selection.CardDisplay.CardDisplay, Converter={StaticResource CardToVisibilityConverter}}">
+                    <local:CardDisplay DataContext="{Binding Selection.CardDisplay}" />
                 </Grid>
             </Grid>
         </Border>
@@ -134,14 +133,14 @@
                         </ToggleButton>
                     </StackPanel>
                 </Grid>
-                <DataGrid x:Name="CollectionGrid" Grid.Row="1" ItemsSource="{Binding FilteredCards}"
-                          SelectedItem="{Binding SelectedCollectionCard}" AutoGenerateColumns="False"
+                <DataGrid x:Name="CollectionGrid" Grid.Row="1" ItemsSource="{Binding Catalog.Cards}"
+                          SelectedItem="{Binding Selection.SelectedCollectionCard}" AutoGenerateColumns="False"
                           IsReadOnly="True" CanUserResizeColumns="True" Background="White"
                           BorderThickness="0" SelectionMode="Single">
                     <DataGrid.InputBindings>
-                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding AddToDeckCommand}"
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding Deck.AddToMainDeckCommand}"
                                       CommandParameter="{Binding SelectedItem, ElementName=CollectionGrid}" />
-                        <MouseBinding MouseAction="RightDoubleClick" Command="{Binding AddToSideboardCommand}"
+                        <MouseBinding MouseAction="RightDoubleClick" Command="{Binding Deck.AddToSideboardCommand}"
                                       CommandParameter="{Binding SelectedItem, ElementName=CollectionGrid}" />
                     </DataGrid.InputBindings>
                     <DataGrid.RowStyle>
@@ -234,17 +233,17 @@
                 </DataGrid>
                 <Border Grid.Row="2" Background="LightGray" BorderBrush="Black" BorderThickness="0,1,0,1" Padding="3,0,0,0">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <TextBox Width="250" Height="20" FontSize="12" Margin="0,0,5,0" Text="{Binding FilterSearchText}"/>
-                        <Button Content="Search" Height="20" FontSize="12" Margin="0,0,5,0" Command="{Binding FilterSearchCardsCommand}"/>
-                        <Button Content="Clear" Height="20" FontSize="12" Margin="0,0,20,0" Command="{Binding ClearFilterSearchCommand}"/>
+                        <TextBox Width="250" Height="20" FontSize="12" Margin="0,0,5,0" Text="{Binding Catalog.SearchText}"/>
+                        <Button Content="Search" Height="20" FontSize="12" Margin="0,0,5,0" Command="{Binding Catalog.SearchCommand}"/>
+                        <Button Content="Clear" Height="20" FontSize="12" Margin="0,0,20,0" Command="{Binding Catalog.ClearSearchCommand}"/>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <CheckBox Content="Names" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding SearchNames}"/>
-                            <CheckBox Content="Types" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding SearchTypes}"/>
-                            <CheckBox Content="Rules" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding SearchRules}"/>
+                            <CheckBox Content="Names" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding Catalog.SearchNames}"/>
+                            <CheckBox Content="Types" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding Catalog.SearchTypes}"/>
+                            <CheckBox Content="Rules" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding Catalog.SearchRules}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock VerticalAlignment="Center" Text="Card count:" Margin="0,0,2,0"/>
-                            <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{Binding CardCount}"/>
+                            <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{Binding Catalog.CardCount}"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -267,15 +266,15 @@
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Background="LightGray">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock VerticalAlignment="Center" Text="Maindeck - " Margin="3,0,0,0"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding MainDeckCardCount}" Margin="0,0,3,0"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Deck.MainDeckCardCount}" Margin="0,0,3,0"/>
                             <TextBlock VerticalAlignment="Center" Text="Lands - " Margin="3,0,0,0"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding MainDeckLandCount}" Margin="0,0,3,0"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Deck.MainDeckLandCount}" Margin="0,0,3,0"/>
                             <TextBlock VerticalAlignment="Center" Text="Creatures - " Margin="3,0,0,0"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding MainDeckCreatureCount}" Margin="0,0,3,0"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Deck.MainDeckCreatureCount}" Margin="0,0,3,0"/>
                         </StackPanel>
                     </StackPanel>
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding GroupedDeckColumns}">
+                        <ItemsControl ItemsSource="{Binding Deck.MainDeckGroups}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" Margin="10,0" />
@@ -290,8 +289,8 @@
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="{Binding ManaValue}" HorizontalAlignment="Center" Foreground="Black" FontWeight="Bold" Margin="0,5" />
-                                        <ListBox Grid.Row="1" ItemsSource="{Binding Cards}"
-                                                 SelectedItem="{Binding DataContext.SelectedMainDeckCard, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, AncestorLevel=1}}"
+                                        <ListBox Grid.Row="1" ItemsSource="{Binding Cards}" SelectedValuePath="InteractiveCard"
+                                                 SelectedValue="{Binding DataContext.Selection.SelectedMainDeckCard, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, AncestorLevel=1}}"
                                                  Background="Transparent" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                             <ListBox.ItemsPanel>
                                                 <ItemsPanelTemplate>
@@ -321,17 +320,17 @@
 
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <local:InteractiveCard DataContext="{Binding Converter={StaticResource CardToInteractiveCardVMConverter}}" Width="135" Height="189">
+                                                    <local:InteractiveCard Width="135" Height="189">
                                                         <ToolTipService.ToolTip>
                                                             <ToolTip Content="{Binding InteractiveCard}" ContentTemplate="{StaticResource CardHoverModalTemplate}"
                                                                      Background="Transparent" BorderThickness="0" Placement="Right" HorizontalOffset="10" VerticalOffset="0"/>
                                                         </ToolTipService.ToolTip>
                                                         <local:InteractiveCard.InputBindings>
                                                             <MouseBinding MouseAction="LeftDoubleClick"
-                                                                          Command="{Binding Data.RemoveFromDeckCommand, Source={StaticResource MainViewModelProxy}}"
+                                                                          Command="{Binding Data.Deck.RemoveFromMainDeckCommand, Source={StaticResource MainViewModelProxy}}"
                                                                           CommandParameter="{Binding InteractiveCard}" />
                                                             <MouseBinding MouseAction="RightDoubleClick"
-                                                                          Command="{Binding Data.MoveCardFromMainDeckToSideboardCommand, Source={StaticResource MainViewModelProxy}}"
+                                                                          Command="{Binding Data.Deck.MoveToSideboardCommand, Source={StaticResource MainViewModelProxy}}"
                                                                           CommandParameter="{Binding InteractiveCard}" />
                                                         </local:InteractiveCard.InputBindings>
                                                     </local:InteractiveCard>
@@ -354,17 +353,17 @@
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Background="LightGray">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock VerticalAlignment="Center" Text="Sideboard - " Margin="3,0,0,0"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding SideboardCardCount}"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Deck.SideboardCardCount}"/>
                         </StackPanel>
                     </StackPanel>
-                    <DataGrid x:Name="SideboardGrid" Grid.Row="1" ItemsSource="{Binding SideboardList}"
-                              SelectedItem="{Binding SelectedSideboardCard}" AutoGenerateColumns="False"
+                    <DataGrid x:Name="SideboardGrid" Grid.Row="1" ItemsSource="{Binding Deck.SideboardCards}"
+                              SelectedItem="{Binding Selection.SelectedSideboardCard}" AutoGenerateColumns="False"
                               IsReadOnly="True" CanUserResizeColumns="True" Background="White" BorderThickness="0"
                               SelectionMode="Single">
                         <DataGrid.InputBindings>
-                            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RemoveFromSideboardCommand}"
+                            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding Deck.RemoveFromSideboardCommand}"
                                           CommandParameter="{Binding SelectedItem, ElementName=SideboardGrid}" />
-                            <MouseBinding MouseAction="RightDoubleClick" Command="{Binding MoveCardFromSideboardToMainDeckCommand}"
+                            <MouseBinding MouseAction="RightDoubleClick" Command="{Binding Deck.MoveToMainDeckCommand}"
                                           CommandParameter="{Binding SelectedItem, ElementName=SideboardGrid}" />
                         </DataGrid.InputBindings>
                         <DataGrid.RowStyle>

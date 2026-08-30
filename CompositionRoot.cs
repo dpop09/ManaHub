@@ -2,14 +2,16 @@ using ManaHub.Contracts;
 using ManaHub.Services;
 using ManaHub.ViewModels;
 using System.IO;
+using System.Net.Http;
 
 namespace ManaHub
 {
-    internal sealed class CompositionRoot
+    internal sealed class CompositionRoot : IDisposable
     {
         private readonly NavigationService _navigation;
         private readonly IApplicationInitializer _initializer;
         private readonly MainWindowViewModel _mainWindowViewModel;
+        private readonly HttpClient _imageHttpClient;
 
         public CompositionRoot()
         {
@@ -25,6 +27,14 @@ namespace ManaHub
             IFileDialogService fileDialogs = new WpfFileDialogService();
             IWindowService windows = new WpfWindowService();
             ISessionService session = new SessionService();
+            _imageHttpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(15) };
+            _imageHttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("ManaHub/1.0");
+            string imageCacheDirectory = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "ManaHub",
+                "Cache");
+            ICardImageService images = new CardImageService(_imageHttpClient, imageCacheDirectory);
+            var cardViewModels = new CardViewModelFactory(images);
 
             _navigation = new NavigationService();
             _navigation.Register(AppPage.Login,
@@ -36,7 +46,23 @@ namespace ManaHub
             _navigation.Register(AppPage.Game,
                 () => new GamePageViewModel(_navigation));
             _navigation.Register(AppPage.DeckEditor,
-                () => new DeckEditorPageViewModel(cards, decks, fileDialogs, dialogs));
+                () =>
+                {
+                    var catalog = new CardCatalogViewModel(cards, dialogs);
+                    var workspace = new DeckWorkspaceViewModel(cardViewModels);
+                    var selection = new DeckSelectionViewModel(cardViewModels.CreateDisplay());
+                    var documents = new DeckDocumentViewModel(
+                        workspace,
+                        cards,
+                        decks,
+                        fileDialogs,
+                        dialogs);
+                    return new DeckEditorPageViewModel(
+                        catalog,
+                        workspace,
+                        selection,
+                        documents);
+                });
             _navigation.Register(AppPage.Settings,
                 () => new SettingsPageViewModel());
 
@@ -61,6 +87,11 @@ namespace ManaHub
         {
             await _navigation.NavigateToAsync(AppPage.Login, cancellationToken);
             return new MainWindow { DataContext = _mainWindowViewModel };
+        }
+
+        public void Dispose()
+        {
+            _imageHttpClient.Dispose();
         }
     }
 }
