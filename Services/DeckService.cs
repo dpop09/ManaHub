@@ -1,27 +1,45 @@
-﻿using ManaHub.Models;
 using System.IO;
 using System.Text.Json;
 
+using ManaHub.Contracts;
+using ManaHub.Domain;
+using ManaHub.Services.External;
+
 namespace ManaHub.Services
 {
-    internal static class DeckService
+    internal sealed class DeckService : IDeckService
     {
-        public static void SaveToFile(string path, string name, IEnumerable<Card> main, IEnumerable<Card> side)
+        public async Task SaveToFileAsync(
+            string path,
+            DeckDocument document,
+            CancellationToken cancellationToken = default)
         {
-            var data = new DeckSaveModel
+            var data = new DeckFileDto
             {
-                DeckName = name,
-                MainDeckIds = main.Select(c => c.Id).ToList(),
-                SideboardIds = side.Select(c => c.Id).ToList()
+                DeckName = document.Name,
+                MainDeckIds = document.MainDeckIds.ToList(),
+                SideboardIds = document.SideboardIds.ToList()
             };
+
             string json = JsonSerializer.Serialize(data);
-            File.WriteAllText(path, json);
+            await File.WriteAllTextAsync(path, json, cancellationToken);
         }
 
-        public static DeckSaveModel LoadFromFile(string path)
+        public async Task<DeckDocument> LoadFromFileAsync(
+            string path,
+            CancellationToken cancellationToken = default)
         {
-            string json = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<DeckSaveModel>(json);
+            string json = await File.ReadAllTextAsync(path, cancellationToken);
+            var data = JsonSerializer.Deserialize<DeckFileDto>(json)
+                ?? throw new InvalidDataException("The selected deck file is invalid.");
+
+            if (data.MainDeckIds == null || data.SideboardIds == null)
+                throw new InvalidDataException("The selected deck file does not contain valid card lists.");
+
+            return new DeckDocument(
+                data.DeckName ?? string.Empty,
+                data.MainDeckIds,
+                data.SideboardIds);
         }
     }
 }

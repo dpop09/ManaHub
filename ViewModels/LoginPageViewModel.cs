@@ -1,14 +1,14 @@
 ﻿using ManaHub.MVVMs;
-using ManaHub.Services;
-using System.Windows;
 using System.Windows.Input;
+
+using ManaHub.Contracts;
 
 namespace ManaHub.ViewModels
 {
     internal class LoginPageViewModel : ViewModelBase
     {
-        private string _username;
-        private string _password;
+        private string _username = string.Empty;
+        private string _password = string.Empty;
         public string Username 
         {
             get { return  _username; }
@@ -28,43 +28,55 @@ namespace ManaHub.ViewModels
             }
         }
 
-        private MainWindowViewModel _mainVM;
+        private readonly INavigationService _navigation;
+        private readonly IUserRepository _users;
+        private readonly ISessionService _session;
+        private readonly IDialogService _dialogs;
         public ICommand GoToCreateAccountPageCommand { get; }
         public ICommand ExecuteLoginCommand { get; }
 
-        // We pass the MainViewModel through the constructor
-        public LoginPageViewModel(MainWindowViewModel mainVM)
+        public LoginPageViewModel(
+            INavigationService navigation,
+            IUserRepository users,
+            ISessionService session,
+            IDialogService dialogs)
         {
-            _mainVM = mainVM;
-            var db = DatabaseService.Instance;
-            GoToCreateAccountPageCommand = new RelayCommand(o => GoToCreateAccountPage());
-            ExecuteLoginCommand = new RelayCommand(o => ExecuteLogin());
+            _navigation = navigation;
+            _users = users;
+            _session = session;
+            _dialogs = dialogs;
+            GoToCreateAccountPageCommand = new AsyncRelayCommand(
+                (o, cancellationToken) => GoToCreateAccountPageAsync(cancellationToken));
+            ExecuteLoginCommand = new AsyncRelayCommand(
+                (o, cancellationToken) => ExecuteLoginAsync(cancellationToken));
         }
 
-        private void GoToCreateAccountPage()
+        private Task GoToCreateAccountPageAsync(CancellationToken cancellationToken)
         {
-            _mainVM.CurrentView = new CreateAccountPageViewModel(this._mainVM);
+            return _navigation.NavigateToAsync(AppPage.CreateAccount, cancellationToken);
         }
-        private void GoToTablesPage()
+
+        private Task GoToTablesPageAsync(CancellationToken cancellationToken)
         {
-            _mainVM.CurrentView = new TablesPageViewModel(this._mainVM);
+            return _navigation.NavigateToAsync(AppPage.Tables, cancellationToken);
         }
-        private void ExecuteLogin()
+
+        private async Task ExecuteLoginAsync(CancellationToken cancellationToken)
         {
             // ensure username and password is not null or whitespace
             if (string.IsNullOrWhiteSpace(_username) || string.IsNullOrWhiteSpace(Password))
             {
-                MessageBox.Show("Please fill in all fields.", "Notification", MessageBoxButton.OK);
+                _dialogs.ShowMessage("Please fill in all fields.");
                 return;
             }
             // check database if user exists, else display incorrect message
-            if (DatabaseService.Instance.CheckUser(Username, Password))
+            if (await _users.CheckUserAsync(Username, Password, cancellationToken))
             {
-                _mainVM.NavVM.Username = Username;
-                GoToTablesPage();
+                _session.Username = Username;
+                await GoToTablesPageAsync(cancellationToken);
             }
             else
-                MessageBox.Show("Incorrect username or password.", "Notification", MessageBoxButton.OK);
+                _dialogs.ShowMessage("Incorrect username or password.");
         }
     }
 }

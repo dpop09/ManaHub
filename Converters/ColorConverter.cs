@@ -7,18 +7,17 @@ namespace ManaHub.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string colorString = value as string;
-
-            if (string.IsNullOrWhiteSpace(colorString))
+            var colors = value as IEnumerable<string>;
+            if (colors == null || !colors.Any())
                 return "Colorless";
 
-            string[] colors = colorString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] colorArray = colors.ToArray();
 
-            if (colors.Length > 1)
+            if (colorArray.Length > 1)
                 return "Multicolored";
 
             // map the single character to the full word
-            return colors[0].ToUpper() switch
+            return colorArray[0].ToUpperInvariant() switch
             {
                 "W" => "White",
                 "U" => "Blue",

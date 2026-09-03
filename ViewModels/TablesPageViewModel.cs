@@ -1,23 +1,26 @@
 ﻿using ManaHub.MVVMs;
 using System.Windows.Input;
 
+using ManaHub.Contracts;
+
 namespace ManaHub.ViewModels
 {
     internal class TablesPageViewModel : ViewModelBase
     {
-        private MainWindowViewModel _mainVM;
+        private readonly INavigationService _navigation;
 
         public ICommand GoToGamePageCommand { get; }
 
-        public TablesPageViewModel(MainWindowViewModel mainVM)
+        public TablesPageViewModel(INavigationService navigation)
         {
-            _mainVM = mainVM;
-            GoToGamePageCommand = new RelayCommand((o) => GoToGamePage());
+            _navigation = navigation;
+            GoToGamePageCommand = new AsyncRelayCommand(
+                (o, cancellationToken) => GoToGamePageAsync(cancellationToken));
         }
 
-        private void GoToGamePage()
+        private Task GoToGamePageAsync(CancellationToken cancellationToken)
         {
-            _mainVM.CurrentView = new GamePageViewModel(this._mainVM);
+            return _navigation.NavigateToAsync(AppPage.Game, cancellationToken);
         }
     }
 }

@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="ManaHub.Views.SettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ManaHub.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="720" d:DesignWidth="1280">
+    <Grid Background="White">
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0" FontSize="25" Content="Delete Cache" Margin="5" Command="{Binding ClearCardImagesCacheCommand}"/>
+            <Button Grid.Row="1" FontSize="25" Content="Delete Card Table" Margin="5" Command="{Binding DeleteCardDatabaseCommand}"/>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,18 +1,21 @@
 ﻿using ManaHub.MVVMs;
-using ManaHub.Services;
-using System.IO;
 using System.Windows;
+
+using ManaHub.Contracts;
 
 namespace ManaHub.ViewModels
 {
-    // MainWindowViewModel acts as the "mediator" for views to communicate indirectly when page navigation occurs
+    // The shell observes navigation state and exposes it to the main window.
     internal class MainWindowViewModel : ViewModelBase
     {
-        private object _currentView;
-        public object CurrentView
+        private readonly INavigationService _navigation;
+        private readonly IWindowService _windowService;
+        private object? _currentView;
+
+        public object? CurrentView
         {
             get => _currentView;
-            set 
+            private set
             { 
                 _currentView = value; 
                 OnPropertyChanged();
@@ -30,23 +33,34 @@ namespace ManaHub.ViewModels
                 OnPropertyChanged();
             }
         }
-        public NavigationBarViewModel NavVM { get; set; }
-        public RelayCommand ShowGoToCreateAccountPageCommand {  get; set; }
-        public RelayCommand CloseWindowCommand { get; set; }
-        public RelayCommand MinimizeWindowCommand { get; set; }
-        public RelayCommand MaximizeWindowCommand { get; set; }
+        public NavigationBarViewModel NavVM { get; }
+        public AsyncRelayCommand ShowGoToCreateAccountPageCommand { get; }
+        public RelayCommand CloseWindowCommand { get; }
+        public RelayCommand MinimizeWindowCommand { get; }
+        public RelayCommand MaximizeWindowCommand { get; }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(
+            INavigationService navigation,
+            IWindowService windowService,
+            NavigationBarViewModel navigationBar)
         {
-            NavVM = new NavigationBarViewModel(this);
+            _navigation = navigation;
+            _windowService = windowService;
+            NavVM = navigationBar;
+
+            _navigation.CurrentViewChanged += OnCurrentViewChanged;
             
             // Commands to swap the view
-            ShowGoToCreateAccountPageCommand = new RelayCommand(o => CurrentView = new CreateAccountPageViewModel(this));
-            MinimizeWindowCommand = new RelayCommand(o => MinimizeWindow());
-            MaximizeWindowCommand = new RelayCommand(o => MaximizeWindow());
-            CloseWindowCommand = new RelayCommand(o => CloseWindow());
-            
-            InitializeApp();
+            ShowGoToCreateAccountPageCommand = new AsyncRelayCommand(
+                (o, cancellationToken) => _navigation.NavigateToAsync(AppPage.CreateAccount, cancellationToken));
+            MinimizeWindowCommand = new RelayCommand(o => _windowService.Minimize());
+            MaximizeWindowCommand = new RelayCommand(o => _windowService.ToggleMaximize());
+            CloseWindowCommand = new RelayCommand(o => _windowService.Close());
+        }
+
+        private void OnCurrentViewChanged(object? sender, EventArgs e)
+        {
+            CurrentView = _navigation.CurrentView;
         }
 
         private void UpdateNavVisibility()
@@ -56,41 +70,6 @@ namespace ManaHub.ViewModels
                 NavVisibility = Visibility.Collapsed;
             else
                 NavVisibility = Visibility.Visible;
-        }
-        private void MinimizeWindow()
-        {
-            Application.Current.MainWindow.WindowState = WindowState.Minimized;
-        }
-        private void MaximizeWindow() 
-        {
-            if (Application.Current.MainWindow.WindowState == WindowState.Maximized)
-                Application.Current.MainWindow.WindowState = WindowState.Normal;
-            else
-                Application.Current.MainWindow.WindowState = WindowState.Maximized;
-        }
-        private void CloseWindow()
-        {
-            Application.Current.Shutdown();
-        }
-        private async void InitializeApp()
-        {
-            var db = DatabaseService.Instance;
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "oracle-cards-20260117221532.json");
-
-            if (File.Exists(filePath))
-            {
-                if (db.GetCardCount() == 0)
-                {
-                    await Task.Run(async () =>
-                    {
-                        await db.BulkImportCards(filePath);
-                    });
-                }
-            }
-            else
-                Console.WriteLine($"Critical Error: File not found at {filePath}");
-
-            CurrentView = new LoginPageViewModel(this);
         }
     }
 }

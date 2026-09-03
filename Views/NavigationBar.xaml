@@ -13,6 +13,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -21,7 +22,9 @@
                         Command="{Binding NavVM.GoToDeckEditorPageCommand}" />
                 <Button Grid.Column="2" Padding="10,0,10,0" Content="Tables"
                         Command="{Binding NavVM.GoToTablesPageCommand}" />
-                <Button Grid.Column="3" Padding="10,0,10,0" Content="Logout" 
+                <Button Grid.Column="3" Padding="10,0,10,0" Content="Settings" 
+                        Command="{Binding NavVM.GoToSettingsPageCommand}" />
+                <Button Grid.Column="4" Padding="10,0,10,0" Content="Logout"
                         Command="{Binding NavVM.ExecuteLogoutCommand}" />
         </Grid>
     </Border>

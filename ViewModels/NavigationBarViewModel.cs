@@ -1,55 +1,64 @@
 ﻿using ManaHub.MVVMs;
 using System.Windows.Input;
 
+using ManaHub.Contracts;
+using System.ComponentModel;
+
 namespace ManaHub.ViewModels
 {
     internal class NavigationBarViewModel : ViewModelBase
     {
-        private string _username;
-        public string Username 
-        {
-            get => _username;
-            set
-            {
-                _username = value;
-                OnPropertyChanged();
-            }
-        }
-        private MainWindowViewModel _mainVM;
+        private readonly INavigationService _navigation;
+        private readonly ISessionService _session;
+
+        public string Username => _session.Username;
         public ICommand ExecuteLogoutCommand { get; }
         public ICommand GoToTablesPageCommand { get; }
-        public ICommand GoToDeckEditorPageCommand {  get; }
+        public ICommand GoToDeckEditorPageCommand { get; }
+        public ICommand GoToSettingsPageCommand { get; }
 
-        public NavigationBarViewModel(MainWindowViewModel mainVM) 
+        public NavigationBarViewModel(INavigationService navigation, ISessionService session)
         {
-            _mainVM = mainVM;
-            ExecuteLogoutCommand = new RelayCommand(o => LogoutCommand());
-            GoToTablesPageCommand = new RelayCommand((o) => GoToTablesPage());
-            GoToDeckEditorPageCommand = new RelayCommand((o) => GoToDeckEditorPage());
+            _navigation = navigation;
+            _session = session;
+            _session.PropertyChanged += OnSessionPropertyChanged;
+            ExecuteLogoutCommand = new AsyncRelayCommand((o, cancellationToken) => LogoutAsync(cancellationToken));
+            GoToTablesPageCommand = new AsyncRelayCommand((o, cancellationToken) => GoToTablesPageAsync(cancellationToken));
+            GoToDeckEditorPageCommand = new AsyncRelayCommand((o, cancellationToken) => GoToDeckEditorPageAsync(cancellationToken));
+            GoToSettingsPageCommand = new AsyncRelayCommand((o, cancellationToken) => GoToSettingsPageAsync(cancellationToken));
         }
 
-        private void LogoutCommand()
+        private async Task LogoutAsync(CancellationToken cancellationToken)
         {
-            if (_mainVM == null) 
-                return;
-            // clear session
-            Username = string.Empty;
-            // navigate to the login page
-            _mainVM.CurrentView = new LoginPageViewModel(this._mainVM);
+            _session.Clear();
+            await _navigation.NavigateToAsync(AppPage.Login, cancellationToken);
         }
 
-        private void GoToTablesPage()
+        private async Task GoToTablesPageAsync(CancellationToken cancellationToken)
         {
-            if (_mainVM.CurrentView is TablesPageViewModel)
+            if (_navigation.CurrentView is TablesPageViewModel)
                 return;
-            _mainVM.CurrentView = new TablesPageViewModel(this._mainVM);
+            await _navigation.NavigateToAsync(AppPage.Tables, cancellationToken);
         }
 
-        private void GoToDeckEditorPage()
+        private async Task GoToSettingsPageAsync(CancellationToken cancellationToken)
         {
-            if (_mainVM.CurrentView is DeckEditorPageViewModel)
+            if (_navigation.CurrentView is SettingsPageViewModel)
                 return;
-            _mainVM.CurrentView = new DeckEditorPageViewModel(this._mainVM);
+            await _navigation.NavigateToAsync(AppPage.Settings, cancellationToken);
+        }
+
+        private async Task GoToDeckEditorPageAsync(CancellationToken cancellationToken)
+        {
+            if (_navigation.CurrentView is DeckEditorPageViewModel)
+                return;
+            await _navigation.NavigateToAsync(AppPage.DeckEditor, cancellationToken);
+        }
+
+        private void OnSessionPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ISessionService.Username))
+                OnPropertyChanged(nameof(Username));
         }
     }
 }

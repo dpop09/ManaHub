@@ -29,10 +29,10 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock x:Name="NameText" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                               Text="{Binding CardDisplay.Name}" TextTrimming="CharacterEllipsis" Foreground="White" 
+                                               Text="{Binding CardDisplay.Front.Name}" TextTrimming="CharacterEllipsis" Foreground="White"
                                                FontWeight="Bold" FontSize="11" />
                                     <ItemsControl x:Name="ManaCostControl" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                                  ItemsSource="{Binding CardDisplay.ManaCost, Converter={StaticResource SymbolToImageConverter}}" 
+                                                  ItemsSource="{Binding CardDisplay.Front.ManaCost, Converter={StaticResource SymbolToImageConverter}}"
                                                   Margin="5,0,0,0" >
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -41,35 +41,35 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <svg:SvgViewbox UriSource="{Binding}" Width="12" Height="12" Margin="1,0" 
+                                                <svg:SvgViewbox UriSource="{Binding}" Width="12" Height="12" Margin="1,0"
                                                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </Grid>
                                 <Grid>
-                                    <TextBlock x:Name="TypeLineText" HorizontalAlignment="Left" Text="{Binding CardDisplay.TypeLine}" 
+                                    <TextBlock x:Name="TypeLineText" HorizontalAlignment="Left" Text="{Binding CardDisplay.Front.TypeLine}"
                                                Foreground="White" FontSize="10" VerticalAlignment="Center"/>
-                                    <TextBlock HorizontalAlignment="Right" Text="{Binding CardDisplay.Set}" 
+                                    <TextBlock HorizontalAlignment="Right" Text="{Binding CardDisplay.SetCode}"
                                                Foreground="#FFD700" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"/>
                                 </Grid>
                             </StackPanel>
                         </Border>
                         <Border Grid.Row="1" Background="#444444" CornerRadius="0,0,12,12" Padding="5">
                             <Grid>
-                                <TextBlock x:Name="OracleTextBlock" helpers:TextBlockHelper.FormattedText="{Binding CardDisplay.OracleText}"
+                                <TextBlock x:Name="OracleTextBlock" helpers:TextBlockHelper.FormattedText="{Binding CardDisplay.Front.OracleText}"
                                            TextWrapping="Wrap" Foreground="White" FontSize="11" LineHeight="10" />
-                                <Button x:Name="FlipButton" VerticalAlignment="Bottom" HorizontalAlignment="Left" 
+                                <Button x:Name="FlipButton" VerticalAlignment="Bottom" HorizontalAlignment="Left"
                                             Width="25" Height="25" Background="White" Command="{Binding FlipCardCommand}">
                                     <svg:SvgViewbox x:Name="FlipIcon" UriSource="pack://application:,,,/ManaHub;component/Assets/ActionSymbols/black-flip.svg" />
                                 </Button>
-                                <Border x:Name="PTBorder" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="#AAAAAA" 
-                                        CornerRadius="12,0,12,0" Padding="8,4" Margin="-5,-5" 
-                                        Visibility="{Binding CardDisplay.Power, Converter={StaticResource StatToVisibility}}">
+                                <Border x:Name="PTBorder" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="#AAAAAA"
+                                        CornerRadius="12,0,12,0" Padding="8,4" Margin="-5,-5"
+                                        Visibility="{Binding CardDisplay.Front.Power, Converter={StaticResource StatToVisibility}}">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock x:Name="PowerText" Text="{Binding CardDisplay.Power}" FontWeight="Bold" FontSize="11" Foreground="Black"/>
+                                        <TextBlock x:Name="PowerText" Text="{Binding CardDisplay.Front.Power}" FontWeight="Bold" FontSize="11" Foreground="Black"/>
                                         <TextBlock Text="/" FontWeight="Bold" FontSize="11" Foreground="Black"/>
-                                        <TextBlock x:Name="ToughnessText" Text="{Binding CardDisplay.Toughness}" FontWeight="Bold" FontSize="11" Foreground="Black"/>
+                                        <TextBlock x:Name="ToughnessText" Text="{Binding CardDisplay.Front.Toughness}" FontWeight="Bold" FontSize="11" Foreground="Black"/>
                                     </StackPanel>
                                 </Border>
                             </Grid>
@@ -79,13 +79,13 @@
 
                 <ControlTemplate.Triggers>
                     <DataTrigger Binding="{Binding IsFlipped}" Value="True">
-                        <Setter TargetName="NameText" Property="Text" Value="{Binding CardDisplay.SecondName}" />
-                        <Setter TargetName="ManaCostControl" Property="ItemsSource" Value="{Binding CardDisplay.SecondManaCost, Converter={StaticResource SymbolToImageConverter}}" />
-                        <Setter TargetName="TypeLineText" Property="Text" Value="{Binding CardDisplay.SecondTypeLine}" />
-                        <Setter TargetName="OracleTextBlock" Property="helpers:TextBlockHelper.FormattedText" Value="{Binding CardDisplay.SecondOracleText}" />
-                        <Setter TargetName="PTBorder" Property="Visibility" Value="{Binding CardDisplay.SecondPower, Converter={StaticResource StatToVisibility}}" />
-                        <Setter TargetName="PowerText" Property="Text" Value="{Binding CardDisplay.SecondPower}" />
-                        <Setter TargetName="ToughnessText" Property="Text" Value="{Binding CardDisplay.SecondToughness}" />
+                        <Setter TargetName="NameText" Property="Text" Value="{Binding CardDisplay.Back.Name}" />
+                        <Setter TargetName="ManaCostControl" Property="ItemsSource" Value="{Binding CardDisplay.Back.ManaCost, Converter={StaticResource SymbolToImageConverter}}" />
+                        <Setter TargetName="TypeLineText" Property="Text" Value="{Binding CardDisplay.Back.TypeLine}" />
+                        <Setter TargetName="OracleTextBlock" Property="helpers:TextBlockHelper.FormattedText" Value="{Binding CardDisplay.Back.OracleText}" />
+                        <Setter TargetName="PTBorder" Property="Visibility" Value="{Binding CardDisplay.Back.Power, Converter={StaticResource StatToVisibility}}" />
+                        <Setter TargetName="PowerText" Property="Text" Value="{Binding CardDisplay.Back.Power}" />
+                        <Setter TargetName="ToughnessText" Property="Text" Value="{Binding CardDisplay.Back.Toughness}" />
                         <Setter TargetName="FlipButton" Property="Background" Value="Black" />
                         <Setter TargetName="FlipIcon" Property="UriSource" Value="pack://application:,,,/ManaHub;component/Assets/ActionSymbols/white-flip.svg" />
                     </DataTrigger>

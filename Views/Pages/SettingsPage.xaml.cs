@@ -3,11 +3,11 @@
 namespace ManaHub.Views
 {
     /// <summary>
-    /// Interaction logic for CardDisplay.xaml
+    /// Interaction logic for SettingsPage.xaml
     /// </summary>
-    public partial class CardDisplay : UserControl
+    public partial class SettingsPage : UserControl
     {
-        public CardDisplay()
+        public SettingsPage()
         {
             InitializeComponent();
         }
